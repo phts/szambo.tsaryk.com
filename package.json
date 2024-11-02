@@ -5,5 +5,23 @@
   "private": true,
   "author": "Phil Tsaryk",
   "license": "ISC",
-  "scripts": {}
+  "scripts": {
+    "build": "webpack --config ./config/webpack.config.js",
+    "deploy": "bash scripts/deploy.sh",
+    "format": "prettier --write '**/*.{html,md,json}' && npm run lint -- --fix",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "@phts/eslint-config": "^2.1.1",
+    "@phts/prettier-config": "^1.2.0",
+    "copy-webpack-plugin": "^12.0.2",
+    "eslint": "^8.57.1",
+    "prettier": "^3.3.3",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
+  }
 }
