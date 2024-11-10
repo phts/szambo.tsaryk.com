@@ -1,14 +1,12 @@
 import 'dotenv/config'
 import * as express from 'express'
-import {root} from './routes'
+import {root, level} from './routes'
 import {getConfig} from './config'
 
 const config = getConfig()
-const app = express()
 
+const app = express()
 app.get('/', root({config}))
-app.post('/data', function (req, res) {
-  res.send('POST /data')
-})
+app.post('/level', level({config}))
 
 app.listen(3000)
