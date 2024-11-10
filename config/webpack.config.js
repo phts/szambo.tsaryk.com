@@ -15,7 +15,12 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: ['package.json', 'package-lock.json'],
+      patterns: [
+        'package.json',
+        'package-lock.json',
+        {from: '.env', noErrorOnMissing: true},
+        {from: 'src/**/*.html', to: '[name][ext]'},
+      ],
     }),
   ],
   externals: [nodeExternals()],

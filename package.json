@@ -16,7 +16,9 @@
     "start:watch": "nodemon dist/app.js"
   },
   "dependencies": {
-    "express": "^4.21.1"
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mongodb": "^6.10.0"
   },
   "devDependencies": {
     "@phts/eslint-config": "^2.1.1",
