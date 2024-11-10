@@ -1,14 +1,11 @@
 {
-  "extends": ["@phts", "@phts/eslint-config/addons/configs", "@phts/eslint-config/addons/node"],
+  "extends": [
+    "@phts",
+    "@phts/eslint-config/addons/configs",
+    "@phts/eslint-config/addons/typescript",
+    "@phts/eslint-config/addons/typescript/node"
+  ],
   "overrides": [
-    {
-      "files": "src/**/*",
-      "parserOptions": {
-        "ecmaFeatures": {
-          "impliedStrict": true
-        }
-      }
-    },
     {
       "files": "*",
       "extends": "@phts/eslint-config/addons/prettier"
