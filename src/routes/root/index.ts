@@ -6,7 +6,7 @@ export const root: Route = () => async (req, res) => {
   await exec<Level>(
     'levels',
     async (collection) => {
-      const cursor = collection.find()
+      const cursor = collection.find().sort({when: -1})
       const levels = await cursor.toArray()
       res.send(page({levels}))
     },
