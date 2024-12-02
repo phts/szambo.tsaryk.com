@@ -13,6 +13,7 @@ export interface Config {
     text: string
   }
   warningLevel: number
+  auth: string
 }
 
 export function getConfig(): Config {
@@ -27,6 +28,7 @@ export function getConfig(): Config {
     EMAIL_SUBJECT,
     EMAIL_TEXT,
     WARNING_LEVEL,
+    APP_AUTH,
   } = process.env
   if (!DB_URI) {
     throw new Error('DB_URI env variable is missing')
@@ -58,6 +60,9 @@ export function getConfig(): Config {
   if (!WARNING_LEVEL) {
     throw new Error('WARNING_LEVEL env variable is missing')
   }
+  if (!APP_AUTH) {
+    throw new Error('APP_AUTH env variable is missing')
+  }
   return {
     db: {uri: DB_URI},
     email: {
@@ -71,5 +76,6 @@ export function getConfig(): Config {
       text: EMAIL_TEXT,
     },
     warningLevel: parseInt(WARNING_LEVEL),
+    auth: APP_AUTH,
   }
 }
