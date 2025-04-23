@@ -5,6 +5,11 @@ export interface Level {
   value: number
   when: Date
 }
+export interface Log {
+  message: string
+  severity: string
+  when: Date
+}
 
 let uri: string
 

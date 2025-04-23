@@ -3,6 +3,7 @@ import {Config} from '../config'
 
 export * from './root'
 export * from './level'
+export * from './log'
 
 interface RouteParams {
   config: Config
