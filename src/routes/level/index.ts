@@ -5,10 +5,6 @@ import {email} from './email'
 export const level: Route =
   ({config}) =>
   async (req, res) => {
-    if (req.query.auth !== config.auth) {
-      res.sendStatus(400)
-      return
-    }
     const newValue = parseInt(req.query.value as string)
     if (isNaN(newValue)) {
       res.sendStatus(400)
