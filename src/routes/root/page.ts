@@ -2,7 +2,7 @@ import * as path from 'path'
 import {readFileSync} from 'fs'
 import {Level, Log} from '../../db'
 
-interface Args {
+export interface Data {
   levels: Level[]
   logs: Log[]
 }
@@ -14,7 +14,7 @@ const COLORS = {
   error: '#e00',
 }
 
-export function page({levels, logs}: Args, warningLevel: number) {
+export function page({levels, logs}: Data, warningLevel: number) {
   const levelsHtml = `<h3>Levels</h3><table border=1>
   <tr><th>When</th><th>Value</th></tr>
   ${levels

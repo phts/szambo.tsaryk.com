@@ -10,9 +10,23 @@
         flex-direction: column;
         align-items: center;
       }
+      hr {
+        width: 100%;
+      }
     </style>
   </head>
   <body>
     {{levels}} {{logs}}
+    <hr />
+    <a id="allDataLink" href="">All data</a>
+    <script>
+      const allDataUrl = new URL(document.location)
+      if (!allDataUrl.searchParams.has('all')) {
+        allDataUrl.searchParams.append('all', 'true')
+      } else {
+        allDataUrl.searchParams.delete('all')
+      }
+      document.getElementById('allDataLink').setAttribute('href', allDataUrl.toString())
+    </script>
   </body>
 </html>

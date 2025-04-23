@@ -1,15 +1,16 @@
 import {Route} from '..'
 import {exec, Level, Log} from '../../db'
-import {page} from './page'
+import {page, Data} from './page'
 
 export const root: Route =
   ({config}) =>
   async (req, res) => {
-    const pagedata: {levels: Level[]; logs: Log[]} = {levels: [], logs: []}
+    const pagedata: Data = {levels: [], logs: []}
+    const limit = req.query.all ? 1000 : 10
     await exec<Level>(
       'levels',
       async (collection) => {
-        const cursor = collection.find().sort({when: -1})
+        const cursor = collection.find().sort({when: -1}).limit(limit)
         pagedata.levels = await cursor.toArray()
       },
       {
@@ -21,7 +22,7 @@ export const root: Route =
     await exec<Log>(
       'logs',
       async (collection) => {
-        const cursor = collection.find().sort({when: -1})
+        const cursor = collection.find().sort({when: -1}).limit(limit)
         pagedata.logs = await cursor.toArray()
       },
       {
