@@ -3,7 +3,14 @@ import {Middleware} from '..'
 export const auth: Middleware =
   ({config}) =>
   (req, res, next) => {
-    if (req.query.auth !== config.auth) {
+    if (req.method === 'GET' && req.path === '/' && !req.query.auth) {
+      next()
+      return
+    }
+    if (
+      (req.method === 'GET' && req.query.auth !== config.auth.rd) ||
+      (req.method !== 'GET' && req.query.auth !== config.auth.wr)
+    ) {
       res.sendStatus(400)
       return
     }

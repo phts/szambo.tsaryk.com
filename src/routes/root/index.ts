@@ -1,10 +1,15 @@
 import {Route} from '..'
 import {exec, Level, Log} from '../../db'
+import {login} from './login'
 import {page, Data} from './page'
 
 export const root: Route =
   ({config}) =>
   async (req, res) => {
+    if (!req.query.auth) {
+      res.send(login())
+      return
+    }
     const pagedata: Data = {levels: [], logs: []}
     const limit = req.query.all ? 1000 : 10
     await exec<Level>(
