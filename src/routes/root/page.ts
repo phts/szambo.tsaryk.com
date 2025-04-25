@@ -30,7 +30,7 @@ export function page({levels, logs}: Data, warningLevel: number) {
     .map(({message, severity, when}) => {
       const color = COLORS[severity as keyof typeof COLORS]
       const style = color ? ` style="color:${color}"` : ''
-      return `<tr${style}><td>${when.toLocaleString()}</td><td>${severity}</td><td>${message}</td></tr>`
+      return `<tr${style}><td>${when.toLocaleString()}</td><td>${severity}</td><td>${message.replaceAll('\n', '<br>')}</td></tr>`
     })
     .join('')}
 </table>`
