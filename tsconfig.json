@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "module": "es6",
+    "module": "ESNext",
     "moduleResolution": "node",
     "outDir": "./dist/",
     "strict": true,
-    "target": "es5"
+    "target": "ES2023"
   }
 }
