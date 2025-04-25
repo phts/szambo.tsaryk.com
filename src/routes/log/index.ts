@@ -6,7 +6,7 @@ export const log: Route = () => async (req, res) => {
   if (
     typeof message !== 'string' ||
     typeof severity !== 'string' ||
-    !['debug', 'info', 'warn', 'error'].includes(severity)
+    !['debug', 'info', 'warn', 'error', 'fatal'].includes(severity)
   ) {
     res.sendStatus(400)
     return

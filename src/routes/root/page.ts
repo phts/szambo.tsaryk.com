@@ -9,9 +9,10 @@ export interface Data {
 
 const tmpl = readFileSync(path.resolve(__dirname, 'page.tmpl.html')).toString()
 
-const COLORS = {
-  warn: '#f60',
-  error: '#e00',
+const STYLES = {
+  warn: 'color:#f60',
+  error: 'color:#e00',
+  fatal: 'background-color:#f55;color:#000',
 }
 
 export function page({levels, logs}: Data, warningLevel: number) {
@@ -19,8 +20,8 @@ export function page({levels, logs}: Data, warningLevel: number) {
   <tr><th>When</th><th>Value</th></tr>
   ${levels
     .map(({value, when}) => {
-      const style = value >= warningLevel ? ` style="color:${COLORS.warn}"` : ''
-      return `<tr${style}><td>${when.toLocaleString()}</td><td>${value}</td></tr>`
+      const props = value >= warningLevel ? ` style="${STYLES.warn}"` : ''
+      return `<tr${props}><td>${when.toLocaleString()}</td><td>${value}</td></tr>`
     })
     .join('')}
 </table>`
@@ -28,9 +29,9 @@ export function page({levels, logs}: Data, warningLevel: number) {
   <tr><th>When</th><th>Severity</th><th>Message</th></tr>
   ${logs
     .map(({message, severity, when}) => {
-      const color = COLORS[severity as keyof typeof COLORS]
-      const style = color ? ` style="color:${color}"` : ''
-      return `<tr${style}><td>${when.toLocaleString()}</td><td>${severity}</td><td>${message.replaceAll('\n', '<br>')}</td></tr>`
+      const style = STYLES[severity as keyof typeof STYLES]
+      const props = style ? ` style="${style}"` : ''
+      return `<tr${props}><td>${when.toLocaleString()}</td><td>${severity}</td><td>${message.replaceAll('\n', '<br>')}</td></tr>`
     })
     .join('')}
 </table>`

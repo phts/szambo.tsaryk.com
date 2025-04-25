@@ -15,7 +15,7 @@ Features:
 
 - `GET /`
 - `POST /level?value=<value>`
-- `POST /log?severity=<debug|info|warn|error>&message=<message>`
+- `POST /log?severity=<debug|info|warn|error|fatal>&message=<message>`
 
 ## Deployment
 
