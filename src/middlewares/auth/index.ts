@@ -11,7 +11,7 @@ export const auth: Middleware =
       (req.method === 'GET' && req.query.auth !== config.auth.rd) ||
       (req.method !== 'GET' && req.query.auth !== config.auth.wr)
     ) {
-      res.sendStatus(400)
+      res.sendStatus(401)
       return
     }
     next()
