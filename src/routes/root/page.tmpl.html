@@ -13,12 +13,19 @@
       hr {
         width: 100%;
       }
+      footer {
+        display: flex;
+      }
     </style>
   </head>
   <body>
     {{levels}} {{logs}}
     <hr />
-    <a id="fullDataLink" href="">Full data</a>
+    <footer>
+      <a id="fullDataLink" href="">Full data</a>
+      |
+      <a href="https://github.com/phts/szambo.tsaryk.com" target="_blank">© Phil Tsaryk, 2025</a>
+    </footer>
     <script>
       const fullDataUrl = new URL(document.location)
       if (!fullDataUrl.searchParams.has('full')) {
