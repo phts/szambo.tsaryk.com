@@ -16,7 +16,7 @@ const STYLES = {
 }
 
 export function page({levels, logs}: Data, warningLevel: number) {
-  const levelsHtml = `<h3>Levels</h3><table border=1>
+  const levelsHtml = `<h3>Levels</h3><table class="levels" border=1>
   <tr><th>When</th><th>Value</th></tr>
   ${levels
     .map(({value, when}) => {
@@ -25,7 +25,7 @@ export function page({levels, logs}: Data, warningLevel: number) {
     })
     .join('')}
 </table>`
-  const logsHtml = `<h3>Logs</h3><table border=1>
+  const logsHtml = `<h3>Logs</h3><table class="logs" border=1>
   <tr><th>When</th><th>Severity</th><th>Message</th></tr>
   ${logs
     .map(({message, severity, when}) => {
