@@ -11,7 +11,7 @@ export const root: Route =
       return
     }
     const pagedata: Data = {levels: [], logs: []}
-    const limit = req.query.all ? 1000 : 10
+    const limit = req.query.full ? 1000 : 10
     await exec<Level>(
       'levels',
       async (collection) => {

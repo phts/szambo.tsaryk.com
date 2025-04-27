@@ -18,15 +18,15 @@
   <body>
     {{levels}} {{logs}}
     <hr />
-    <a id="allDataLink" href="">All data</a>
+    <a id="fullDataLink" href="">Full data</a>
     <script>
-      const allDataUrl = new URL(document.location)
-      if (!allDataUrl.searchParams.has('all')) {
-        allDataUrl.searchParams.append('all', 'true')
+      const fullDataUrl = new URL(document.location)
+      if (!fullDataUrl.searchParams.has('full')) {
+        fullDataUrl.searchParams.append('full', 'true')
       } else {
-        allDataUrl.searchParams.delete('all')
+        fullDataUrl.searchParams.delete('full')
       }
-      document.getElementById('allDataLink').setAttribute('href', allDataUrl.toString())
+      document.getElementById('fullDataLink').setAttribute('href', fullDataUrl.toString())
     </script>
   </body>
 </html>
