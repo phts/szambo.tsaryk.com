@@ -3,6 +3,8 @@ import {exec, Level, Log} from '../../db'
 import {login} from './login'
 import {page, Data} from './page'
 
+const CHART_MAX_VALUES = 10
+
 export const root: Route =
   ({config}) =>
   async (req, res) => {
@@ -10,7 +12,7 @@ export const root: Route =
       res.send(login())
       return
     }
-    const pagedata: Data = {levels: [], logs: []}
+    const pagedata: Data = {levels: [], logs: [], chart: {labels: [], data: []}}
     const limit = req.query.full ? 1000 : 10
     await exec<Level>(
       'levels',
@@ -36,6 +38,9 @@ export const root: Route =
         },
       }
     )
-
+    pagedata.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
+      pagedata.chart.data.unshift(v.value)
+      pagedata.chart.labels.unshift(v.when.toLocaleString())
+    })
     res.send(page(pagedata, config.warningLevel))
   }

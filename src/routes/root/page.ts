@@ -5,6 +5,10 @@ import {Level, Log} from '../../db'
 export interface Data {
   levels: Level[]
   logs: Log[]
+  chart: {
+    labels: string[]
+    data: number[]
+  }
 }
 
 const tmpl = readFileSync(path.resolve(__dirname, 'page.tmpl.html')).toString()
@@ -15,7 +19,7 @@ const STYLES = {
   fatal: 'background-color:#f55;color:#000',
 }
 
-export function page({levels, logs}: Data, warningLevel: number) {
+export function page({levels, logs, chart: {labels: chartLabels, data: chartData}}: Data, warningLevel: number) {
   const levelsHtml = `<h3>Levels</h3><table class="levels" border=1>
   <tr><th>When</th><th>Value</th></tr>
   ${levels
@@ -35,5 +39,9 @@ export function page({levels, logs}: Data, warningLevel: number) {
     })
     .join('')}
 </table>`
-  return tmpl.replace('{{levels}}', levelsHtml).replace('{{logs}}', logsHtml)
+  return tmpl
+    .replace('{{levels}}', levelsHtml)
+    .replace('{{logs}}', logsHtml)
+    .replace("'{{chartLabels}}'", JSON.stringify(chartLabels))
+    .replace("'{{chartData}}'", JSON.stringify(chartData))
 }

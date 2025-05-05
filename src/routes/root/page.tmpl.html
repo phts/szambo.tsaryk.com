@@ -22,10 +22,18 @@
       .logs td:nth-child(2) {
         text-align: center;
       }
+      .chart-wrapper {
+        max-width: 800px;
+        width: 100%;
+      }
     </style>
   </head>
   <body>
-    {{levels}} {{logs}}
+    {{levels}}
+    <div class="chart-wrapper">
+      <canvas id="chart"></canvas>
+    </div>
+    {{logs}}
     <hr />
     <footer>
       <a id="fullDataLink" href="">Full data</a>
@@ -40,6 +48,72 @@
         fullDataUrl.searchParams.delete('full')
       }
       document.getElementById('fullDataLink').setAttribute('href', fullDataUrl.toString())
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const ctx = document.getElementById('chart')
+      const plugin = {
+        id: 'horizontalLine',
+        defaults: {},
+        afterDraw: (chart, _, options) => {
+          const {ctx} = chart
+          const {left, right} = chart.chartArea
+          const scale = chart.scales.y
+          const width = options.width || 1
+          const color = options.color || '#000'
+          const value = options.value ? scale.getPixelForValue(options.value) : 0
+          ctx.beginPath()
+          ctx.lineWidth = width
+          ctx.moveTo(left, value)
+          ctx.lineTo(right, value)
+          ctx.strokeStyle = color
+          ctx.stroke()
+        },
+      }
+      Chart.register(plugin)
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: '{{chartLabels}}',
+          datasets: [
+            {
+              data: '{{chartData}}',
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          elements: {
+            bar: {
+              backgroundColor: (ctx) => (ctx.parsed.y >= 83 ? '#f60' : '#000'),
+            },
+          },
+          scales: {
+            x: {
+              ticks: {
+                autoSkip: false,
+                maxRotation: 90,
+                minRotation: 90,
+              },
+            },
+            y: {
+              beginAtZero: true,
+              max: 100,
+              min: 0,
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+            horizontalLine: {
+              width: 1,
+              color: '#f60',
+              value: 83,
+            },
+          },
+        },
+      })
     </script>
   </body>
 </html>
