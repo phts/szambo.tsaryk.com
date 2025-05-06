@@ -14,30 +14,14 @@ export const root: Route =
     }
     const pagedata: Data = {levels: [], logs: [], chart: {labels: [], data: []}}
     const limit = req.query.full ? 1000 : 10
-    await exec<Level>(
-      'levels',
-      async (collection) => {
-        const cursor = collection.find().sort({when: -1}).limit(limit)
-        pagedata.levels = await cursor.toArray()
-      },
-      {
-        onError: () => {
-          res.sendStatus(503)
-        },
-      }
-    )
-    await exec<Log>(
-      'logs',
-      async (collection) => {
-        const cursor = collection.find().sort({when: -1}).limit(limit)
-        pagedata.logs = await cursor.toArray()
-      },
-      {
-        onError: () => {
-          res.sendStatus(503)
-        },
-      }
-    )
+    await exec<Level>('levels', async (collection) => {
+      const cursor = collection.find().sort({when: -1}).limit(limit)
+      pagedata.levels = await cursor.toArray()
+    })
+    await exec<Log>('logs', async (collection) => {
+      const cursor = collection.find().sort({when: -1}).limit(limit)
+      pagedata.logs = await cursor.toArray()
+    })
     pagedata.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
       pagedata.chart.data.unshift(v.value)
       pagedata.chart.labels.unshift(v.when.toLocaleString())

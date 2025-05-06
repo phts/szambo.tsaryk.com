@@ -10,18 +10,10 @@ export const level: Route =
       res.sendStatus(400)
       return
     }
-    await exec<Level>(
-      'levels',
-      async (collection) => {
-        await collection.insertOne({value: newValue, when: new Date()})
-        res.send({ok: true})
-      },
-      {
-        onError: () => {
-          res.sendStatus(503)
-        },
-      }
-    )
+    await exec<Level>('levels', async (collection) => {
+      await collection.insertOne({value: newValue, when: new Date()})
+      res.send({ok: true})
+    })
     if (newValue >= config.warningLevel) {
       email({config: config.email, level: newValue})
     }
