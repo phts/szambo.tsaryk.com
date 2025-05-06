@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>szambo.tsaryk.com</title>
+    <style>
+      body {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+      }
+      hr {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      Last: when={{lastWhen}}; actions={{lastActions}}
+    </div>
+    <form action="/remote-control" method="post">
+      <hr />
+      <div>
+        Actions: <label><input type="checkbox" name="check"> Check</label>
+      </div>
+      <div>
+        <input type="password" name="auth">
+        <input type="submit" value="🚀">
+      </div>
+    </form>
+</html>

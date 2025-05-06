@@ -9,6 +9,7 @@ export interface Data {
     labels: string[]
     data: number[]
   }
+  remoteControlHref: string
 }
 
 const tmpl = readFileSync(path.resolve(__dirname, 'page.tmpl.html')).toString()
@@ -19,7 +20,10 @@ const STYLES = {
   fatal: 'background-color:#f55;color:#000',
 }
 
-export function page({levels, logs, chart: {labels: chartLabels, data: chartData}}: Data, warningLevel: number) {
+export function page(
+  {levels, logs, chart: {labels: chartLabels, data: chartData}, remoteControlHref}: Data,
+  warningLevel: number
+) {
   const levelsHtml = `<h3>Levels</h3><table class="levels" border=1>
   <tr><th>When</th><th>Value</th></tr>
   ${levels
@@ -42,6 +46,7 @@ export function page({levels, logs, chart: {labels: chartLabels, data: chartData
   return tmpl
     .replace('{{levels}}', levelsHtml)
     .replace('{{logs}}', logsHtml)
+    .replace('{{remoteControlHref}}', remoteControlHref)
     .replace("'{{chartLabels}}'", JSON.stringify(chartLabels))
     .replace("'{{chartData}}'", JSON.stringify(chartData))
 }

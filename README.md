@@ -14,8 +14,11 @@ Features:
 ### Endpoints
 
 - `GET /`
+- `GET /remote-control`
+- `GET /rc`
 - `POST /level?value=<value>`
 - `POST /log?severity=<debug|info|warn|error|fatal>&message=<message>`
+- `POST /remote-control`
 
 ## Deployment
 

@@ -12,7 +12,12 @@ export const root: Route =
       res.send(login())
       return
     }
-    const pagedata: Data = {levels: [], logs: [], chart: {labels: [], data: []}}
+    const pagedata: Data = {
+      levels: [],
+      logs: [],
+      chart: {labels: [], data: []},
+      remoteControlHref: `/remote-control?auth=${config.auth.rd}`,
+    }
     const limit = req.query.full ? 1000 : 10
     await exec<Level>('levels', async (collection) => {
       const cursor = collection.find().sort({when: -1}).limit(limit)

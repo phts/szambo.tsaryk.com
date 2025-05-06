@@ -11,6 +11,14 @@ export interface Log {
   when: Date
 }
 
+export enum RemoteControlAction {
+  Check = 'check',
+}
+export interface RemoteControl {
+  when: Date
+  actions: RemoteControlAction[]
+}
+
 let uri: string
 
 export function init(config: Config) {
