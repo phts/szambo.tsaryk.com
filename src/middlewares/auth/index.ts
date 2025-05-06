@@ -9,7 +9,7 @@ export const auth: Middleware =
     }
     if (
       (req.method === 'GET' && req.query.auth !== config.auth.rd) ||
-      (req.method !== 'GET' && req.query.auth !== config.auth.wr)
+      (req.method !== 'GET' && req.query.auth !== config.auth.wr && req.body.auth !== config.auth.wr)
     ) {
       res.sendStatus(401)
       return
