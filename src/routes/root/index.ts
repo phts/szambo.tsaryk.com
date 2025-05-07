@@ -3,7 +3,7 @@ import {exec, Level, Log} from '../../db'
 import {login} from './login'
 import {page, Data} from './page'
 
-const CHART_MAX_VALUES = 10
+const CHART_MAX_VALUES = 50
 
 export const root: Route =
   ({config}) =>
@@ -18,7 +18,7 @@ export const root: Route =
       chart: {labels: [], data: []},
       remoteControlHref: `/remote-control?auth=${config.auth.rd}`,
     }
-    const limit = req.query.full ? 1000 : 10
+    const limit = req.query.full ? 1000 : 15
     await exec<Level>('levels', async (collection) => {
       const cursor = collection.find().sort({when: -1}).limit(limit)
       pagedata.levels = await cursor.toArray()
