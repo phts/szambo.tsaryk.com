@@ -16,7 +16,7 @@ export enum RemoteControlAction {
 }
 export interface RemoteControl {
   when: Date
-  actions: RemoteControlAction[]
+  action: RemoteControlAction
 }
 
 let uri: string
