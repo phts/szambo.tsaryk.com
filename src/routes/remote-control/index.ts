@@ -23,23 +23,23 @@ export const remoteControlItem: Route = () => async (req, res) => {
     res.sendStatus(404)
     return
   }
-  res.send(`id=${item.when.toISOString()};actions=${item.actions.join(',')}`)
+  res.send(`${item.when.toISOString()}|${item.action}`)
 }
 
 export const submitRemoteControl: Route =
   ({config}) =>
   async (req, res) => {
-    const actions: RemoteControlAction[] = []
+    let action: RemoteControlAction | null = null
     if (req.body.check === 'on') {
-      actions.push(RemoteControlAction.Check)
+      action = RemoteControlAction.Check
     }
-    if (!actions.length) {
+    if (!action) {
       res.sendStatus(400)
       return
     }
 
     await exec<RemoteControl>('remote-control', async (collection) => {
-      const item = {when: new Date(), actions}
+      const item = {when: new Date(), action}
       await collection.insertOne(item)
       res.redirect(`/?auth=${config.auth.rd}`)
     })
