@@ -1,5 +1,5 @@
 import {Route} from '..'
-import {exec, RemoteControl, RemoteControlAction} from '../../db'
+import {exec, Log, RemoteControl, RemoteControlAction} from '../../db'
 import {Data, page} from './page'
 
 async function getRemoteControlItem(): Promise<RemoteControl | null> {
@@ -41,6 +41,9 @@ export const submitRemoteControl: Route =
     await exec<RemoteControl>('remote-control', async (collection) => {
       const item = {when: new Date(), action}
       await collection.insertOne(item)
-      res.redirect(`/?auth=${config.auth.rd}`)
     })
+    await exec<Log>('logs', async (collection) => {
+      await collection.insertOne({message: `Remote action requested: ${action}`, severity: 'info', when: new Date()})
+    })
+    res.redirect(`/?auth=${config.auth.rd}`)
   }
