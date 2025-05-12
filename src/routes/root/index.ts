@@ -29,7 +29,7 @@ export const root: Route =
     })
     pagedata.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
       pagedata.chart.data.unshift(v.value)
-      pagedata.chart.labels.unshift(v.when.toLocaleDateString())
+      pagedata.chart.labels.unshift(v.when.toISOString())
     })
     res.send(page(pagedata, config.warningLevel))
   }

@@ -96,6 +96,9 @@
                 autoSkip: false,
                 maxRotation: 90,
                 minRotation: 90,
+                callback: function (value) {
+                  return this.getLabelForValue(value).split('T')[0]
+                },
               },
               grid: {
                 display: false,
@@ -129,6 +132,11 @@
               width: 1,
               color: '#f60',
               value: 83,
+            },
+            tooltip: {
+              callbacks: {
+                title: (context) => new Date(Date.parse(context[0].label)).toLocaleString(),
+              },
             },
           },
         },
