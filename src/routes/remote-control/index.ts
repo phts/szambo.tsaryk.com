@@ -30,8 +30,8 @@ export const submitRemoteControl: Route =
   ({config}) =>
   async (req, res) => {
     let action: RemoteControlAction | null = null
-    if (req.body.check === 'on') {
-      action = RemoteControlAction.Check
+    if (req.body.measure === 'on') {
+      action = RemoteControlAction.Measure
     }
     if (!action) {
       res.sendStatus(400)

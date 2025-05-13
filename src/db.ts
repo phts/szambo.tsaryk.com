@@ -12,7 +12,7 @@ export interface Log {
 }
 
 export enum RemoteControlAction {
-  Check = 'check',
+  Measure = 'measure',
 }
 export interface RemoteControl {
   when: Date
