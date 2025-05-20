@@ -10,6 +10,7 @@ export interface Data {
     data: number[]
   }
   remoteControlHref: string
+  showMode: boolean
 }
 
 const tmpl = readFileSync(path.resolve(__dirname, 'page.tmpl.html')).toString()
@@ -21,15 +22,15 @@ const STYLES = {
 }
 
 export function page(
-  {levels, logs, chart: {labels: chartLabels, data: chartData}, remoteControlHref}: Data,
+  {levels, logs, chart: {labels: chartLabels, data: chartData}, remoteControlHref, showMode}: Data,
   warningLevel: number
 ) {
   const levelsHtml = `<h3>Levels</h3><table class="levels" border=1>
-  <tr><th>When</th><th>Value</th><th>Mode</th></tr>
+  <tr><th>When</th><th>Value</th>${showMode ? '<th>Mode</th>' : ''}</tr>
   ${levels
     .map(({value, when, mode}) => {
       const props = value >= warningLevel ? ` style="${STYLES.warn}"` : ''
-      return `<tr${props}><td>${when.toLocaleString()}</td><td>${value}</td><td>${mode}</td></tr>`
+      return `<tr${props}><td>${when.toLocaleString()}</td><td>${value}</td>${showMode ? `<td>${mode}</td>` : ''}</tr>`
     })
     .join('')}
 </table>`

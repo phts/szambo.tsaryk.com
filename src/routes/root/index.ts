@@ -17,6 +17,7 @@ export const root: Route =
       logs: [],
       chart: {labels: [], data: []},
       remoteControlHref: `/remote-control?auth=${config.auth.rd}`,
+      showMode: !!req.query.manual,
     }
     await exec<Level>('levels', async (collection) => {
       let cursor = collection.find().sort({when: -1})
