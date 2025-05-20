@@ -1,7 +1,7 @@
 import {Route} from '..'
 import {exec, Level, LevelMode, Log} from '../../db'
 import {login} from './login'
-import {page, Data} from './page'
+import {home, Data} from './home'
 
 const CHART_MAX_VALUES = 50
 
@@ -40,5 +40,5 @@ export const root: Route =
       pagedata.chart.data.unshift(v.value)
       pagedata.chart.labels.unshift(v.when.toISOString())
     })
-    res.send(page(pagedata, config.warningLevel))
+    res.send(home(pagedata, config.warningLevel))
   }

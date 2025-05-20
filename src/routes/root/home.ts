@@ -13,7 +13,7 @@ export interface Data {
   showMode: boolean
 }
 
-const tmpl = readFileSync(path.resolve(__dirname, 'page.tmpl.html')).toString()
+const tmpl = readFileSync(path.resolve(__dirname, 'home.tmpl.html')).toString()
 
 const STYLES = {
   warn: 'color:#f60',
@@ -21,7 +21,7 @@ const STYLES = {
   fatal: 'background-color:#f55;color:#000',
 }
 
-export function page(
+export function home(
   {levels, logs, chart: {labels: chartLabels, data: chartData}, remoteControlHref, showMode}: Data,
   warningLevel: number
 ) {
