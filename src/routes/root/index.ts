@@ -1,5 +1,5 @@
 import {Route} from '..'
-import {exec, Level, Log} from '../../db'
+import {exec, Level, LevelMode, Log} from '../../db'
 import {login} from './login'
 import {page, Data} from './page'
 
@@ -18,13 +18,21 @@ export const root: Route =
       chart: {labels: [], data: []},
       remoteControlHref: `/remote-control?auth=${config.auth.rd}`,
     }
-    const limit = req.query.full ? 1000 : 15
     await exec<Level>('levels', async (collection) => {
-      const cursor = collection.find().sort({when: -1}).limit(limit)
+      let cursor = collection.find().sort({when: -1})
+      if (!req.query.manual && !req.query.full) {
+        cursor = cursor.filter({mode: LevelMode.Auto})
+      }
+      if (!req.query.full) {
+        cursor = cursor.limit(15)
+      }
       pagedata.levels = await cursor.toArray()
     })
     await exec<Log>('logs', async (collection) => {
-      const cursor = collection.find().sort({when: -1}).limit(limit)
+      let cursor = collection.find().sort({when: -1})
+      if (!req.query.full) {
+        cursor = cursor.limit(15)
+      }
       pagedata.logs = await cursor.toArray()
     })
     pagedata.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {

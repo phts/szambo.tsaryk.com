@@ -25,11 +25,11 @@ export function page(
   warningLevel: number
 ) {
   const levelsHtml = `<h3>Levels</h3><table class="levels" border=1>
-  <tr><th>When</th><th>Value</th></tr>
+  <tr><th>When</th><th>Value</th><th>Mode</th></tr>
   ${levels
-    .map(({value, when}) => {
+    .map(({value, when, mode}) => {
       const props = value >= warningLevel ? ` style="${STYLES.warn}"` : ''
-      return `<tr${props}><td>${when.toLocaleString()}</td><td>${value}</td></tr>`
+      return `<tr${props}><td>${when.toLocaleString()}</td><td>${value}</td><td>${mode}</td></tr>`
     })
     .join('')}
 </table>`

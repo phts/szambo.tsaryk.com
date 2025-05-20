@@ -36,6 +36,8 @@
     {{logs}}
     <hr />
     <footer>
+      <a id="manualLink" href="">Auto + Manual</a>
+      &nbsp;|&nbsp;
       <a id="fullDataLink" href="">Full data</a>
       &nbsp;|&nbsp;
       <a href="{{remoteControlHref}}">Remote control</a>
@@ -50,6 +52,13 @@
         fullDataUrl.searchParams.delete('full')
       }
       document.getElementById('fullDataLink').setAttribute('href', fullDataUrl.toString())
+      const manualLinkUrl = new URL(document.location)
+      if (!manualLinkUrl.searchParams.has('manual')) {
+        manualLinkUrl.searchParams.append('manual', 'true')
+      } else {
+        manualLinkUrl.searchParams.delete('manual')
+      }
+      document.getElementById('manualLink').setAttribute('href', manualLinkUrl.toString())
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

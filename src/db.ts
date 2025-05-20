@@ -1,8 +1,13 @@
 import {Collection, Document, MongoClient} from 'mongodb'
 import {Config} from './config'
 
+export enum LevelMode {
+  Auto = 'auto',
+  Manual = 'manual',
+}
 export interface Level {
   value: number
+  mode: LevelMode
   when: Date
 }
 export interface Log {
