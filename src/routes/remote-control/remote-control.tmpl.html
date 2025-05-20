@@ -17,6 +17,11 @@
       hr {
         width: 100%;
       }
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
     </style>
   </head>
   <body>
@@ -26,7 +31,7 @@
     <form action="/remote-control" method="post">
       <hr />
       <div>
-        Actions: <label><input type="radio" name="measure"> Measure</label>
+        Actions: <label><input type="radio" name="action" value="measure"> Measure</label> | <label><input type="radio" name="action" value="measure+reset"> Measure and reset timer</label>
       </div>
       <div>
         <input type="password" name="auth">

@@ -18,6 +18,7 @@ export interface Log {
 
 export enum RemoteControlAction {
   Measure = 'measure',
+  MeasureAndResetTimer = 'measure+reset',
 }
 export interface RemoteControl {
   when: Date

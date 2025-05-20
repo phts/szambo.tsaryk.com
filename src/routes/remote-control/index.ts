@@ -41,11 +41,8 @@ export const remoteControlItem: Route = () => async (req, res) => {
 export const submitRemoteControl: Route =
   ({config}) =>
   async (req, res) => {
-    let action: RemoteControlAction | null = null
-    if (req.body.measure === 'on') {
-      action = RemoteControlAction.Measure
-    }
-    if (!action) {
+    const action: RemoteControlAction | undefined = req.body.action as RemoteControlAction
+    if (!Object.values(RemoteControlAction).includes(action)) {
       res.sendStatus(400)
       return
     }
