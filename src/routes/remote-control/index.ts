@@ -2,6 +2,18 @@ import {Route} from '..'
 import {exec, Log, RemoteControl, RemoteControlAction} from '../../db'
 import {Data, page} from './page'
 
+function generateId(item: RemoteControl) {
+  const {when} = item
+  return [
+    when.getFullYear(),
+    (when.getMonth() + 1).toString().padStart(2, '0'),
+    when.getDay().toString().padStart(2, '0'),
+    when.getHours().toString().padStart(2, '0'),
+    when.getMinutes().toString().padStart(2, '0'),
+    when.getSeconds().toString().padStart(2, '0'),
+  ].join('')
+}
+
 async function getRemoteControlItem(): Promise<RemoteControl | null> {
   let it: RemoteControl | null = null
   await exec<RemoteControl>('remote-control', async (collection) => {
@@ -23,7 +35,7 @@ export const remoteControlItem: Route = () => async (req, res) => {
     res.sendStatus(404)
     return
   }
-  res.send(`${item.when.toISOString()}|${item.action}`)
+  res.send(`${generateId(item)}|${item.action}`)
 }
 
 export const submitRemoteControl: Route =
@@ -38,12 +50,16 @@ export const submitRemoteControl: Route =
       return
     }
 
+    const item = {when: new Date(), action}
     await exec<RemoteControl>('remote-control', async (collection) => {
-      const item = {when: new Date(), action}
       await collection.insertOne(item)
     })
     await exec<Log>('logs', async (collection) => {
-      await collection.insertOne({message: `Remote action requested: ${action}`, severity: 'info', when: new Date()})
+      await collection.insertOne({
+        message: `Remote action requested: ${action} (id=${generateId(item)})`,
+        severity: 'info',
+        when: new Date(),
+      })
     })
     res.redirect(`/?auth=${config.auth.rd}`)
   }
