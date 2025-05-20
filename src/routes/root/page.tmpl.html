@@ -26,6 +26,9 @@
         max-width: 800px;
         width: 100%;
       }
+      a.active {
+        text-decoration: line-through;
+      }
     </style>
   </head>
   <body>
@@ -45,20 +48,25 @@
       <a href="https://github.com/phts/szambo.tsaryk.com" target="_blank">© Phil Tsaryk, 2025</a>
     </footer>
     <script>
+      const moreDataLink = document.getElementById('moreDataLink')
       const moreDataUrl = new URL(document.location)
       if (!moreDataUrl.searchParams.has('more')) {
         moreDataUrl.searchParams.append('more', 'true')
       } else {
         moreDataUrl.searchParams.delete('more')
+        moreDataLink.classList.add('active')
       }
-      document.getElementById('moreDataLink').setAttribute('href', moreDataUrl.toString())
+      moreDataLink.setAttribute('href', moreDataUrl.toString())
+
+      const manualLink = document.getElementById('manualLink')
       const manualLinkUrl = new URL(document.location)
       if (!manualLinkUrl.searchParams.has('manual')) {
         manualLinkUrl.searchParams.append('manual', 'true')
       } else {
         manualLinkUrl.searchParams.delete('manual')
+        manualLink.classList.add('active')
       }
-      document.getElementById('manualLink').setAttribute('href', manualLinkUrl.toString())
+      manualLink.setAttribute('href', manualLinkUrl.toString())
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
