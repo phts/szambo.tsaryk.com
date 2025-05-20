@@ -20,17 +20,17 @@ export const root: Route =
     }
     await exec<Level>('levels', async (collection) => {
       let cursor = collection.find().sort({when: -1})
-      if (!req.query.manual && !req.query.full) {
+      if (!req.query.manual) {
         cursor = cursor.filter({mode: LevelMode.Auto})
       }
-      if (!req.query.full) {
+      if (!req.query.more) {
         cursor = cursor.limit(15)
       }
       pagedata.levels = await cursor.toArray()
     })
     await exec<Log>('logs', async (collection) => {
       let cursor = collection.find().sort({when: -1})
-      if (!req.query.full) {
+      if (!req.query.more) {
         cursor = cursor.limit(15)
       }
       pagedata.logs = await cursor.toArray()

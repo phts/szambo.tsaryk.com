@@ -38,20 +38,20 @@
     <footer>
       <a id="manualLink" href="">Auto + Manual</a>
       &nbsp;|&nbsp;
-      <a id="fullDataLink" href="">Full data</a>
+      <a id="moreDataLink" href="">More data</a>
       &nbsp;|&nbsp;
       <a href="{{remoteControlHref}}">Remote control</a>
       &nbsp;|&nbsp;
       <a href="https://github.com/phts/szambo.tsaryk.com" target="_blank">© Phil Tsaryk, 2025</a>
     </footer>
     <script>
-      const fullDataUrl = new URL(document.location)
-      if (!fullDataUrl.searchParams.has('full')) {
-        fullDataUrl.searchParams.append('full', 'true')
+      const moreDataUrl = new URL(document.location)
+      if (!moreDataUrl.searchParams.has('more')) {
+        moreDataUrl.searchParams.append('more', 'true')
       } else {
-        fullDataUrl.searchParams.delete('full')
+        moreDataUrl.searchParams.delete('more')
       }
-      document.getElementById('fullDataLink').setAttribute('href', fullDataUrl.toString())
+      document.getElementById('moreDataLink').setAttribute('href', moreDataUrl.toString())
       const manualLinkUrl = new URL(document.location)
       if (!manualLinkUrl.searchParams.has('manual')) {
         manualLinkUrl.searchParams.append('manual', 'true')
