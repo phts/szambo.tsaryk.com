@@ -1,13 +1,12 @@
 import * as path from 'path'
 import {readFileSync} from 'fs'
-import {Level, Log} from '../../db'
+import {Level, LevelMode, Log} from '../../db'
 
 export interface Data {
   levels: Level[]
   logs: Log[]
   chart: {
-    labels: string[]
-    data: number[]
+    data: Array<{x: string; y: number; mode: LevelMode}>
   }
   remoteControlHref: string
   showMode: boolean
@@ -22,7 +21,7 @@ const STYLES = {
 }
 
 export function home(
-  {levels, logs, chart: {labels: chartLabels, data: chartData}, remoteControlHref, showMode}: Data,
+  {levels, logs, chart: {data: chartData}, remoteControlHref, showMode}: Data,
   warningLevel: number
 ) {
   const levelsHtml = `<h3>Levels</h3><table class="levels" border=1>
@@ -48,6 +47,5 @@ export function home(
     .replace('{{levels}}', levelsHtml)
     .replace('{{logs}}', logsHtml)
     .replace('{{remoteControlHref}}', remoteControlHref)
-    .replace("'{{chartLabels}}'", JSON.stringify(chartLabels))
     .replace("'{{chartData}}'", JSON.stringify(chartData))
 }

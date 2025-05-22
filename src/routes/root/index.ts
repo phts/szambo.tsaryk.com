@@ -15,7 +15,7 @@ export const root: Route =
     const pagedata: Data = {
       levels: [],
       logs: [],
-      chart: {labels: [], data: []},
+      chart: {data: []},
       remoteControlHref: `/remote-control?auth=${config.auth.rd}`,
       showMode: !!req.query.manual,
     }
@@ -37,8 +37,7 @@ export const root: Route =
       pagedata.logs = await cursor.toArray()
     })
     pagedata.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
-      pagedata.chart.data.unshift(v.value)
-      pagedata.chart.labels.unshift(v.when.toISOString())
+      pagedata.chart.data.unshift({x: v.when.toISOString(), y: v.value, mode: v.mode})
     })
     res.send(home(pagedata, config.warningLevel))
   }

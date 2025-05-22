@@ -93,7 +93,6 @@
       new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: '{{chartLabels}}',
           datasets: [
             {
               data: '{{chartData}}',
@@ -104,7 +103,7 @@
         options: {
           elements: {
             bar: {
-              backgroundColor: (ctx) => (ctx.parsed.y >= 83 ? '#f60' : '#000'),
+              backgroundColor: (ctx) => (ctx.parsed.y >= 83 ? '#f60' : ctx.raw.mode === 'auto' ? '#000' : '#006'),
             },
           },
           scales: {
