@@ -10,6 +10,7 @@ export interface Data {
   }
   remoteControlHref: string
   showMode: boolean
+  isAdmin: boolean
 }
 
 const tmpl = readFileSync(path.resolve(__dirname, 'home.tmpl.html')).toString()
@@ -22,9 +23,10 @@ const STYLES = {
 }
 
 export function home(
-  {levels, logs, chart: {data: chartData}, remoteControlHref, showMode}: Data,
+  {levels, logs, chart: {data: chartData}, remoteControlHref, showMode, isAdmin}: Data,
   warningLevel: number
 ) {
+  const adminPanelHtml = isAdmin ? `<a href="${remoteControlHref}">Remote control</a><hr>` : ''
   const levelsHtml = `<h3>Levels</h3><table class="levels" border=1>
   <tr><th>When</th><th>Value</th>${showMode ? '<th>Mode</th>' : ''}</tr>
   ${levels
@@ -45,8 +47,8 @@ export function home(
     .join('')}
 </table>`
   return tmpl
+    .replace('{{adminPanel}}', adminPanelHtml)
     .replace('{{levels}}', levelsHtml)
     .replace('{{logs}}', logsHtml)
-    .replace('{{remoteControlHref}}', remoteControlHref)
     .replace("'{{chartData}}'", JSON.stringify(chartData))
 }

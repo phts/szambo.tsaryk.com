@@ -15,7 +15,7 @@
     "lint:ts": "tsc --noEmit",
     "lint:es": "eslint .",
     "start": "node dist/app.js",
-    "start:watch": "nodemon dist/app.js"
+    "start:watch": "nodemon --ext js,json,html dist/app.js"
   },
   "dependencies": {
     "body-parser": "^2.2.0",

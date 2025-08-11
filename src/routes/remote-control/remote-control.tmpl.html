@@ -30,11 +30,11 @@
     </div>
     <form action="/remote-control" method="post">
       <hr />
+      <input type="hidden" name="auth" value="{{auth_wr}}">
       <div>
         Actions: <label><input type="radio" name="action" value="measure"> Measure</label> | <label><input type="radio" name="action" value="measure+reset"> Measure and reset timer</label>
       </div>
       <div>
-        <input type="password" name="auth">
         <input type="submit" value="🚀">
       </div>
     </form>

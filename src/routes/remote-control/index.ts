@@ -24,7 +24,7 @@ async function getRemoteControlItem(): Promise<RemoteControl | null> {
 }
 
 export const remoteControl: Route = () => async (req, res) => {
-  const data: Data = {item: null}
+  const data: Data = {item: null, auth_wr: String(req.query.auth_wr)}
   data.item = await getRemoteControlItem()
   res.send(page(data))
 }
