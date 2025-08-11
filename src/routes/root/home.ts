@@ -15,6 +15,7 @@ export interface Data {
 const tmpl = readFileSync(path.resolve(__dirname, 'home.tmpl.html')).toString()
 
 const STYLES = {
+  debug: 'opacity:0.5',
   warn: 'color:#f60',
   error: 'color:#e00',
   fatal: 'background-color:#f55;color:#000',
