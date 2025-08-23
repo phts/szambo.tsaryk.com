@@ -1,14 +1,17 @@
-import {Collection, Document, MongoClient} from 'mongodb'
+import {Collection, Document, MongoClient, ObjectId} from 'mongodb'
 import {Config} from './config'
 
 export enum LevelMode {
   Auto = 'auto',
   Manual = 'manual',
 }
-export interface Level {
+export interface NewLevel {
   value: number
   mode: LevelMode
   when: Date
+}
+export interface Level extends NewLevel {
+  _id: ObjectId
 }
 export interface Log {
   message: string

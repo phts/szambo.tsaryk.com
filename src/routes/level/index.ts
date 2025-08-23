@@ -1,5 +1,6 @@
+import {ObjectId} from 'mongodb'
 import {Route} from '..'
-import {exec, Level, LevelMode} from '../../db'
+import {exec, Level, LevelMode, NewLevel} from '../../db'
 import {email} from './email'
 
 export const level: Route =
@@ -11,7 +12,7 @@ export const level: Route =
       return
     }
     const mode = req.query.mode === 'auto' ? LevelMode.Auto : LevelMode.Manual
-    await exec<Level>('levels', async (collection) => {
+    await exec<NewLevel>('levels', async (collection) => {
       await collection.insertOne({value: newValue, mode, when: new Date()})
       res.send({ok: true})
     })
@@ -19,3 +20,14 @@ export const level: Route =
       email({config: config.email, level: newValue})
     }
   }
+
+export const removeLevel: Route = () => async (req, res) => {
+  await exec<Level>('levels', async (collection) => {
+    if (typeof req.query.id !== 'string') {
+      res.sendStatus(400)
+      return
+    }
+    await collection.deleteOne({_id: new ObjectId(req.query.id)})
+  })
+  res.send({ok: true})
+}

@@ -16,7 +16,9 @@
       footer {
         display: flex;
       }
-      .levels td:nth-child(2) {
+      .levels td:nth-child(2),
+      .levels td:nth-child(3),
+      .levels td:nth-child(4) {
         text-align: center;
       }
       .logs td:nth-child(2) {
@@ -157,6 +159,14 @@
           },
         },
       })
+    </script>
+    <script>
+      async function removeLevel(id, auth) {
+        const res = await fetch(`/level?id=${id}&auth=${auth}`, {method: 'DELETE'})
+        if (res.ok) {
+          window.location.reload()
+        }
+      }
     </script>
   </body>
 </html>

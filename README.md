@@ -19,6 +19,7 @@ Features:
 - `POST /level?value=<value>&mode=<auto|manual>`
 - `POST /log?severity=<debug|info|warn|error|fatal>&message=<message>`
 - `POST /remote-control`
+- `DELETE /level`
 
 ## Deployment
 

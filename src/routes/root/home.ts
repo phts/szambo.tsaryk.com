@@ -1,5 +1,6 @@
 import * as path from 'path'
 import {readFileSync} from 'fs'
+import {Request} from 'express'
 import {Level, LevelMode, Log} from '../../db'
 
 export interface Data {
@@ -11,6 +12,8 @@ export interface Data {
   remoteControlHref: string
   showMode: boolean
   isAdmin: boolean
+  warningLevel: number
+  query: Request['query']
 }
 
 const tmpl = readFileSync(path.resolve(__dirname, 'home.tmpl.html')).toString()
@@ -22,17 +25,30 @@ const STYLES = {
   fatal: 'background-color:#f55;color:#000',
 }
 
-export function home(
-  {levels, logs, chart: {data: chartData}, remoteControlHref, showMode, isAdmin}: Data,
-  warningLevel: number
-) {
+export function home({
+  levels,
+  logs,
+  chart: {data: chartData},
+  remoteControlHref,
+  showMode,
+  isAdmin,
+  warningLevel,
+  query,
+}: Data) {
   const adminPanelHtml = isAdmin ? `<a href="${remoteControlHref}">Remote control</a><hr>` : ''
   const levelsHtml = `<h3>Levels</h3><table class="levels" border=1>
-  <tr><th>When</th><th>Value</th>${showMode ? '<th>Mode</th>' : ''}</tr>
+<tr><th>When</th><th>Value</th>${showMode ? '<th>Mode</th>' : ''}
+${isAdmin ? '<th>Remove</th>' : ''}</tr>
   ${levels
-    .map(({value, when, mode}) => {
+    .map(({_id, value, when, mode}) => {
       const props = value >= warningLevel ? ` style="${STYLES.warn}"` : ''
-      return `<tr${props}><td>${when.toLocaleString()}</td><td>${value}</td>${showMode ? `<td>${mode}</td>` : ''}</tr>`
+      return `\
+<tr${props}>
+<td>${when.toLocaleString()}</td>
+<td>${value}</td>
+${showMode ? `<td>${mode}</td>` : ''}
+${isAdmin ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.stringify(query.auth_wr)})'>×</button></td>` : ''}
+</tr>`
     })
     .join('')}
 </table>`
@@ -46,6 +62,7 @@ export function home(
     })
     .join('')}
 </table>`
+
   return tmpl
     .replace('{{adminPanel}}', adminPanelHtml)
     .replace('{{levels}}', levelsHtml)

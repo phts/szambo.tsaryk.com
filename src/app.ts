@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
-import {root, level, log, remoteControl, submitRemoteControl, remoteControlItem} from './routes'
+import {root, level, log, remoteControl, submitRemoteControl, remoteControlItem, removeLevel} from './routes'
 import {getConfig} from './config'
 import {init} from './db'
 import {auth} from './middlewares/auth'
@@ -18,6 +18,7 @@ app.get('/', root({config}))
 app.post('/level', level({config}))
 app.post('/log', log({config}))
 app.post('/remote-control', submitRemoteControl({config}))
+app.delete('/level', removeLevel({config}))
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
