@@ -19,16 +19,16 @@
   },
   "dependencies": {
     "body-parser": "^2.2.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "mongodb": "^6.16.0",
-    "nodemailer": "^7.0.2"
+    "mongodb": "^6.19.0",
+    "nodemailer": "^7.0.6"
   },
   "devDependencies": {
     "@phts/eslint-config": "^2.1.1",
     "@phts/prettier-config": "^1.2.0",
     "@types/express": "^5.0.3",
-    "@types/nodemailer": "^6.4.17",
+    "@types/nodemailer": "^7.0.1",
     "copy-webpack-plugin": "^13.0.1",
     "eslint": "^8.57.1",
     "nodemon": "^3.1.10",
