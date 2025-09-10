@@ -58,5 +58,5 @@ export const submitRemoteControl: Route =
         when: new Date(),
       })
     })
-    res.redirect(`/?auth=${config.auth.rd}`)
+    res.redirect(`/?auth=${config.auth.rd}&auth_wr=${config.auth.wr}`)
   }
