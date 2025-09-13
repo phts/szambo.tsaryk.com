@@ -1,5 +1,6 @@
 import {Route} from '..'
-import {exec, RemoteControl, RemoteControlAction} from '../../db'
+import {RemoteControl, RemoteControlAction} from '../../db'
+import {RemoteControlService} from '../../services'
 import {Data, page} from './page'
 
 function generateId(item: RemoteControl) {
@@ -14,29 +15,28 @@ function generateId(item: RemoteControl) {
   ].join('')
 }
 
-async function getRemoteControlItem(): Promise<RemoteControl | null> {
-  let it: RemoteControl | null = null
-  await exec<RemoteControl>('remote-control', async (collection) => {
-    const cursor = collection.find().sort({_id: -1}).limit(1)
-    it = (await cursor.toArray())[0] ?? null
-  })
-  return it
+async function getRemoteControlItem(remoteControl: RemoteControlService): Promise<RemoteControl | null> {
+  return (await remoteControl.toArray({limit: 1}))[0] ?? null
 }
 
-export const remoteControl: Route = () => async (req, res) => {
-  const data: Data = {item: null, auth_wr: String(req.query.auth_wr)}
-  data.item = await getRemoteControlItem()
-  res.send(page(data))
-}
-
-export const remoteControlItem: Route = () => async (req, res) => {
-  const item = await getRemoteControlItem()
-  if (!item) {
-    res.sendStatus(404)
-    return
+export const remoteControl: Route =
+  ({services}) =>
+  async (req, res) => {
+    const data: Data = {item: null, auth_wr: String(req.query.auth_wr)}
+    data.item = await getRemoteControlItem(services.remoteControl)
+    res.send(page(data))
   }
-  res.send(`${generateId(item)}|${item.action}`)
-}
+
+export const remoteControlItem: Route =
+  ({services}) =>
+  async (req, res) => {
+    const item = await getRemoteControlItem(services.remoteControl)
+    if (!item) {
+      res.sendStatus(404)
+      return
+    }
+    res.send(`${generateId(item)}|${item.action}`)
+  }
 
 export const submitRemoteControl: Route =
   ({config, services}) =>
@@ -48,9 +48,7 @@ export const submitRemoteControl: Route =
     }
 
     const item = {when: new Date(), action}
-    await exec<RemoteControl>('remote-control', async (collection) => {
-      await collection.insertOne(item)
-    })
+    await services.remoteControl.insertOne(item)
     await services.logs.insertOne({
       message: `Remote action requested: ${action} (id=${generateId(item)})`,
       severity: 'info',
