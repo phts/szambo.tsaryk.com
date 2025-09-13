@@ -20,22 +20,73 @@
       form {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        min-width: 400px;
+      }
+      ul {
+        list-style-type: none;
+      }
+      .last {
+        color: #666;
+        font-size: smaller;
+      }
+      .actions {
+        display: flex;
+        justify-content: center;
       }
     </style>
   </head>
   <body>
-    <div>
-      Last: when={{lastWhen}}; action={{lastActions}}
-    </div>
     <form action="/remote-control" method="post">
+      <input type="hidden" name="auth" value="{{auth_wr}}" />
+      <input type="hidden" name="scheduledTimezone" />
       <hr />
-      <input type="hidden" name="auth" value="{{auth_wr}}">
       <div>
-        Actions: <label><input type="radio" name="action" value="measure"> Measure</label> | <label><input type="radio" name="action" value="measure+reset"> Measure and reset timer</label>
+        Action:
+        <ul>
+          <li>
+            <label><input id="radio-action-measure" type="radio" name="action" value="measure" /> Measure</label>
+          </li>
+          <li>
+            <label><input type="radio" name="action" value="measure+reset" /> Measure and reset timer</label>
+          </li>
+        </ul>
       </div>
       <div>
-        <input type="submit" value="🚀">
+        When:
+        <ul>
+          <li>
+            <label><input id="radio-when-now" type="radio" name="when" value="now" /> Now</label>
+          </li>
+          <li>
+            <label
+              ><input id="radio-when-scheduled" type="radio" name="when" value="scheduled" /> Scheduled on
+              <input type="datetime-local" name="scheduledDatetime"
+            /></label>
+          </li>
+        </ul>
       </div>
+      <div class="actions">
+        <input type="submit" value="🚀" />
+      </div>
+      <hr />
+      <div class="last">Last: when={{lastWhen}}; action={{lastActions}}</div>
     </form>
+  </body>
+  <script>
+    document.getElementById('radio-when-now').addEventListener('change', (e) => {
+      document.querySelector('input[name=scheduledDatetime]').setAttribute('disabled', true)
+    })
+    document.getElementById('radio-when-scheduled').addEventListener('change', (e) => {
+      document.querySelector('input[name=scheduledDatetime]').removeAttribute('disabled')
+      const pad = (s) => s.toString().padStart(2, '0')
+      const now = new Date()
+      document.querySelector('input[name=scheduledDatetime]').value =
+        `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`
+    })
+    window.addEventListener('load', () => {
+      document.querySelector('input[name=scheduledTimezone]').value = new Date().getTimezoneOffset()
+      document.getElementById('radio-action-measure').click()
+      document.getElementById('radio-when-now').click()
+    })
+  </script>
 </html>

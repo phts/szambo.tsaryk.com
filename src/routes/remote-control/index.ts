@@ -1,9 +1,10 @@
 import {Route} from '..'
 import {RemoteControl, RemoteControlAction} from '../../models'
 import {RemoteControlService} from '../../services'
+import {tzOffsetToIsoTimezone} from '../../utils'
 import {Data, page} from './page'
 
-function generateId(item: RemoteControl) {
+export function generateId(item: RemoteControl) {
   const {when} = item
   return [
     when.getFullYear(),
@@ -41,17 +42,35 @@ export const remoteControlItem: Route =
 export const submitRemoteControl: Route =
   ({config, services}) =>
   async (req, res) => {
-    const action: RemoteControlAction | undefined = req.body.action as RemoteControlAction
+    const {action, when, scheduledDatetime, scheduledTimezone} = req.body
     if (!Object.values(RemoteControlAction).includes(action)) {
       res.sendStatus(400)
       return
     }
+    if (!['now', 'scheduled'].includes(when)) {
+      res.sendStatus(400)
+      return
+    }
 
-    const item = {when: new Date(), action}
-    await services.remoteControl.insertOne(item)
-    await services.logs.insertOne({
-      message: `Remote action requested: ${action} (id=${generateId(item)})`,
-      severity: 'info',
-    })
+    if (when === 'now') {
+      const item = {when: new Date(), action}
+      await services.remoteControl.insertOne(item)
+      await services.logs.insertOne({
+        message: `Requested remote action "${action}" (id=${generateId(item)})`,
+        severity: 'info',
+      })
+    } else if (when === 'scheduled') {
+      const datetime = new Date(`${scheduledDatetime}:00${tzOffsetToIsoTimezone(parseInt(scheduledTimezone))}`)
+      if (isNaN(datetime.valueOf())) {
+        res.sendStatus(400)
+        return
+      }
+      services.scheduledActions.insertOne({when: datetime, action})
+      await services.logs.insertOne({
+        message: `Scheduled remote action "${action}" on ${datetime.toLocaleString()}`,
+        severity: 'info',
+      })
+    }
+
     res.redirect(`/?auth=${config.auth.rd}&auth_wr=${config.auth.wr}`)
   }
