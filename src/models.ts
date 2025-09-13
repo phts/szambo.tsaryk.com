@@ -26,3 +26,11 @@ export interface RemoteControl {
   when: Date
   action: RemoteControlAction
 }
+
+export interface NewScheduledAction {
+  when: Date
+  action: RemoteControlAction
+}
+export interface ScheduledAction extends NewScheduledAction {
+  _id: ObjectId
+}

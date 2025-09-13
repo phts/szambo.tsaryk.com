@@ -6,6 +6,7 @@ import {getConfig} from './config'
 import {init} from './db'
 import {auth} from './middlewares/auth'
 import {LevelsService, LogsService, RemoteControlService} from './services'
+import * as scheduledActions from './services/scheduled-actions'
 
 const config = getConfig()
 init(config)
@@ -36,3 +37,4 @@ app.use((err, req, res, next) => {
 })
 
 app.listen(3000)
+scheduledActions.start()
