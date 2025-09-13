@@ -5,13 +5,14 @@ import {root, level, log, remoteControl, submitRemoteControl, remoteControlItem,
 import {getConfig} from './config'
 import {init} from './db'
 import {auth} from './middlewares/auth'
-import {LogsService} from './services'
+import {LevelsService, LogsService} from './services'
 
 const config = getConfig()
 init(config)
 
 const services = {
   logs: new LogsService(),
+  levels: new LevelsService(),
 }
 
 const app = express()

@@ -1,5 +1,5 @@
 import {Route} from '..'
-import {exec, Level, LevelMode} from '../../db'
+import {LevelMode} from '../../db'
 import {login} from './login'
 import {home, Data} from './home'
 
@@ -22,15 +22,9 @@ export const root: Route =
       warningLevel: config.warningLevel,
       query: req.query,
     }
-    await exec<Level>('levels', async (collection) => {
-      let cursor = collection.find().sort({when: -1})
-      if (!req.query.manual) {
-        cursor = cursor.filter({mode: LevelMode.Auto})
-      }
-      if (!req.query.more) {
-        cursor = cursor.limit(15)
-      }
-      page.levels = await cursor.toArray()
+    page.levels = await services.levels.toArray({
+      limit: req.query.more ? undefined : 15,
+      filter: req.query.manual ? undefined : {mode: LevelMode.Auto},
     })
     page.logs = await services.logs.toArray({limit: req.query.more ? undefined : 15})
     page.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
