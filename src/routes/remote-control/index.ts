@@ -1,5 +1,5 @@
 import {Route} from '..'
-import {RemoteControl, RemoteControlAction} from '../../db'
+import {RemoteControl, RemoteControlAction} from '../../models'
 import {RemoteControlService} from '../../services'
 import {Data, page} from './page'
 

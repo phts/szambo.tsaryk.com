@@ -1,4 +1,5 @@
-import {exec, Log} from '../db'
+import {exec} from '../db'
+import {Log} from '../models'
 
 export class LogsService {
   public async insertOne(doc: {message: string; severity: string}): Promise<void> {

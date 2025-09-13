@@ -1,5 +1,6 @@
 import {Document, ObjectId} from 'mongodb'
-import {exec, Level, NewLevel} from '../db'
+import {exec} from '../db'
+import {Level, NewLevel} from '../models'
 
 export class LevelsService {
   public async insertOne(doc: NewLevel): Promise<void> {
