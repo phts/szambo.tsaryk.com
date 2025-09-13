@@ -5,20 +5,25 @@ import {root, level, log, remoteControl, submitRemoteControl, remoteControlItem,
 import {getConfig} from './config'
 import {init} from './db'
 import {auth} from './middlewares/auth'
+import {LogsService} from './services'
 
 const config = getConfig()
 init(config)
 
+const services = {
+  logs: new LogsService(),
+}
+
 const app = express()
 app.use(bodyParser.urlencoded())
 app.use(auth({config}))
-app.get('/remote-control', remoteControl({config}))
-app.get('/rc', remoteControlItem({config}))
-app.get('/', root({config}))
-app.post('/level', level({config}))
-app.post('/log', log({config}))
-app.post('/remote-control', submitRemoteControl({config}))
-app.delete('/level', removeLevel({config}))
+app.get('/remote-control', remoteControl({config, services}))
+app.get('/rc', remoteControlItem({config, services}))
+app.get('/', root({config, services}))
+app.post('/level', level({config, services}))
+app.post('/log', log({config, services}))
+app.post('/remote-control', submitRemoteControl({config, services}))
+app.delete('/level', removeLevel({config, services}))
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
