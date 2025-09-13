@@ -1,5 +1,5 @@
 import {Route} from '..'
-import {LevelMode} from '../../db'
+import {LevelMode} from '../../models'
 import {email} from './email'
 
 export const level: Route =

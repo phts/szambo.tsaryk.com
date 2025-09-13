@@ -1,6 +1,6 @@
 import * as path from 'path'
 import {readFileSync} from 'fs'
-import {RemoteControl} from '../../db'
+import {RemoteControl} from '../../models'
 
 export interface Data {
   item: RemoteControl | null

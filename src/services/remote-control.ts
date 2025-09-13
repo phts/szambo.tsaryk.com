@@ -1,4 +1,5 @@
-import {exec, RemoteControl} from '../db'
+import {exec} from '../db'
+import {RemoteControl} from '../models'
 
 export class RemoteControlService {
   public async insertOne(newEntry: RemoteControl): Promise<void> {

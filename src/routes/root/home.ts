@@ -1,7 +1,7 @@
 import * as path from 'path'
 import {readFileSync} from 'fs'
 import {Request} from 'express'
-import {Level, LevelMode, Log} from '../../db'
+import {Level, LevelMode, Log} from '../../models'
 
 export interface Data {
   levels: Level[]
