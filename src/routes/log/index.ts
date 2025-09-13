@@ -1,18 +1,17 @@
 import {Route} from '..'
-import {exec, Log} from '../../db'
 
-export const log: Route = () => async (req, res) => {
-  const {message, severity} = req.query
-  if (
-    typeof message !== 'string' ||
-    typeof severity !== 'string' ||
-    !['debug', 'info', 'warn', 'error', 'fatal'].includes(severity)
-  ) {
-    res.sendStatus(400)
-    return
-  }
-  await exec<Log>('logs', async (collection) => {
-    await collection.insertOne({message, severity, when: new Date()})
+export const log: Route =
+  ({services}) =>
+  async (req, res) => {
+    const {message, severity} = req.query
+    if (
+      typeof message !== 'string' ||
+      typeof severity !== 'string' ||
+      !['debug', 'info', 'warn', 'error', 'fatal'].includes(severity)
+    ) {
+      res.sendStatus(400)
+      return
+    }
+    await services.logs.insertOne({message, severity})
     res.send({ok: true})
-  })
-}
+  }

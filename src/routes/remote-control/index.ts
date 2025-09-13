@@ -1,5 +1,5 @@
 import {Route} from '..'
-import {exec, Log, RemoteControl, RemoteControlAction} from '../../db'
+import {exec, RemoteControl, RemoteControlAction} from '../../db'
 import {Data, page} from './page'
 
 function generateId(item: RemoteControl) {
@@ -39,7 +39,7 @@ export const remoteControlItem: Route = () => async (req, res) => {
 }
 
 export const submitRemoteControl: Route =
-  ({config}) =>
+  ({config, services}) =>
   async (req, res) => {
     const action: RemoteControlAction | undefined = req.body.action as RemoteControlAction
     if (!Object.values(RemoteControlAction).includes(action)) {
@@ -51,12 +51,9 @@ export const submitRemoteControl: Route =
     await exec<RemoteControl>('remote-control', async (collection) => {
       await collection.insertOne(item)
     })
-    await exec<Log>('logs', async (collection) => {
-      await collection.insertOne({
-        message: `Remote action requested: ${action} (id=${generateId(item)})`,
-        severity: 'info',
-        when: new Date(),
-      })
+    await services.logs.insertOne({
+      message: `Remote action requested: ${action} (id=${generateId(item)})`,
+      severity: 'info',
     })
     res.redirect(`/?auth=${config.auth.rd}&auth_wr=${config.auth.wr}`)
   }

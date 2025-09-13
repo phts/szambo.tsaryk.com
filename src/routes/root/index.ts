@@ -1,12 +1,12 @@
 import {Route} from '..'
-import {exec, Level, LevelMode, Log} from '../../db'
+import {exec, Level, LevelMode} from '../../db'
 import {login} from './login'
 import {home, Data} from './home'
 
 const CHART_MAX_VALUES = 50
 
 export const root: Route =
-  ({config}) =>
+  ({config, services}) =>
   async (req, res) => {
     if (!req.query.auth) {
       res.send(login())
@@ -32,13 +32,7 @@ export const root: Route =
       }
       page.levels = await cursor.toArray()
     })
-    await exec<Log>('logs', async (collection) => {
-      let cursor = collection.find().sort({when: -1})
-      if (!req.query.more) {
-        cursor = cursor.limit(15)
-      }
-      page.logs = await cursor.toArray()
-    })
+    page.logs = await services.logs.toArray({limit: req.query.more ? undefined : 15})
     page.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
       page.chart.data.unshift({x: v.when.toISOString(), y: v.value, mode: v.mode})
     })
