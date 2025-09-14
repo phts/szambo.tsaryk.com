@@ -9,8 +9,14 @@ export interface Config {
     pass: string
     from: string
     to: string
-    subject: string
-    text: string
+    level: {
+      subject: string
+      text: string
+    }
+    fatal: {
+      subject: string
+      text: string
+    }
   }
   warningLevel: number
   auth: {
@@ -28,8 +34,10 @@ export function getConfig(): Config {
     EMAIL_PASS,
     EMAIL_FROM,
     EMAIL_TO,
-    EMAIL_SUBJECT,
-    EMAIL_TEXT,
+    EMAIL_LEVEL_SUBJECT,
+    EMAIL_LEVEL_TEXT,
+    EMAIL_FATAL_SUBJECT,
+    EMAIL_FATAL_TEXT,
     WARNING_LEVEL,
     APP_AUTH_WR,
     APP_AUTH_RD,
@@ -55,11 +63,17 @@ export function getConfig(): Config {
   if (!EMAIL_TO) {
     throw new Error('EMAIL_TO env variable is missing')
   }
-  if (!EMAIL_SUBJECT) {
+  if (!EMAIL_LEVEL_SUBJECT) {
     throw new Error('EMAIL_SUBJECT env variable is missing')
   }
-  if (!EMAIL_TEXT) {
+  if (!EMAIL_LEVEL_TEXT) {
     throw new Error('EMAIL_TEXT env variable is missing')
+  }
+  if (!EMAIL_FATAL_SUBJECT) {
+    throw new Error('EMAIL_FATAL_SUBJECT env variable is missing')
+  }
+  if (!EMAIL_FATAL_TEXT) {
+    throw new Error('EMAIL_FATAL_TEXT env variable is missing')
   }
   if (!WARNING_LEVEL) {
     throw new Error('WARNING_LEVEL env variable is missing')
@@ -79,8 +93,14 @@ export function getConfig(): Config {
       pass: EMAIL_PASS,
       from: EMAIL_FROM,
       to: EMAIL_TO,
-      subject: EMAIL_SUBJECT,
-      text: EMAIL_TEXT,
+      level: {
+        subject: EMAIL_LEVEL_SUBJECT,
+        text: EMAIL_LEVEL_TEXT,
+      },
+      fatal: {
+        subject: EMAIL_FATAL_SUBJECT,
+        text: EMAIL_FATAL_TEXT,
+      },
     },
     warningLevel: parseInt(WARNING_LEVEL),
     auth: {

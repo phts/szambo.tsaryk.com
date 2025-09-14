@@ -13,5 +13,8 @@ export const log: Route =
       return
     }
     await services.logs.insertOne({message, severity})
+    if (severity === 'fatal') {
+      services.emails.sendFatalNotification(message)
+    }
     res.send({ok: true})
   }
