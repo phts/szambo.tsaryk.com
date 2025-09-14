@@ -15,16 +15,18 @@ import {
 import {getConfig} from './config'
 import {init} from './db'
 import {auth} from './middlewares/auth'
-import {LevelsService, LogsService, RemoteControlService, ScheduledActionsService} from './services'
+import {EmailsService, LevelsService, LogsService, RemoteControlService, ScheduledActionsService} from './services'
 
 const config = getConfig()
 init(config)
 
+const emails = new EmailsService(config.email)
 const levels = new LevelsService()
 const logs = new LogsService()
 const remoteControl = new RemoteControlService()
 const scheduledActions = new ScheduledActionsService({logs, remoteControl})
 const services = {
+  emails,
   levels,
   logs,
   remoteControl,

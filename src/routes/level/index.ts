@@ -1,7 +1,6 @@
 import {ObjectId} from 'mongodb'
 import {Route} from '..'
 import {LevelMode} from '../../models'
-import {email} from './email'
 
 export const level: Route =
   ({config, services}) =>
@@ -16,7 +15,7 @@ export const level: Route =
     res.send({ok: true})
 
     if (newValue >= config.warningLevel) {
-      email({config: config.email, level: newValue})
+      services.emails.sendLevelNotification(newValue)
     }
   }
 

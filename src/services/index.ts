@@ -1,4 +1,5 @@
-export * from './logs'
+export * from './emails'
 export * from './levels'
+export * from './logs'
 export * from './remote-control'
 export * from './scheduled-actions'
