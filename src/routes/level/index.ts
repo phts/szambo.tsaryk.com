@@ -1,3 +1,4 @@
+import {ObjectId} from 'mongodb'
 import {Route} from '..'
 import {LevelMode} from '../../models'
 import {email} from './email'
@@ -26,6 +27,16 @@ export const removeLevel: Route =
       res.sendStatus(400)
       return
     }
+    const level = (await services.levels.toArray({filter: {_id: new ObjectId(req.query.id)}}))[0]
+    if (!level) {
+      console.warn(`Level with id=${req.query.id} does not exists`)
+      res.send({ok: true})
+      return
+    }
     await services.levels.deleteOne(req.query.id)
+    await services.logs.insertOne({
+      message: `Removed level "${level.value}" (${level.when.toLocaleString()})`,
+      severity: 'info',
+    })
     res.send({ok: true})
   }
