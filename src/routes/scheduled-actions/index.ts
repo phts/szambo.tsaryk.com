@@ -1,0 +1,36 @@
+import {ObjectId} from 'mongodb'
+import {Route} from '..'
+import {Data, page} from './page'
+
+export const scheduledActions: Route =
+  ({services}) =>
+  async (req, res) => {
+    const data: Data = {
+      items: await services.scheduledActions.toArray(),
+      query: req.query,
+    }
+    res.send(page(data))
+  }
+
+export const removeScheduledAction: Route =
+  ({services}) =>
+  async (req, res) => {
+    if (typeof req.query.id !== 'string') {
+      res.sendStatus(400)
+      return
+    }
+
+    const item = (await services.scheduledActions.toArray({filter: {_id: new ObjectId(req.query.id)}}))[0]
+    if (!item) {
+      console.warn(`Scheduled action with id=${req.query.id} does not exists`)
+      res.send({ok: true})
+      return
+    }
+    await services.scheduledActions.deleteOne(req.query.id)
+
+    await services.logs.insertOne({
+      message: `Removed scheduled action "${item.action}" (${item.when.toLocaleString()})`,
+      severity: 'info',
+    })
+    res.send({ok: true})
+  }

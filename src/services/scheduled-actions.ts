@@ -1,4 +1,4 @@
-import {ObjectId} from 'mongodb'
+import {Document, ObjectId} from 'mongodb'
 import {exec} from '../db'
 import {NewScheduledAction, ScheduledAction} from '../models'
 import {generateId} from '../routes'
@@ -25,15 +25,25 @@ export class ScheduledActionsService {
   }
 
   public async getEarliest(): Promise<ScheduledAction | null> {
-    return exec<ScheduledAction, ScheduledAction>('scheduled-actions', async (collection) => {
-      const cursor = collection.find().sort({when: 1}).limit(1)
-      return (await cursor.toArray())[0] ?? null
+    return (await this.toArray())[0] ?? null
+  }
+
+  public async deleteOne(id: ObjectId | string): Promise<void> {
+    if (typeof id === 'string') {
+      id = new ObjectId(id)
+    }
+    await exec<ScheduledAction>('scheduled-actions', async (collection) => {
+      await collection.deleteOne({_id: id})
     })
   }
 
-  public async deleteOne(id: ObjectId): Promise<void> {
-    await exec<ScheduledAction>('scheduled-actions', async (collection) => {
-      await collection.deleteOne({_id: id})
+  public async toArray({filter}: {filter?: Document} = {}): Promise<ScheduledAction[]> {
+    return exec<ScheduledAction, ScheduledAction[]>('scheduled-actions', async (collection) => {
+      let cursor = collection.find().sort({when: 1})
+      if (filter) {
+        cursor = cursor.filter(filter)
+      }
+      return cursor.toArray()
     })
   }
 

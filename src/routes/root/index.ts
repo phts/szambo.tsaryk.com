@@ -17,6 +17,7 @@ export const root: Route =
       logs: [],
       chart: {data: []},
       remoteControlHref: `/remote-control?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}`,
+      scheduledActionsHref: `/scheduled-actions?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}`,
       showMode: !!req.query.manual,
       isAdmin: req.query.auth_wr === config.auth.wr,
       warningLevel: config.warningLevel,

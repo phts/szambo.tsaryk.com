@@ -10,6 +10,7 @@ export interface Data {
     data: Array<{x: string; y: number; mode: LevelMode}>
   }
   remoteControlHref: string
+  scheduledActionsHref: string
   showMode: boolean
   isAdmin: boolean
   warningLevel: number
@@ -30,12 +31,15 @@ export function home({
   logs,
   chart: {data: chartData},
   remoteControlHref,
+  scheduledActionsHref,
   showMode,
   isAdmin,
   warningLevel,
   query,
 }: Data) {
-  const adminPanelHtml = isAdmin ? `<a href="${remoteControlHref}">Remote control</a><hr>` : ''
+  const adminPanelHtml = isAdmin
+    ? `<div><a href="${remoteControlHref}">Remote control</a> | <a href="${scheduledActionsHref}">Scheduled actions</a></div><hr>`
+    : ''
   const levelsHtml = `<h3>Levels</h3><table class="levels" border=1>
 <tr><th>When</th><th>Value</th>${showMode ? '<th>Mode</th>' : ''}
 ${isAdmin ? '<th>Remove</th>' : ''}</tr>

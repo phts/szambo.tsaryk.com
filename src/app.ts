@@ -9,6 +9,8 @@ import {
   submitRemoteControl,
   remoteControlItem,
   removeLevel,
+  scheduledActions as scheduledActionsRoute,
+  removeScheduledAction,
 } from './routes'
 import {getConfig} from './config'
 import {init} from './db'
@@ -33,12 +35,14 @@ const app = express()
 app.use(bodyParser.urlencoded())
 app.use(auth({config}))
 app.get('/remote-control', remoteControlRoute({config, services}))
+app.get('/scheduled-actions', scheduledActionsRoute({config, services}))
 app.get('/rc', remoteControlItem({config, services}))
 app.get('/', root({config, services}))
 app.post('/level', level({config, services}))
 app.post('/log', log({config, services}))
 app.post('/remote-control', submitRemoteControl({config, services}))
 app.delete('/level', removeLevel({config, services}))
+app.delete('/scheduled-action', removeScheduledAction({config, services}))
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

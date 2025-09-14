@@ -6,6 +6,7 @@ export * from './root'
 export * from './level'
 export * from './log'
 export * from './remote-control'
+export * from './scheduled-actions'
 
 interface RouteParams {
   config: Config
