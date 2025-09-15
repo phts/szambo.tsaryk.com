@@ -40,7 +40,7 @@ export function home({
   const adminPanelHtml = isAdmin
     ? `<div><a href="${remoteControlHref}">Remote control</a> | <a href="${scheduledActionsHref}">Scheduled actions</a></div><hr>`
     : ''
-  const levelsHtml = `<h3>Levels</h3><table class="levels" border=1>
+  const levelsHtml = `<table class="levels" border=1>
 <tr><th>When</th><th>Value</th>${showMode ? '<th>Mode</th>' : ''}
 ${isAdmin ? '<th>Remove</th>' : ''}</tr>
   ${levels
@@ -56,7 +56,7 @@ ${isAdmin ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.str
     })
     .join('')}
 </table>`
-  const logsHtml = `<h3>Logs</h3><table class="logs" border=1>
+  const logsHtml = `<table class="logs" border=1>
   <tr><th>When</th><th>Severity</th><th>Message</th></tr>
   ${logs
     .map(({message, severity, when}) => {

@@ -24,10 +24,10 @@ export const root: Route =
       query: req.query,
     }
     page.levels = await services.levels.toArray({
-      limit: req.query.more ? undefined : 15,
+      limit: req.query.more ? undefined : 20,
       filter: req.query.manual ? undefined : {mode: LevelMode.Auto},
     })
-    page.logs = await services.logs.toArray({limit: req.query.more ? undefined : 15})
+    page.logs = await services.logs.toArray({limit: req.query.more ? undefined : 20})
     page.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
       page.chart.data.unshift({x: v.when.toISOString(), y: v.value, mode: v.mode})
     })

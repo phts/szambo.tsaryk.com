@@ -28,6 +28,7 @@
         word-break: break-all;
       }
       .chart-wrapper {
+        margin: 0 0 16px;
         max-width: 800px;
         width: 100%;
       }
@@ -37,10 +38,13 @@
     </style>
   </head>
   <body>
-    {{adminPanel}}{{levels}}
+    {{adminPanel}}
+    <h3>Levels</h3>
     <div class="chart-wrapper">
       <canvas id="chart"></canvas>
     </div>
+    {{levels}}
+    <h3>Logs</h3>
     {{logs}}
     <hr />
     <footer>
