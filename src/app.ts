@@ -7,7 +7,7 @@ import {
   log,
   remoteControl as remoteControlRoute,
   submitRemoteControl,
-  remoteControlItem,
+  rc,
   removeLevel,
   scheduledActions as scheduledActionsRoute,
   removeScheduledAction,
@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded())
 app.use(auth({config}))
 app.get('/remote-control', remoteControlRoute({config, services}))
 app.get('/scheduled-actions', scheduledActionsRoute({config, services}))
-app.get('/rc', remoteControlItem({config, services}))
+app.get('/rc', rc({config, services}))
 app.get('/', root({config, services}))
 app.post('/level', level({config, services}))
 app.post('/log', log({config, services}))
