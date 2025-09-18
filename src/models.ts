@@ -21,16 +21,15 @@ export interface Log {
 export enum RemoteControlAction {
   Measure = 'measure',
   MeasureAndResetTimer = 'measure+reset',
+  MeasureInterval = 'interval',
 }
 export interface RemoteControl {
   when: Date
   action: RemoteControlAction
+  payload?: string | null
 }
 
-export interface NewScheduledAction {
-  when: Date
-  action: RemoteControlAction
-}
+export type NewScheduledAction = RemoteControl
 export interface ScheduledAction extends NewScheduledAction {
   _id: ObjectId
 }

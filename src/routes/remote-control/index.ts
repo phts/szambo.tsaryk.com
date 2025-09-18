@@ -36,13 +36,13 @@ export const rc: Route =
       res.sendStatus(404)
       return
     }
-    res.send(`${generateId(item)}|${item.action}`)
+    res.send(`${generateId(item)}|${item.action}${item.payload ? `=${item.payload}` : ''}`)
   }
 
 export const submitRemoteControl: Route =
   ({config, services}) =>
   async (req, res) => {
-    const {action, when, scheduledDatetime, scheduledTimezone} = req.body
+    const {action, when, scheduledDatetime, scheduledTimezone, interval} = req.body
     if (!Object.values(RemoteControlAction).includes(action)) {
       res.sendStatus(400)
       return
@@ -52,11 +52,17 @@ export const submitRemoteControl: Route =
       return
     }
 
+    let payload
+    if (action === 'interval') {
+      payload = interval
+    }
+
+    const item: RemoteControl = {action, when: new Date(), ...(payload ? {payload} : null)}
+
     if (when === 'now') {
-      const item = {when: new Date(), action}
       await services.remoteControl.insertOne(item)
       await services.logs.insertOne({
-        message: `Requested remote action "${action}" (id=${generateId(item)})`,
+        message: `Requested remote action "${action}${payload ? `=${payload}` : ''}" (id=${generateId(item)})`,
         severity: 'info',
       })
     } else if (when === 'scheduled') {
@@ -65,9 +71,10 @@ export const submitRemoteControl: Route =
         res.sendStatus(400)
         return
       }
-      services.scheduledActions.insertOne({when: datetime, action})
+      item.when = datetime
+      services.scheduledActions.insertOne(item)
       await services.logs.insertOne({
-        message: `Scheduled remote action "${action}" on ${datetime.toLocaleString()}`,
+        message: `Scheduled remote action "${action}${payload ? `=${payload}` : ''}" on ${datetime.toLocaleString()}`,
         severity: 'info',
       })
     }
