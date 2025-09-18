@@ -57,23 +57,24 @@ export class ScheduledActionsService {
   }
 
   private async check() {
-    const item = await this.getEarliest()
-    if (!item) {
+    const scheduledItem = await this.getEarliest()
+    if (!scheduledItem) {
       return
     }
 
     const now = new Date()
-    if (now.valueOf() < item.when.valueOf()) {
+    if (now.valueOf() < scheduledItem.when.valueOf()) {
       return
     }
 
-    const rcItem = {when: new Date(), action: item.action}
-    this.dependencies.remoteControl.insertOne(rcItem)
+    const {action, payload} = scheduledItem
+    const item = {when: new Date(), action, payload}
+    this.dependencies.remoteControl.insertOne(item)
     this.dependencies.logs.insertOne({
-      message: `Requested remote action "${rcItem.action}" (id=${generateId(rcItem)}) by schedule`,
+      message: `Requested remote action "${action}${payload ? `=${payload}` : ''}" (id=${generateId(item)}) by schedule`,
       severity: 'info',
     })
 
-    this.deleteOne(item._id)
+    this.deleteOne(scheduledItem._id)
   }
 }

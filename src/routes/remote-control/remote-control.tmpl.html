@@ -48,7 +48,13 @@
             <label><input id="radio-action-measure" type="radio" name="action" value="measure" /> Measure</label>
           </li>
           <li>
-            <label><input type="radio" name="action" value="measure+reset" /> Measure and reset timer</label>
+            <label><input type="radio" name="action" value="measure+reset" /> Measure and restart timer</label>
+          </li>
+          <li>
+            <label
+              ><input type="radio" name="action" value="interval" /> Set measure interval:
+              <input type="number" name="interval" min="1" max="24" /> hours</label
+            >
           </li>
         </ul>
       </div>
@@ -74,18 +80,31 @@
     </form>
   </body>
   <script>
-    document.getElementById('radio-when-now').addEventListener('change', (e) => {
-      document.querySelector('input[name=scheduledDatetime]').setAttribute('disabled', true)
-    })
-    document.getElementById('radio-when-scheduled').addEventListener('change', (e) => {
-      document.querySelector('input[name=scheduledDatetime]').removeAttribute('disabled')
+    function dateToInputValue(date) {
       const pad = (s) => s.toString().padStart(2, '0')
-      const now = new Date()
-      document.querySelector('input[name=scheduledDatetime]').value =
-        `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+    }
+    const form = document.querySelector('form')
+    const scheduledDatetime = document.querySelector('input[name=scheduledDatetime]')
+    const interval = document.querySelector('input[name=interval]')
+    form.addEventListener('change', () => {
+      const data = Object.fromEntries(new FormData(form))
+      console.log(data)
+      if (data.when === 'now') {
+        scheduledDatetime.setAttribute('disabled', true)
+      } else {
+        scheduledDatetime.removeAttribute('disabled')
+      }
+      if (data.action === 'interval') {
+        interval.removeAttribute('disabled')
+      } else {
+        interval.setAttribute('disabled', true)
+      }
     })
     window.addEventListener('load', () => {
       document.querySelector('input[name=scheduledTimezone]').value = new Date().getTimezoneOffset()
+      interval.value = 24
+      scheduledDatetime.value = dateToInputValue(new Date())
       document.getElementById('radio-action-measure').click()
       document.getElementById('radio-when-now').click()
     })
