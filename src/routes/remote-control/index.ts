@@ -28,7 +28,7 @@ export const remoteControl: Route =
     res.send(page(data))
   }
 
-export const remoteControlItem: Route =
+export const rc: Route =
   ({services}) =>
   async (req, res) => {
     const item = await getRemoteControlItem(services.remoteControl)
