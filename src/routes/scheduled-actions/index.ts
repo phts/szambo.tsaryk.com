@@ -1,5 +1,6 @@
 import {ObjectId} from 'mongodb'
 import {Route} from '..'
+import {actionWithPayloadToString} from '../../helpers'
 import {Data, page} from './page'
 
 export const scheduledActions: Route =
@@ -29,7 +30,7 @@ export const removeScheduledAction: Route =
     await services.scheduledActions.deleteOne(req.query.id)
 
     await services.logs.insertOne({
-      message: `Removed scheduled action "${item.action}" (${item.when.toLocaleString()})`,
+      message: `Removed scheduled action ${actionWithPayloadToString(item.action, item.payload)} (${item.when.toLocaleString()})`,
       severity: 'info',
     })
     res.send({ok: true})
