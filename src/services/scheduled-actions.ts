@@ -1,7 +1,7 @@
 import {Document, ObjectId} from 'mongodb'
 import {exec} from '../db'
 import {NewScheduledAction, ScheduledAction} from '../models'
-import {generateId} from '../routes'
+import {actionWithPayloadToString, generateRcId} from '../helpers'
 import {LogsService} from './logs'
 import {RemoteControlService} from './remote-control'
 
@@ -71,7 +71,7 @@ export class ScheduledActionsService {
     const item = {when: new Date(), action, payload}
     this.dependencies.remoteControl.insertOne(item)
     this.dependencies.logs.insertOne({
-      message: `Requested remote action "${action}${payload ? `=${payload}` : ''}" (id=${generateId(item)}) by schedule`,
+      message: `Requested remote action  ${actionWithPayloadToString(action, payload)} (id=${generateRcId(item)}) by schedule`,
       severity: 'info',
     })
 
