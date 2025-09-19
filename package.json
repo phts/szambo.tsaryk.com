@@ -14,6 +14,8 @@
     "lint": "run-p lint:*",
     "lint:ts": "tsc --noEmit",
     "lint:es": "eslint .",
+    "prebuild": "npm run lint",
+    "predeploy": "npm run build",
     "start": "node dist/app.js",
     "start:watch": "nodemon --ext js,json,html dist/app.js"
   },
