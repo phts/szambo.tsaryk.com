@@ -27,11 +27,12 @@ export const removeScheduledAction: Route =
       res.send({ok: true})
       return
     }
-    await services.scheduledActions.deleteOne(req.query.id)
 
     await services.logs.insertOne({
       message: `Removed scheduled action ${actionWithPayloadToString(item.action, item.payload)} (${item.when.toLocaleString()})`,
       severity: 'info',
     })
+
+    await services.scheduledActions.deleteOne(req.query.id)
     res.send({ok: true})
   }
