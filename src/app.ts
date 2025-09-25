@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import * as path from 'node:path'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import {
@@ -36,6 +37,7 @@ const services = {
 const app = express()
 app.use(bodyParser.urlencoded())
 app.use(auth({config}))
+app.use('/', express.static(path.join(__dirname, 'static')))
 app.get('/remote-control', remoteControlRoute({config, services}))
 app.get('/scheduled-actions', scheduledActionsRoute({config, services}))
 app.get('/rc', remoteControlItem({config, services}))

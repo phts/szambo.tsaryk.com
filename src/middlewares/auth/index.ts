@@ -1,9 +1,11 @@
 import {Middleware} from '..'
 
+const IGNORE_GET_PATH = ['/', '/favicon.png', '/favicon.ico']
+
 export const auth: Middleware =
   ({config}) =>
   (req, res, next) => {
-    if (req.method === 'GET' && req.path === '/' && !req.query.auth) {
+    if (req.method === 'GET' && IGNORE_GET_PATH.includes(req.path) && !req.query.auth) {
       next()
       return
     }

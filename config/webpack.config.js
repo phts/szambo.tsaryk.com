@@ -29,6 +29,7 @@ module.exports = {
         'package-lock.json',
         {from: '.env', noErrorOnMissing: true},
         {from: 'src/**/*.html', to: '[name][ext]'},
+        {from: 'src/static/**', to: 'static/[name][ext]'},
       ],
     }),
   ],
