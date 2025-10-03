@@ -50,7 +50,7 @@ export const submitRemoteControl: Route =
 
     if (when === 'now') {
       await services.remoteControl.insertOne(item)
-      await services.logs.insertOne({
+      await services.logs.insertOneFromWeb({
         message: `Requested remote action ${actionWithPayloadToString(action, payload)} (id=${generateRcId(item)})`,
         severity: 'info',
       })
@@ -62,7 +62,7 @@ export const submitRemoteControl: Route =
       }
       item.when = datetime
       services.scheduledActions.insertOne(item)
-      await services.logs.insertOne({
+      await services.logs.insertOneFromWeb({
         message: `Scheduled remote action ${actionWithPayloadToString(action, payload)} on ${datetime.toLocaleString()}`,
         severity: 'info',
       })

@@ -4,6 +4,10 @@ export enum LevelMode {
   Auto = 'auto',
   Manual = 'manual',
 }
+export enum Source {
+  Device = 'device',
+  Web = 'web',
+}
 export interface NewLevel {
   value: number
   mode: LevelMode
@@ -15,6 +19,7 @@ export interface Level extends NewLevel {
 export interface Log {
   message: string
   severity: string
+  source: Source
   when: Date
 }
 

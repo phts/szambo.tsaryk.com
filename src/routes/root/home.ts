@@ -1,7 +1,7 @@
 import * as path from 'path'
 import {readFileSync} from 'fs'
 import {Request} from 'express'
-import {Level, LevelMode, Log} from '../../models'
+import {Level, LevelMode, Log, Source} from '../../models'
 
 export interface Data {
   levels: Level[]
@@ -24,6 +24,11 @@ const STYLES = {
   warn: 'color:#f60',
   error: 'color:#e00',
   fatal: 'background-color:#f55;color:#000',
+}
+
+const LOG_SOURCE_TO_ELEMENT = {
+  [Source.Device]: '<span title="Device">📡</span>',
+  [Source.Web]: '<span title="Web">🌐</span>',
 }
 
 export function home({
@@ -57,12 +62,13 @@ ${isAdmin ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.str
     .join('')}
 </table>`
   const logsHtml = `<table class="logs" border=1>
-  <tr><th>When</th><th>Severity</th><th>Message</th></tr>
+  <tr><th>When</th><th>Severity</th><th>Source</th><th>Message</th></tr>
   ${logs
-    .map(({message, severity, when}) => {
+    .map(({message, severity, source, when}) => {
       const style = STYLES[severity as keyof typeof STYLES]
       const props = style ? ` style="${style}"` : ''
-      return `<tr${props}><td>${when.toLocaleString()}</td><td>${severity}</td><td>${message.replaceAll('\n', '<br>')}</td></tr>`
+      const sourceEl = LOG_SOURCE_TO_ELEMENT[source] || ''
+      return `<tr${props}><td>${when.toLocaleString()}</td><td>${severity}</td><td>${sourceEl}</td><td>${message.replaceAll('\n', '<br>')}</td></tr>`
     })
     .join('')}
 </table>`

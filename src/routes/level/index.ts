@@ -33,7 +33,7 @@ export const removeLevel: Route =
       return
     }
     await services.levels.deleteOne(req.query.id)
-    await services.logs.insertOne({
+    await services.logs.insertOneFromWeb({
       message: `Removed level "${level.value}" (${level.when.toLocaleString()})`,
       severity: 'info',
     })

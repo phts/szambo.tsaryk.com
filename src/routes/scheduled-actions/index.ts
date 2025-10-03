@@ -28,7 +28,7 @@ export const removeScheduledAction: Route =
       return
     }
 
-    await services.logs.insertOne({
+    await services.logs.insertOneFromWeb({
       message: `Removed scheduled action ${actionWithPayloadToString(item.action, item.payload)} (${item.when.toLocaleString()})`,
       severity: 'info',
     })

@@ -1,14 +1,12 @@
 import {exec} from '../db'
-import {Log} from '../models'
+import {Log, Source} from '../models'
 
 export class LogsService {
-  public async insertOne(doc: {message: string; severity: string}): Promise<void> {
-    await exec<Log>('logs', async (collection) => {
-      await collection.insertOne({
-        ...doc,
-        when: new Date(),
-      })
-    })
+  public async insertOneFromDevice(doc: {message: string; severity: string}): Promise<void> {
+    await this.insertOne({...doc, source: Source.Device})
+  }
+  public async insertOneFromWeb(doc: {message: string; severity: string}): Promise<void> {
+    await this.insertOne({...doc, source: Source.Web})
   }
 
   public async toArray({limit}: {limit?: number}): Promise<Log[]> {
@@ -18,6 +16,15 @@ export class LogsService {
         cursor = cursor.limit(limit)
       }
       return cursor.toArray()
+    })
+  }
+
+  private async insertOne(doc: {message: string; severity: string; source: Source}): Promise<void> {
+    await exec<Log>('logs', async (collection) => {
+      await collection.insertOne({
+        ...doc,
+        when: new Date(),
+      })
     })
   }
 }
