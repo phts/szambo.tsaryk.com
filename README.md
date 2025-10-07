@@ -9,18 +9,6 @@ Features:
 - Simple authentication system
 - REST API
 
-## Usage
-
-### Endpoints
-
-- `GET /`
-- `GET /remote-control`
-- `GET /rc`
-- `POST /level?value=<value>&mode=<auto|manual>`
-- `POST /log?severity=<debug|info|warn|error|fatal>&message=<message>`
-- `POST /remote-control`
-- `DELETE /level`
-
 ## Deployment
 
 ```sh
