@@ -89,7 +89,6 @@
     const interval = document.querySelector('input[name=interval]')
     form.addEventListener('change', () => {
       const data = Object.fromEntries(new FormData(form))
-      console.log(data)
       if (data.when === 'now') {
         scheduledDatetime.setAttribute('disabled', true)
       } else {
