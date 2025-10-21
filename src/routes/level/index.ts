@@ -2,17 +2,49 @@ import {ObjectId} from 'mongodb'
 import {Route} from '..'
 import {LevelMode} from '../../models'
 
+function parseValue(raw?: unknown): {value: number; value_m3: number | null} {
+  if (typeof raw !== 'string') {
+    throw new Error('parse')
+  }
+  if (!raw.length) {
+    throw new Error('parse')
+  }
+
+  const parts = raw.split('|')
+  const value = parseInt(parts[0])
+  if (isNaN(value)) {
+    throw new Error('parse')
+  }
+
+  if (parts.length === 1) {
+    return {value, value_m3: null}
+  }
+
+  const valueM3 = parseFloat(parts[1])
+  if (isNaN(valueM3)) {
+    return {value, value_m3: null}
+  }
+
+  return {value, value_m3: valueM3}
+}
+
 export const postLevel: Route =
   ({services}) =>
   async (req, res) => {
-    const newValue = parseInt(req.query.value as string)
-    if (isNaN(newValue)) {
+    try {
+      const {value, value_m3} = parseValue(req.query.value)
+      const mode = req.query.mode === 'auto' ? LevelMode.Auto : LevelMode.Manual
+      await services.levels.insertOne({value, value_m3, mode, when: new Date()})
+      res.send({ok: true})
+    } catch (e) {
+      if (!(e instanceof Error)) {
+        throw e
+      }
+      if (e.message !== 'parse') {
+        throw e
+      }
       res.sendStatus(400)
-      return
     }
-    const mode = req.query.mode === 'auto' ? LevelMode.Auto : LevelMode.Manual
-    await services.levels.insertOne({value: newValue, mode, when: new Date()})
-    res.send({ok: true})
   }
 
 export const deleteLevel: Route =

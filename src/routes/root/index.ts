@@ -29,7 +29,12 @@ export const getRoot: Route =
     })
     page.logs = await services.logs.toArray({limit: req.query.more ? undefined : 20})
     page.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
-      page.chart.data.unshift({x: v.when.toISOString(), y: v.value, mode: v.mode})
+      page.chart.data.unshift({
+        x: v.when.toISOString(),
+        y: v.value,
+        mode: v.mode,
+        label_m3: typeof v.value_m3 === 'number' ? `${v.value_m3} m³` : '',
+      })
     })
     res.send(home(page))
   }

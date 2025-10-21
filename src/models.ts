@@ -10,6 +10,7 @@ export enum Source {
 }
 export interface NewLevel {
   value: number
+  value_m3: number | null
   mode: LevelMode
   when: Date
 }
