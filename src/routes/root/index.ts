@@ -5,7 +5,7 @@ import {home, Data} from './home'
 
 const CHART_MAX_VALUES = 50
 
-export const root: Route =
+export const getRoot: Route =
   ({config, services}) =>
   async (req, res) => {
     if (!req.query.auth) {

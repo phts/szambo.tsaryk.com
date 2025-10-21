@@ -9,7 +9,7 @@ async function getRemoteControlItem(remoteControl: RemoteControlService): Promis
   return (await remoteControl.toArray({limit: 1}))[0] ?? null
 }
 
-export const remoteControl: Route =
+export const getRemoteControl: Route =
   ({services}) =>
   async (req, res) => {
     const data: Data = {item: null, auth_wr: String(req.query.auth_wr)}
@@ -17,7 +17,7 @@ export const remoteControl: Route =
     res.send(page(data))
   }
 
-export const rc: Route =
+export const getRc: Route =
   ({services}) =>
   async (req, res) => {
     const item = await getRemoteControlItem(services.remoteControl)
@@ -28,7 +28,7 @@ export const rc: Route =
     res.send(`${generateRcId(item)}|${item.action}${item.payload ? `=${item.payload}` : ''}`)
   }
 
-export const submitRemoteControl: Route =
+export const postRemoteControl: Route =
   ({config, services}) =>
   async (req, res) => {
     const {action, when, scheduledDatetime, scheduledTimezone, interval} = req.body

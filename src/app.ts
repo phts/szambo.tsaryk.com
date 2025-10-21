@@ -3,15 +3,15 @@ import * as path from 'node:path'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import {
-  root,
-  level,
-  log,
-  remoteControl as remoteControlRoute,
-  submitRemoteControl,
-  rc,
-  removeLevel,
-  scheduledActions as scheduledActionsRoute,
-  removeScheduledAction,
+  deleteLevel,
+  deleteScheduledAction,
+  getRc,
+  getRemoteControl,
+  getRoot,
+  getScheduledActions,
+  postLevel,
+  postLog,
+  postRemoteControl,
 } from './routes'
 import {getConfig} from './config'
 import {init} from './db'
@@ -38,15 +38,15 @@ const app = express()
 app.use(bodyParser.urlencoded())
 app.use(auth({config}))
 app.use('/', express.static(path.join(__dirname, 'static')))
-app.get('/remote-control', remoteControlRoute({config, services}))
-app.get('/scheduled-actions', scheduledActionsRoute({config, services}))
-app.get('/rc', rc({config, services}))
-app.get('/', root({config, services}))
-app.post('/level', level({config, services}))
-app.post('/log', log({config, services}))
-app.post('/remote-control', submitRemoteControl({config, services}))
-app.delete('/level', removeLevel({config, services}))
-app.delete('/scheduled-action', removeScheduledAction({config, services}))
+app.get('/remote-control', getRemoteControl({config, services}))
+app.get('/scheduled-actions', getScheduledActions({config, services}))
+app.get('/rc', getRc({config, services}))
+app.get('/', getRoot({config, services}))
+app.post('/level', postLevel({config, services}))
+app.post('/log', postLog({config, services}))
+app.post('/remote-control', postRemoteControl({config, services}))
+app.delete('/level', deleteLevel({config, services}))
+app.delete('/scheduled-action', deleteScheduledAction({config, services}))
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

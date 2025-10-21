@@ -1,6 +1,6 @@
 import {Route} from '..'
 
-export const log: Route =
+export const postLog: Route =
   ({services}) =>
   async (req, res) => {
     const {message, severity} = req.query

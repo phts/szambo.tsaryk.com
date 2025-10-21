@@ -2,7 +2,7 @@ import {ObjectId} from 'mongodb'
 import {Route} from '..'
 import {LevelMode} from '../../models'
 
-export const level: Route =
+export const postLevel: Route =
   ({config, services}) =>
   async (req, res) => {
     const newValue = parseInt(req.query.value as string)
@@ -19,7 +19,7 @@ export const level: Route =
     }
   }
 
-export const removeLevel: Route =
+export const deleteLevel: Route =
   ({services}) =>
   async (req, res) => {
     if (typeof req.query.id !== 'string') {

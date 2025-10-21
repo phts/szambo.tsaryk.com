@@ -3,7 +3,7 @@ import {Route} from '..'
 import {actionWithPayloadToString} from '../../helpers'
 import {Data, page} from './page'
 
-export const scheduledActions: Route =
+export const getScheduledActions: Route =
   ({services}) =>
   async (req, res) => {
     const data: Data = {
@@ -13,7 +13,7 @@ export const scheduledActions: Route =
     res.send(page(data))
   }
 
-export const removeScheduledAction: Route =
+export const deleteScheduledAction: Route =
   ({services}) =>
   async (req, res) => {
     if (typeof req.query.id !== 'string') {
