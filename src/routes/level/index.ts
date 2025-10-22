@@ -35,7 +35,7 @@ export const postLevel: Route =
     try {
       const {value, value_m3, errorRate} = parseValue(req.query.value)
       const mode = req.query.mode === 'auto' ? LevelMode.Auto : LevelMode.Manual
-      await services.levels.insertOne({value, value_m3, errorRate, mode, when: new Date()})
+      await services.levels.insertOne({value, value_m3, errorRate, mode})
       res.send({ok: true})
     } catch (e) {
       if (e instanceof ParseError) {

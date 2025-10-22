@@ -17,9 +17,9 @@ export class LevelsService {
     this.dependencies = dependencies
   }
 
-  public async insertOne(doc: NewLevel): Promise<void> {
+  public async insertOne(doc: Omit<NewLevel, 'when'>): Promise<void> {
     await exec<NewLevel>('levels', async (collection) => {
-      await collection.insertOne(doc)
+      await collection.insertOne({...doc, when: new Date()})
     })
 
     if (doc.value >= this.config.warningAt) {
