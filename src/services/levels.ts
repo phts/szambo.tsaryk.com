@@ -13,12 +13,32 @@ interface Dependencies {
 
 export class LevelsService extends Service<Dependencies, Config['levels']> {
   public async insertOne(doc: Omit<NewLevel, 'when'>): Promise<void> {
+    const [previousLevel] = await this.toArray({limit: 1})
+
+    const when = new Date()
     await exec<NewLevel>('levels', async (collection) => {
-      await collection.insertOne({...doc, when: new Date()})
+      await collection.insertOne({...doc, when})
     })
 
     if (doc.value >= this.config.warningAt) {
       this.dependencies.emails.sendLevelNotification(doc.value)
+    }
+
+    if (doc.value > previousLevel.value) {
+      const valueDiff = doc.value - previousLevel.value
+      const hoursDiff = Math.floor((when.valueOf() - previousLevel.when.valueOf()) / 1000 / 60 / 60) || 1
+      const speed = valueDiff / hoursDiff
+      this.dependencies.logs.insertOneFromWeb({
+        message: `Level increase rate: ${valueDiff}% ÷ ${hoursDiff}h = ${speed}%/h (warning at: ${this.config.warningHighDiffPerHour}%/h)`,
+        severity: Severity.Debug,
+      })
+      if (speed >= this.config.warningHighDiffPerHour) {
+        this.dependencies.emails.sendHighDiffNotification({
+          hours: hoursDiff,
+          value: doc.value,
+          prevValue: previousLevel.value,
+        })
+      }
     }
   }
 

@@ -34,6 +34,17 @@ export class EmailsService extends Service<null, Config['emails']> {
     this.sendMail(mailOptions)
   }
 
+  public sendHighDiffNotification({hours, value, prevValue}: {hours: number; value: number; prevValue: number}) {
+    const mailOptions = {
+      subject: this.config.highDiff.subject,
+      text: this.config.highDiff.text
+        .replace('{{hours}}', hours.toString())
+        .replace('{{value}}', value.toString())
+        .replace('{{prevValue}}', prevValue.toString()),
+    }
+    this.sendMail(mailOptions)
+  }
+
   private sendMail(mailOptions: {subject: string; text: string}) {
     this.transporter.sendMail({...mailOptions, from: this.config.from, to: this.config.to}, (error, info) => {
       if (error) {

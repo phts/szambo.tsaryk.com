@@ -17,9 +17,14 @@ export interface Config {
       subject: string
       text: string
     }
+    highDiff: {
+      subject: string
+      text: string
+    }
   }
   levels: {
     warningAt: number
+    warningHighDiffPerHour: number
   }
   auth: {
     rd: string
@@ -40,7 +45,10 @@ export function getConfig(): Config {
     EMAILS_LEVEL_TEXT,
     EMAILS_FATAL_SUBJECT,
     EMAILS_FATAL_TEXT,
+    EMAILS_HIGH_DIFF_SUBJECT,
+    EMAILS_HIGH_DIFF_TEXT,
     LEVELS_WARNING_AT,
+    LEVELS_WARNING_HIGH_DIFF_PER_HOUR,
     APP_AUTH_WR,
     APP_AUTH_RD,
   } = process.env
@@ -77,8 +85,17 @@ export function getConfig(): Config {
   if (!EMAILS_FATAL_TEXT) {
     throw new Error('EMAILS_FATAL_TEXT env variable is missing')
   }
+  if (!EMAILS_HIGH_DIFF_SUBJECT) {
+    throw new Error('EMAILS_HIGH_DIFF_SUBJECT env variable is missing')
+  }
+  if (!EMAILS_HIGH_DIFF_TEXT) {
+    throw new Error('EMAILS_HIGH_DIFF_TEXT env variable is missing')
+  }
   if (!LEVELS_WARNING_AT) {
     throw new Error('LEVELS_WARNING_AT env variable is missing')
+  }
+  if (!LEVELS_WARNING_HIGH_DIFF_PER_HOUR) {
+    throw new Error('LEVELS_WARNING_HIGH_DIFF_PER_HOUR env variable is missing')
   }
   if (!APP_AUTH_WR) {
     throw new Error('APP_AUTH_WR env variable is missing')
@@ -103,9 +120,14 @@ export function getConfig(): Config {
         subject: EMAILS_FATAL_SUBJECT,
         text: EMAILS_FATAL_TEXT,
       },
+      highDiff: {
+        subject: EMAILS_HIGH_DIFF_SUBJECT,
+        text: EMAILS_HIGH_DIFF_TEXT,
+      },
     },
     levels: {
       warningAt: parseInt(LEVELS_WARNING_AT),
+      warningHighDiffPerHour: parseInt(LEVELS_WARNING_HIGH_DIFF_PER_HOUR),
     },
     auth: {
       rd: APP_AUTH_RD,
