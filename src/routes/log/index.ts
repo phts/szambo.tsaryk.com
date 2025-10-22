@@ -14,8 +14,5 @@ export const postLog: Route =
       return
     }
     await services.logs.insertOneFromDevice({message, severity: severity as Severity})
-    if (severity === Severity.Fatal) {
-      services.emails.sendFatalNotification(message)
-    }
     res.send({ok: true})
   }

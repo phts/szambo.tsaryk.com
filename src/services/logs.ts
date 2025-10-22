@@ -1,7 +1,18 @@
 import {exec} from '../db'
 import {Log, Severity, Source} from '../models'
+import {EmailsService} from './emails'
+
+interface Dependencies {
+  emails: EmailsService
+}
 
 export class LogsService {
+  private dependencies: Dependencies
+
+  constructor(dependencies: Dependencies) {
+    this.dependencies = dependencies
+  }
+
   public async insertOneFromDevice(doc: {message: string; severity: Severity}): Promise<void> {
     await this.insertOne({...doc, source: Source.Device})
   }
@@ -26,5 +37,8 @@ export class LogsService {
         when: new Date(),
       })
     })
+    if (doc.severity === Severity.Fatal) {
+      this.dependencies.emails.sendFatalNotification(doc.message)
+    }
   }
 }

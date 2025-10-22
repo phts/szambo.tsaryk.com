@@ -22,8 +22,8 @@ const config = getConfig()
 init(config)
 
 const emails = new EmailsService(config.emails)
+const logs = new LogsService({emails})
 const levels = new LevelsService(config.levels, {emails})
-const logs = new LogsService()
 const remoteControl = new RemoteControlService()
 const scheduledActions = new ScheduledActionsService({logs, remoteControl})
 const services = {
