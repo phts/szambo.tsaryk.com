@@ -7,7 +7,7 @@ export interface Data {
   levels: Level[]
   logs: Log[]
   chart: {
-    data: Array<{x: string; y: number; mode: LevelMode; label_m3: string}>
+    data: Array<{x: string; y: number; mode: LevelMode; label_m3: string; errorRate: string}>
   }
   remoteControlHref: string
   scheduledActionsHref: string
@@ -46,16 +46,17 @@ export function home({
     ? `<div><a href="${remoteControlHref}">Remote control</a> | <a href="${scheduledActionsHref}">Scheduled actions</a></div><hr>`
     : ''
   const levelsHtml = `<table class="levels" border=1>
-<tr><th>When</th><th>%</th><th>m&sup3;</th>${showMode ? '<th>Mode</th>' : ''}
+<tr><th>When</th><th>%</th><th>m&sup3;</th><th title="Error rate">⚠</th>${showMode ? '<th>Mode</th>' : ''}
 ${isAdmin ? '<th>Remove</th>' : ''}</tr>
   ${levels
-    .map(({_id, value, value_m3: m3, when, mode}) => {
+    .map(({_id, value, value_m3: m3, errorRate, when, mode}) => {
       const props = value >= warningLevel ? ` style="${STYLES.warn}"` : ''
       return `\
 <tr${props}>
 <td>${when.toLocaleString()}</td>
 <td>${value}</td>
 <td>${m3 ?? ''}</td>
+<td>${typeof errorRate === 'number' ? `${errorRate}%` : ''}</td>
 ${showMode ? `<td>${mode}</td>` : ''}
 ${isAdmin ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.stringify(query.auth_wr)})'>×</button></td>` : ''}
 </tr>`

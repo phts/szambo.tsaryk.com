@@ -34,6 +34,7 @@ export const getRoot: Route =
         y: v.value,
         mode: v.mode,
         label_m3: typeof v.value_m3 === 'number' ? `${v.value_m3} m³` : '',
+        errorRate: typeof v.errorRate === 'number' ? `⚠${v.errorRate}%` : '',
       })
     })
     res.send(home(page))

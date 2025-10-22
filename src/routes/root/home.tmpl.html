@@ -18,13 +18,15 @@
         display: flex;
       }
       .levels th:nth-child(2),
-      .levels th:nth-child(3) {
+      .levels th:nth-child(3),
+      .levels th:nth-child(4) {
         min-width: 40px;
       }
       .levels td:nth-child(2),
       .levels td:nth-child(3),
       .levels td:nth-child(4),
-      .levels td:nth-child(5) {
+      .levels td:nth-child(5),
+      .levels td:nth-child(6) {
         text-align: center;
       }
       .logs td:nth-child(2),
@@ -168,7 +170,9 @@
             tooltip: {
               callbacks: {
                 title: (ctx) =>
-                  [new Date(Date.parse(ctx[0].label)).toLocaleString(), ctx[0].raw.label_m3].filter(Boolean).join('\n'),
+                  [new Date(Date.parse(ctx[0].label)).toLocaleString(), ctx[0].raw.label_m3, ctx[0].raw.errorRate]
+                    .filter(Boolean)
+                    .join('\n'),
               },
             },
           },
