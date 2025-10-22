@@ -1,11 +1,11 @@
 import {exec} from '../db'
-import {Log, Source} from '../models'
+import {Log, Severity, Source} from '../models'
 
 export class LogsService {
-  public async insertOneFromDevice(doc: {message: string; severity: string}): Promise<void> {
+  public async insertOneFromDevice(doc: {message: string; severity: Severity}): Promise<void> {
     await this.insertOne({...doc, source: Source.Device})
   }
-  public async insertOneFromWeb(doc: {message: string; severity: string}): Promise<void> {
+  public async insertOneFromWeb(doc: {message: string; severity: Severity}): Promise<void> {
     await this.insertOne({...doc, source: Source.Web})
   }
 
@@ -19,7 +19,7 @@ export class LogsService {
     })
   }
 
-  private async insertOne(doc: {message: string; severity: string; source: Source}): Promise<void> {
+  private async insertOne(doc: {message: string; severity: Severity; source: Source}): Promise<void> {
     await exec<Log>('logs', async (collection) => {
       await collection.insertOne({
         ...doc,

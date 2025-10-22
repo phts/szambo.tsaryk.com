@@ -8,6 +8,13 @@ export enum Source {
   Device = 'device',
   Web = 'web',
 }
+export enum Severity {
+  Debug = 'debug',
+  Info = 'info',
+  Warning = 'warning',
+  Error = 'error',
+  Fatal = 'fatal',
+}
 export interface NewLevel {
   value: number
   value_m3: number | null
@@ -20,7 +27,7 @@ export interface Level extends NewLevel {
 }
 export interface Log {
   message: string
-  severity: string
+  severity: Severity
   source: Source
   when: Date
 }

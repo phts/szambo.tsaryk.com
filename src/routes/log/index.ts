@@ -1,4 +1,5 @@
 import {Route} from '..'
+import {Severity} from '../../models'
 
 export const postLog: Route =
   ({services}) =>
@@ -7,13 +8,13 @@ export const postLog: Route =
     if (
       typeof message !== 'string' ||
       typeof severity !== 'string' ||
-      !['debug', 'info', 'warn', 'error', 'fatal'].includes(severity)
+      !Object.values(Severity).includes(severity as Severity)
     ) {
       res.sendStatus(400)
       return
     }
-    await services.logs.insertOneFromDevice({message, severity})
-    if (severity === 'fatal') {
+    await services.logs.insertOneFromDevice({message, severity: severity as Severity})
+    if (severity === Severity.Fatal) {
       services.emails.sendFatalNotification(message)
     }
     res.send({ok: true})

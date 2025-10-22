@@ -1,5 +1,5 @@
 import {Route} from '..'
-import {RemoteControl, RemoteControlAction} from '../../models'
+import {RemoteControl, RemoteControlAction, Severity} from '../../models'
 import {RemoteControlService} from '../../services'
 import {tzOffsetToIsoTimezone} from '../../utils'
 import {actionWithPayloadToString, generateRcId} from '../../helpers'
@@ -52,7 +52,7 @@ export const postRemoteControl: Route =
       await services.remoteControl.insertOne(item)
       await services.logs.insertOneFromWeb({
         message: `Requested remote action ${actionWithPayloadToString(action, payload)} (id=${generateRcId(item)})`,
-        severity: 'info',
+        severity: Severity.Info,
       })
     } else if (when === 'scheduled') {
       const datetime = new Date(`${scheduledDatetime}:00${tzOffsetToIsoTimezone(parseInt(scheduledTimezone))}`)
@@ -64,7 +64,7 @@ export const postRemoteControl: Route =
       services.scheduledActions.insertOne(item)
       await services.logs.insertOneFromWeb({
         message: `Scheduled remote action ${actionWithPayloadToString(action, payload)} on ${datetime.toLocaleString()}`,
-        severity: 'info',
+        severity: Severity.Info,
       })
     }
 

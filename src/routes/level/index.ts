@@ -1,6 +1,6 @@
 import {ObjectId} from 'mongodb'
 import {Route} from '..'
-import {LevelMode, NewLevel} from '../../models'
+import {LevelMode, NewLevel, Severity} from '../../models'
 
 class ParseError extends Error {}
 
@@ -62,7 +62,7 @@ export const deleteLevel: Route =
     await services.levels.deleteOne(req.query.id)
     await services.logs.insertOneFromWeb({
       message: `Removed level "${level.value}" (${level.when.toLocaleString()})`,
-      severity: 'info',
+      severity: Severity.Info,
     })
     res.send({ok: true})
   }
