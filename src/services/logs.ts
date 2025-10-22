@@ -1,18 +1,13 @@
 import {exec} from '../db'
 import {Log, Severity, Source} from '../models'
+import {Service} from './base'
 import {EmailsService} from './emails'
 
 interface Dependencies {
   emails: EmailsService
 }
 
-export class LogsService {
-  private dependencies: Dependencies
-
-  constructor(dependencies: Dependencies) {
-    this.dependencies = dependencies
-  }
-
+export class LogsService extends Service<Dependencies, null> {
   public async insertOneFromDevice(doc: {message: string; severity: Severity}): Promise<void> {
     await this.insertOne({...doc, source: Source.Device})
   }

@@ -1,7 +1,8 @@
 import {exec} from '../db'
 import {RemoteControl} from '../models'
+import {Service} from './base'
 
-export class RemoteControlService {
+export class RemoteControlService extends Service<null, null> {
   public async insertOne(doc: RemoteControl): Promise<void> {
     await exec<RemoteControl>('remote-control', async (collection) => {
       await collection.insertOne(doc)

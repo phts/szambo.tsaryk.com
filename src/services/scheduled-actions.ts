@@ -4,19 +4,15 @@ import {NewScheduledAction, ScheduledAction, Severity} from '../models'
 import {actionWithPayloadToString, generateRcId} from '../helpers'
 import {LogsService} from './logs'
 import {RemoteControlService} from './remote-control'
+import {Service} from './base'
 
 interface Dependencies {
   logs: LogsService
   remoteControl: RemoteControlService
 }
 
-export class ScheduledActionsService {
+export class ScheduledActionsService extends Service<Dependencies, null> {
   private watcher?: NodeJS.Timeout
-  private dependencies: Dependencies
-
-  constructor(dependencies: Dependencies) {
-    this.dependencies = dependencies
-  }
 
   public async insertOne(doc: NewScheduledAction): Promise<void> {
     await exec<NewScheduledAction>('scheduled-actions', async (collection) => {

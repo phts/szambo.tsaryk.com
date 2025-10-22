@@ -3,20 +3,13 @@ import {exec} from '../db'
 import {Level, NewLevel} from '../models'
 import {Config} from '../config'
 import {EmailsService} from './emails'
+import {Service} from './base'
 
 interface Dependencies {
   emails: EmailsService
 }
 
-export class LevelsService {
-  private config: Config['levels']
-  private dependencies: Dependencies
-
-  constructor(config: Config['levels'], dependencies: Dependencies) {
-    this.config = config
-    this.dependencies = dependencies
-  }
-
+export class LevelsService extends Service<Dependencies, Config['levels']> {
   public async insertOne(doc: Omit<NewLevel, 'when'>): Promise<void> {
     await exec<NewLevel>('levels', async (collection) => {
       await collection.insertOne({...doc, when: new Date()})

@@ -1,12 +1,12 @@
 import * as nodemailer from 'nodemailer'
 import {Config} from '../config'
+import {Service} from './base'
 
-export class EmailsService {
-  private config: Config['emails']
+export class EmailsService extends Service<null, Config['emails']> {
   private transporter: nodemailer.Transporter
 
-  constructor(config: Config['emails']) {
-    this.config = config
+  constructor(dependencies: null, config: Config['emails']) {
+    super(dependencies, config)
     this.transporter = nodemailer.createTransport({
       host: config.host,
       port: config.port,
