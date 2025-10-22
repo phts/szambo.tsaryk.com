@@ -23,7 +23,7 @@ init(config)
 
 const emails = new EmailsService(null, config.emails)
 const logs = new LogsService({emails}, null)
-const levels = new LevelsService({emails}, config.levels)
+const levels = new LevelsService({emails, logs}, config.levels)
 const remoteControl = new RemoteControlService(null, null)
 const scheduledActions = new ScheduledActionsService({logs, remoteControl}, null)
 const services = {
