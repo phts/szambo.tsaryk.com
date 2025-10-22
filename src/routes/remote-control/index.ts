@@ -61,7 +61,7 @@ export const postRemoteControl: Route =
         return
       }
       item.when = datetime
-      services.scheduledActions.insertOne(item)
+      await services.scheduledActions.insertOne(item)
       await services.logs.insertOneFromWeb({
         message: `Scheduled remote action ${actionWithPayloadToString(action, payload)} on ${datetime.toLocaleString()}`,
         severity: Severity.Info,
