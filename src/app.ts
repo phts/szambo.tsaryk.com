@@ -21,7 +21,7 @@ import {EmailsService, LevelsService, LogsService, RemoteControlService, Schedul
 const config = getConfig()
 init(config)
 
-const emails = new EmailsService(config.email)
+const emails = new EmailsService(config.emails)
 const levels = new LevelsService()
 const logs = new LogsService()
 const remoteControl = new RemoteControlService()

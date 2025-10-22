@@ -2,7 +2,7 @@ export interface Config {
   db: {
     uri: string
   }
-  email: {
+  emails: {
     host: string
     port: number
     user: string
@@ -18,7 +18,9 @@ export interface Config {
       text: string
     }
   }
-  warningLevel: number
+  levels: {
+    warningAt: number
+  }
   auth: {
     rd: string
     wr: string
@@ -28,55 +30,55 @@ export interface Config {
 export function getConfig(): Config {
   const {
     DB_URI,
-    EMAIL_HOST,
-    EMAIL_PORT,
-    EMAIL_USER,
-    EMAIL_PASS,
-    EMAIL_FROM,
-    EMAIL_TO,
-    EMAIL_LEVEL_SUBJECT,
-    EMAIL_LEVEL_TEXT,
-    EMAIL_FATAL_SUBJECT,
-    EMAIL_FATAL_TEXT,
-    WARNING_LEVEL,
+    EMAILS_HOST,
+    EMAILS_PORT,
+    EMAILS_USER,
+    EMAILS_PASS,
+    EMAILS_FROM,
+    EMAILS_TO,
+    EMAILS_LEVEL_SUBJECT,
+    EMAILS_LEVEL_TEXT,
+    EMAILS_FATAL_SUBJECT,
+    EMAILS_FATAL_TEXT,
+    LEVELS_WARNING_AT,
     APP_AUTH_WR,
     APP_AUTH_RD,
   } = process.env
   if (!DB_URI) {
     throw new Error('DB_URI env variable is missing')
   }
-  if (!EMAIL_HOST) {
-    throw new Error('EMAIL_HOST env variable is missing')
+  if (!EMAILS_HOST) {
+    throw new Error('EMAILS_HOST env variable is missing')
   }
-  if (!EMAIL_PORT) {
-    throw new Error('EMAIL_PORT env variable is missing')
+  if (!EMAILS_PORT) {
+    throw new Error('EMAILS_PORT env variable is missing')
   }
-  if (!EMAIL_USER) {
-    throw new Error('EMAIL_USER env variable is missing')
+  if (!EMAILS_USER) {
+    throw new Error('EMAILS_USER env variable is missing')
   }
-  if (!EMAIL_PASS) {
-    throw new Error('EMAIL_PASS env variable is missing')
+  if (!EMAILS_PASS) {
+    throw new Error('EMAILS_PASS env variable is missing')
   }
-  if (!EMAIL_FROM) {
-    throw new Error('EMAIL_FROM env variable is missing')
+  if (!EMAILS_FROM) {
+    throw new Error('EMAILS_FROM env variable is missing')
   }
-  if (!EMAIL_TO) {
-    throw new Error('EMAIL_TO env variable is missing')
+  if (!EMAILS_TO) {
+    throw new Error('EMAILS_TO env variable is missing')
   }
-  if (!EMAIL_LEVEL_SUBJECT) {
-    throw new Error('EMAIL_SUBJECT env variable is missing')
+  if (!EMAILS_LEVEL_SUBJECT) {
+    throw new Error('EMAILS_SUBJECT env variable is missing')
   }
-  if (!EMAIL_LEVEL_TEXT) {
-    throw new Error('EMAIL_TEXT env variable is missing')
+  if (!EMAILS_LEVEL_TEXT) {
+    throw new Error('EMAILS_TEXT env variable is missing')
   }
-  if (!EMAIL_FATAL_SUBJECT) {
-    throw new Error('EMAIL_FATAL_SUBJECT env variable is missing')
+  if (!EMAILS_FATAL_SUBJECT) {
+    throw new Error('EMAILS_FATAL_SUBJECT env variable is missing')
   }
-  if (!EMAIL_FATAL_TEXT) {
-    throw new Error('EMAIL_FATAL_TEXT env variable is missing')
+  if (!EMAILS_FATAL_TEXT) {
+    throw new Error('EMAILS_FATAL_TEXT env variable is missing')
   }
-  if (!WARNING_LEVEL) {
-    throw new Error('WARNING_LEVEL env variable is missing')
+  if (!LEVELS_WARNING_AT) {
+    throw new Error('LEVELS_WARNING_AT env variable is missing')
   }
   if (!APP_AUTH_WR) {
     throw new Error('APP_AUTH_WR env variable is missing')
@@ -86,23 +88,25 @@ export function getConfig(): Config {
   }
   return {
     db: {uri: DB_URI},
-    email: {
-      host: EMAIL_HOST,
-      port: parseInt(EMAIL_PORT),
-      user: EMAIL_USER,
-      pass: EMAIL_PASS,
-      from: EMAIL_FROM,
-      to: EMAIL_TO,
+    emails: {
+      host: EMAILS_HOST,
+      port: parseInt(EMAILS_PORT),
+      user: EMAILS_USER,
+      pass: EMAILS_PASS,
+      from: EMAILS_FROM,
+      to: EMAILS_TO,
       level: {
-        subject: EMAIL_LEVEL_SUBJECT,
-        text: EMAIL_LEVEL_TEXT,
+        subject: EMAILS_LEVEL_SUBJECT,
+        text: EMAILS_LEVEL_TEXT,
       },
       fatal: {
-        subject: EMAIL_FATAL_SUBJECT,
-        text: EMAIL_FATAL_TEXT,
+        subject: EMAILS_FATAL_SUBJECT,
+        text: EMAILS_FATAL_TEXT,
       },
     },
-    warningLevel: parseInt(WARNING_LEVEL),
+    levels: {
+      warningAt: parseInt(LEVELS_WARNING_AT),
+    },
     auth: {
       rd: APP_AUTH_RD,
       wr: APP_AUTH_WR,

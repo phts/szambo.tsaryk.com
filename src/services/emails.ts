@@ -2,10 +2,10 @@ import * as nodemailer from 'nodemailer'
 import {Config} from '../config'
 
 export class EmailsService {
-  private config: Config['email']
+  private config: Config['emails']
   private transporter: nodemailer.Transporter
 
-  constructor(config: Config['email']) {
+  constructor(config: Config['emails']) {
     this.config = config
     this.transporter = nodemailer.createTransport({
       host: config.host,

@@ -14,7 +14,7 @@ export const postLevel: Route =
     await services.levels.insertOne({value: newValue, mode, when: new Date()})
     res.send({ok: true})
 
-    if (newValue >= config.warningLevel) {
+    if (newValue >= config.levels.warningAt) {
       services.emails.sendLevelNotification(newValue)
     }
   }

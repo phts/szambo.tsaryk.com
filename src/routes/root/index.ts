@@ -20,7 +20,7 @@ export const getRoot: Route =
       scheduledActionsHref: `/scheduled-actions?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}`,
       showMode: !!req.query.manual,
       isAdmin: req.query.auth_wr === config.auth.wr,
-      warningLevel: config.warningLevel,
+      warningLevel: config.levels.warningAt,
       query: req.query,
     }
     page.levels = await services.levels.toArray({
