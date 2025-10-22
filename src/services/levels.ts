@@ -1,12 +1,30 @@
 import {Document, ObjectId} from 'mongodb'
 import {exec} from '../db'
 import {Level, NewLevel} from '../models'
+import {Config} from '../config'
+import {EmailsService} from './emails'
+
+interface Dependencies {
+  emails: EmailsService
+}
 
 export class LevelsService {
+  private config: Config['levels']
+  private dependencies: Dependencies
+
+  constructor(config: Config['levels'], dependencies: Dependencies) {
+    this.config = config
+    this.dependencies = dependencies
+  }
+
   public async insertOne(doc: NewLevel): Promise<void> {
     await exec<NewLevel>('levels', async (collection) => {
       await collection.insertOne(doc)
     })
+
+    if (doc.value >= this.config.warningAt) {
+      this.dependencies.emails.sendLevelNotification(doc.value)
+    }
   }
 
   public async deleteOne(id: string): Promise<void> {

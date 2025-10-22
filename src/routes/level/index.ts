@@ -3,7 +3,7 @@ import {Route} from '..'
 import {LevelMode} from '../../models'
 
 export const postLevel: Route =
-  ({config, services}) =>
+  ({services}) =>
   async (req, res) => {
     const newValue = parseInt(req.query.value as string)
     if (isNaN(newValue)) {
@@ -13,10 +13,6 @@ export const postLevel: Route =
     const mode = req.query.mode === 'auto' ? LevelMode.Auto : LevelMode.Manual
     await services.levels.insertOne({value: newValue, mode, when: new Date()})
     res.send({ok: true})
-
-    if (newValue >= config.levels.warningAt) {
-      services.emails.sendLevelNotification(newValue)
-    }
   }
 
 export const deleteLevel: Route =
