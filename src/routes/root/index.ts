@@ -26,8 +26,9 @@ export const getRoot: Route =
     page.levels = await services.levels.toArray({
       limit: req.query.more ? undefined : 20,
       filter: req.query.manual ? undefined : {mode: LevelMode.Auto},
+      sort: {when: -1},
     })
-    page.logs = await services.logs.toArray({limit: req.query.more ? undefined : 20})
+    page.logs = await services.logs.toArray({limit: req.query.more ? undefined : 20, sort: {when: -1}})
     page.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
       page.chart.data.unshift({
         x: v.when.toISOString(),

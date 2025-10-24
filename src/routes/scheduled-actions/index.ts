@@ -8,7 +8,7 @@ export const getScheduledActions: Route =
   ({services}) =>
   async (req, res) => {
     const data: Data = {
-      items: await services.scheduledActions.toArray(),
+      items: await services.scheduledActions.toArray({sort: {when: 1}}),
       query: req.query,
     }
     res.send(page(data))

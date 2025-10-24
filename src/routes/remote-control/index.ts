@@ -6,7 +6,7 @@ import {actionWithPayloadToString, generateRcId} from '../../helpers'
 import {Data, page} from './page'
 
 async function getRemoteControlItem(remoteControl: RemoteControlService): Promise<RemoteControl | null> {
-  return (await remoteControl.toArray({limit: 1}))[0] ?? null
+  return (await remoteControl.toArray({limit: 1, sort: {_id: -1}}))[0] ?? null
 }
 
 export const getRemoteControl: Route =

@@ -1,4 +1,4 @@
-import {Document, ObjectId} from 'mongodb'
+import {Document, ObjectId, Sort} from 'mongodb'
 import {exec} from '../db'
 import {NewScheduledAction, ScheduledAction, Severity} from '../models'
 import {actionWithPayloadToString, generateRcId} from '../helpers'
@@ -21,7 +21,7 @@ export class ScheduledActionsService extends Service<Dependencies, null> {
   }
 
   public async getEarliest(): Promise<ScheduledAction | null> {
-    return (await this.toArray())[0] ?? null
+    return (await this.toArray({sort: {when: 1}}))[0] ?? null
   }
 
   public async deleteOne(id: ObjectId | string): Promise<void> {
@@ -33,9 +33,12 @@ export class ScheduledActionsService extends Service<Dependencies, null> {
     })
   }
 
-  public async toArray({filter}: {filter?: Document} = {}): Promise<ScheduledAction[]> {
+  public async toArray({filter, sort}: {filter?: Document; sort?: Sort} = {}): Promise<ScheduledAction[]> {
     return exec<ScheduledAction, ScheduledAction[]>('scheduled-actions', async (collection) => {
-      let cursor = collection.find().sort({when: 1})
+      let cursor = collection.find()
+      if (sort) {
+        cursor = cursor.sort(sort)
+      }
       if (filter) {
         cursor = cursor.filter(filter)
       }

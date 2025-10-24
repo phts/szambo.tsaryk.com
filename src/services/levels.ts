@@ -1,4 +1,4 @@
-import {Document, ObjectId} from 'mongodb'
+import {Document, ObjectId, Sort} from 'mongodb'
 import {exec} from '../db'
 import {Level, NewLevel, Severity} from '../models'
 import {Config} from '../config'
@@ -13,7 +13,7 @@ interface Dependencies {
 
 export class LevelsService extends Service<Dependencies, Config['levels']> {
   public async insertOne(doc: Omit<NewLevel, 'when'>): Promise<void> {
-    const [previousLevel] = await this.toArray({limit: 1})
+    const [previousLevel] = await this.toArray({limit: 1, sort: {when: -1}})
 
     const when = new Date()
     await exec<NewLevel>('levels', async (collection) => {
@@ -59,9 +59,12 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
     })
   }
 
-  public async toArray({limit, filter}: {limit?: number; filter?: Document}): Promise<Level[]> {
+  public async toArray({limit, filter, sort}: {limit?: number; filter?: Document; sort?: Sort} = {}): Promise<Level[]> {
     return exec<Level, Level[]>('levels', async (collection) => {
-      let cursor = collection.find().sort({when: -1})
+      let cursor = collection.find()
+      if (sort) {
+        cursor = cursor.sort(sort)
+      }
       if (filter) {
         cursor = cursor.filter(filter)
       }

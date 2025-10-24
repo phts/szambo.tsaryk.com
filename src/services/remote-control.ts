@@ -1,3 +1,4 @@
+import {Sort} from 'mongodb'
 import {exec} from '../db'
 import {RemoteControl} from '../models'
 import {Service} from './base'
@@ -9,9 +10,12 @@ export class RemoteControlService extends Service<null, null> {
     })
   }
 
-  public async toArray({limit}: {limit?: number}): Promise<RemoteControl[]> {
+  public async toArray({limit, sort}: {limit?: number; sort?: Sort}): Promise<RemoteControl[]> {
     return exec<RemoteControl, RemoteControl[]>('remote-control', async (collection) => {
-      let cursor = collection.find().sort({_id: -1})
+      let cursor = collection.find()
+      if (sort) {
+        cursor = cursor.sort(sort)
+      }
       if (limit) {
         cursor = cursor.limit(limit)
       }

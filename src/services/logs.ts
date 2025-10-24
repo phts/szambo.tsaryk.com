@@ -1,3 +1,4 @@
+import {Sort} from 'mongodb'
 import {exec} from '../db'
 import {Log, Severity, Source} from '../models'
 import {Service} from './base'
@@ -15,9 +16,12 @@ export class LogsService extends Service<Dependencies, null> {
     await this.insertOne({...doc, source: Source.Web})
   }
 
-  public async toArray({limit}: {limit?: number}): Promise<Log[]> {
+  public async toArray({limit, sort}: {limit?: number; sort?: Sort} = {}): Promise<Log[]> {
     return exec<Log, Log[]>('logs', async (collection) => {
-      let cursor = collection.find().sort({when: -1})
+      let cursor = collection.find()
+      if (sort) {
+        cursor = cursor.sort(sort)
+      }
       if (limit) {
         cursor = cursor.limit(limit)
       }
