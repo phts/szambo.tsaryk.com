@@ -23,12 +23,16 @@ export const getRoot: Route =
       warningLevel: config.levels.warningAt,
       query: req.query,
     }
-    page.levels = await services.levels.toArray({
-      limit: req.query.more ? undefined : 20,
-      filter: req.query.manual ? undefined : {mode: LevelMode.Auto},
-      sort: {when: -1},
-    })
-    page.logs = await services.logs.toArray({limit: req.query.more ? undefined : 20, sort: {when: -1}})
+    page.levels = req.query.more
+      ? await services.levels.toArray({
+          limit: 750,
+          filter: req.query.manual ? undefined : {mode: LevelMode.Auto},
+          sort: {when: -1},
+        })
+      : await services.levels.toThrottledArray({
+          limit: 31,
+        })
+    page.logs = await services.logs.toArray({limit: req.query.more ? 200 : 40, sort: {when: -1}})
     page.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
       page.chart.data.unshift({
         x: v.when.toISOString(),

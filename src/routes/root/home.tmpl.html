@@ -57,9 +57,9 @@
     {{logs}}
     <hr />
     <footer>
-      <a id="manualLink" href="">Auto + Manual</a>
-      &nbsp;|&nbsp;
       <a id="moreDataLink" href="">More data</a>
+      &nbsp;|&nbsp;
+      <a id="manualLink" href="">Auto + Manual</a>
       &nbsp;|&nbsp;
       <a href="/">Admin mode</a>
       &nbsp;|&nbsp;
@@ -68,21 +68,23 @@
     <script>
       const moreDataLink = document.getElementById('moreDataLink')
       const moreDataUrl = new URL(document.location)
-      if (!moreDataUrl.searchParams.has('more')) {
-        moreDataUrl.searchParams.append('more', 'true')
-      } else {
+      if (moreDataUrl.searchParams.has('more')) {
         moreDataUrl.searchParams.delete('more')
+        moreDataUrl.searchParams.delete('manual')
         moreDataLink.classList.add('active')
+      } else {
+        moreDataUrl.searchParams.append('more', 'true')
       }
       moreDataLink.setAttribute('href', moreDataUrl.toString())
 
       const manualLink = document.getElementById('manualLink')
       const manualLinkUrl = new URL(document.location)
-      if (!manualLinkUrl.searchParams.has('manual')) {
-        manualLinkUrl.searchParams.append('manual', 'true')
-      } else {
+      if (manualLinkUrl.searchParams.has('manual')) {
         manualLinkUrl.searchParams.delete('manual')
         manualLink.classList.add('active')
+      } else {
+        if (!manualLinkUrl.searchParams.has('more')) manualLinkUrl.searchParams.append('more', 'true')
+        manualLinkUrl.searchParams.append('manual', 'true')
       }
       manualLink.setAttribute('href', manualLinkUrl.toString())
     </script>

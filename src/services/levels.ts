@@ -1,6 +1,6 @@
 import {Document, ObjectId, Sort} from 'mongodb'
 import {exec} from '../db'
-import {Level, NewLevel, Severity} from '../models'
+import {Level, LevelMode, NewLevel, Severity} from '../models'
 import {Config} from '../config'
 import {EmailsService} from './emails'
 import {LogsService} from './logs'
@@ -11,7 +11,11 @@ interface Dependencies {
   logs: LogsService
 }
 
+const MAX_HISTORY_DEPTH = 62
+
 export class LevelsService extends Service<Dependencies, Config['levels']> {
+  private cache: {key: ObjectId | null; data: Level[] | null} = {key: null, data: null}
+
   public async insertOne(doc: Omit<NewLevel, 'when'>): Promise<void> {
     const [previousLevel] = await this.toArray({limit: 1, sort: {when: -1}})
 
@@ -48,6 +52,7 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       console.warn(`Level with id=${id} does not exists`)
       return
     }
+    this.cache.key = null
 
     await exec<Level>('levels', async (collection) => {
       await collection.deleteOne({_id: new ObjectId(id)})
@@ -73,5 +78,42 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       }
       return cursor.toArray()
     })
+  }
+
+  public async toThrottledArray({limit}: {limit: number}): Promise<Level[]> {
+    const today = new Date()
+    const levels: Level[] = []
+    let iteration = 0
+
+    while (levels.length < limit && iteration < MAX_HISTORY_DEPTH) {
+      iteration++
+      const gte = new Date(today.valueOf())
+      gte.setHours(0, 0, 0)
+      const lt = new Date(today.valueOf())
+      lt.setHours(23, 59, 59)
+      const entries = await this.toArray({
+        filter: {
+          mode: LevelMode.Auto,
+          when: {
+            $gte: gte,
+            $lte: lt,
+          },
+        },
+        sort: {when: -1},
+      })
+      if (entries.length) {
+        if (iteration === 1) {
+          if (entries[0]._id.equals(this.cache.key) && this.cache.data) {
+            return this.cache.data
+          }
+          this.cache.key = entries[0]._id
+        }
+        levels.push(entries[0])
+      }
+      today.setDate(today.getDate() - 1)
+    }
+
+    this.cache.data = levels
+    return levels
   }
 }
