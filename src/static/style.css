@@ -1,0 +1,85 @@
+hr {
+  width: 100%;
+}
+
+body.login,
+body.scheduled-actions,
+body.remote-control {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+
+body.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home footer {
+  display: flex;
+}
+
+.home .levels th:nth-child(2),
+.home .levels th:nth-child(3),
+.home .levels th:nth-child(4) {
+  min-width: 40px;
+}
+
+.home .levels td:nth-child(2),
+.home .levels td:nth-child(3),
+.home .levels td:nth-child(4),
+.home .levels td:nth-child(5),
+.home .levels td:nth-child(6) {
+  text-align: center;
+}
+
+.home .logs td:nth-child(2),
+.home .logs td:nth-child(3) {
+  text-align: center;
+}
+
+.home .logs td:nth-child(4) {
+  word-break: break-all;
+}
+
+.home .chart-wrapper {
+  margin: 0 0 16px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.home a.active {
+  text-decoration: line-through;
+}
+
+
+.remote-control form {
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+}
+
+.remote-control ul {
+  list-style-type: none;
+}
+
+.remote-control .last {
+  color: #666;
+  font-size: smaller;
+}
+
+.remote-control .actions {
+  display: flex;
+  justify-content: center;
+}
+
+
+.scheduled-actions table td:nth-child(4) {
+  text-align: center;
+}

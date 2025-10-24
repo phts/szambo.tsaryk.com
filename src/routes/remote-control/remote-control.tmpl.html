@@ -4,39 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/style.css" />
     <title>szambo.tsaryk.com</title>
-    <style>
-      body {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        justify-content: center;
-        margin: 0;
-        padding: 0;
-      }
-      hr {
-        width: 100%;
-      }
-      form {
-        display: flex;
-        flex-direction: column;
-        min-width: 400px;
-      }
-      ul {
-        list-style-type: none;
-      }
-      .last {
-        color: #666;
-        font-size: smaller;
-      }
-      .actions {
-        display: flex;
-        justify-content: center;
-      }
-    </style>
   </head>
-  <body>
+  <body class="remote-control">
     <form action="/remote-control" method="post">
       <input type="hidden" name="auth" value="{{auth_wr}}" />
       <input type="hidden" name="scheduledTimezone" />

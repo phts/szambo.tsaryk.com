@@ -4,49 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/style.css" />
     <title>szambo.tsaryk.com</title>
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      hr {
-        width: 100%;
-      }
-      footer {
-        display: flex;
-      }
-      .levels th:nth-child(2),
-      .levels th:nth-child(3),
-      .levels th:nth-child(4) {
-        min-width: 40px;
-      }
-      .levels td:nth-child(2),
-      .levels td:nth-child(3),
-      .levels td:nth-child(4),
-      .levels td:nth-child(5),
-      .levels td:nth-child(6) {
-        text-align: center;
-      }
-      .logs td:nth-child(2),
-      .logs td:nth-child(3) {
-        text-align: center;
-      }
-      .logs td:nth-child(4) {
-        word-break: break-all;
-      }
-      .chart-wrapper {
-        margin: 0 0 16px;
-        max-width: 800px;
-        width: 100%;
-      }
-      a.active {
-        text-decoration: line-through;
-      }
-    </style>
   </head>
-  <body>
+  <body class="home">
     {{adminPanel}}
     <h3>Levels</h3>
     <div class="chart-wrapper">

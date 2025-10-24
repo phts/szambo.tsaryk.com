@@ -1,6 +1,6 @@
 import {Middleware} from '..'
 
-const IGNORE_GET_PATH = ['/', '/favicon.png', '/favicon.ico']
+const IGNORE_GET_PATH = ['/', '/favicon.png', '/favicon.ico', '/style.css']
 
 export const auth: Middleware =
   ({config}) =>
