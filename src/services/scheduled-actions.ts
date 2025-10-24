@@ -21,7 +21,7 @@ export class ScheduledActionsService extends Service<Dependencies, null> {
   }
 
   public async getEarliest(): Promise<ScheduledAction | null> {
-    return (await this.toArray({sort: {when: 1}}))[0] ?? null
+    return (await this.toArray({limit: 1, sort: {when: 1}}))[0] ?? null
   }
 
   public async deleteOne(id: ObjectId | string): Promise<void> {
@@ -33,7 +33,9 @@ export class ScheduledActionsService extends Service<Dependencies, null> {
     })
   }
 
-  public async toArray({filter, sort}: {filter?: Document; sort?: Sort} = {}): Promise<ScheduledAction[]> {
+  public async toArray({limit, filter, sort}: {limit?: number; filter?: Document; sort?: Sort} = {}): Promise<
+    ScheduledAction[]
+  > {
     return exec<ScheduledAction, ScheduledAction[]>('scheduled-actions', async (collection) => {
       let cursor = collection.find()
       if (sort) {
@@ -41,6 +43,9 @@ export class ScheduledActionsService extends Service<Dependencies, null> {
       }
       if (filter) {
         cursor = cursor.filter(filter)
+      }
+      if (limit) {
+        cursor = cursor.limit(limit)
       }
       return cursor.toArray()
     })
