@@ -97,7 +97,8 @@
                 maxRotation: 90,
                 minRotation: 90,
                 callback: function (value) {
-                  return this.getLabelForValue(value).split('T')[0]
+                  const date = new Date(Date.parse(this.getLabelForValue(value)))
+                  return `${date.getDate().toString().padStart('2', '0')}.${(date.getMonth() + 1).toString().padStart('2', '0')}`
                 },
               },
               grid: {
