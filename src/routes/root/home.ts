@@ -19,13 +19,6 @@ export interface Data {
 
 const tmpl = readFileSync(path.resolve(__dirname, 'home.tmpl.html')).toString()
 
-const STYLES = {
-  debug: 'opacity:0.5',
-  warn: 'color:#f60',
-  error: 'color:#e00',
-  fatal: 'background-color:#f55;color:#000',
-}
-
 const LOG_SOURCE_TO_ELEMENT = {
   [Source.Device]: '<span title="Device">📡</span>',
   [Source.Web]: '<span title="Web">🌐</span>',
@@ -50,7 +43,7 @@ export function home({
 ${isAdmin ? '<th>Remove</th>' : ''}</tr>
   ${levels
     .map(({_id, value, value_m3: m3, errorRate, when, mode}) => {
-      const props = value >= warningLevel ? ` style="${STYLES.warn}"` : ''
+      const props = value >= warningLevel ? ` class="warn"` : ''
       return `\
 <tr${props}>
 <td>${when.toLocaleString()}</td>
@@ -67,10 +60,8 @@ ${isAdmin ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.str
   <tr><th>When</th><th>Severity</th><th>Source</th><th>Message</th></tr>
   ${logs
     .map(({message, severity, source, when}) => {
-      const style = STYLES[severity as keyof typeof STYLES]
-      const props = style ? ` style="${style}"` : ''
       const sourceEl = LOG_SOURCE_TO_ELEMENT[source] || ''
-      return `<tr${props}><td>${when.toLocaleString()}</td><td>${severity}</td><td>${sourceEl}</td><td>${message.replaceAll('\n', '<br>')}</td></tr>`
+      return `<tr class="${severity}"><td>${when.toLocaleString()}</td><td>${severity}</td><td>${sourceEl}</td><td>${message.replaceAll('\n', '<br>')}</td></tr>`
     })
     .join('')}
 </table>`

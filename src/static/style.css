@@ -39,6 +39,10 @@ body.home {
   text-align: center;
 }
 
+.home .levels .warn {
+  color: #f60;
+}
+
 .home .logs td:nth-child(2),
 .home .logs td:nth-child(3) {
   text-align: center;
@@ -46,6 +50,23 @@ body.home {
 
 .home .logs td:nth-child(4) {
   word-break: break-all;
+}
+
+.home .logs .debug {
+  opacity: 0.5;
+}
+
+.home .logs .warn {
+  color: #f60;
+}
+
+.home .logs .error {
+  color: #e00;
+}
+
+.home .logs .fatal {
+  background-color: #f55;
+  color: #000;
 }
 
 .home .chart-wrapper {
