@@ -18,21 +18,23 @@ export const getRoot: Route =
       chart: {data: []},
       remoteControlHref: `/remote-control?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}`,
       scheduledActionsHref: `/scheduled-actions?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}`,
+      levelsHref: `/levels?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}`,
+      logsHref: `/logs?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}`,
       showMode: !!req.query.manual,
       isAdmin: req.query.auth_wr === config.auth.wr,
       warningLevel: config.levels.warningAt,
-      query: req.query,
+      authWr: req.query.auth_wr?.toString(),
     }
     page.levels = req.query.more
       ? await services.levels.toArray({
-          limit: 750,
+          limit: 250,
           filter: req.query.manual ? undefined : {mode: LevelMode.Auto},
           sort: {when: -1},
         })
       : await services.levels.toThrottledArray({
           limit: 31,
         })
-    page.logs = await services.logs.toArray({limit: req.query.more ? 200 : 40, sort: {when: -1}})
+    page.logs = await services.logs.toArray({limit: 40, sort: {when: -1}})
     page.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
       page.chart.data.unshift({
         x: v.when.toISOString(),

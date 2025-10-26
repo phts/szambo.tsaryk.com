@@ -5,6 +5,8 @@ import * as bodyParser from 'body-parser'
 import {
   deleteLevel,
   deleteScheduledAction,
+  getLevels,
+  getLogs,
   getRc,
   getRemoteControl,
   getRoot,
@@ -38,6 +40,8 @@ const app = express()
 app.use(bodyParser.urlencoded())
 app.use(auth({config}))
 app.use('/', express.static(path.join(__dirname, 'static')))
+app.get('/levels', getLevels({config, services}))
+app.get('/logs', getLogs({config, services}))
 app.get('/remote-control', getRemoteControl({config, services}))
 app.get('/scheduled-actions', getScheduledActions({config, services}))
 app.get('/rc', getRc({config, services}))

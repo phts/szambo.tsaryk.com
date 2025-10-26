@@ -1,5 +1,6 @@
 import {Route} from '..'
 import {LevelMode, NewLevel} from '../../models'
+import {levelsPage} from './levelsPage'
 
 class ParseError extends Error {}
 
@@ -27,6 +28,24 @@ function parseValue(raw?: unknown): Pick<NewLevel, 'value' | 'value_m3' | 'error
 
   return {value, value_m3: parseNumber(parts[1]), errorRate: parseNumber(parts[2])}
 }
+
+export const getLevels: Route =
+  ({services, config}) =>
+  async (req, res) => {
+    const levels = await services.levels.toArray({
+      limit: 1000,
+      sort: {when: -1},
+    })
+    res.send(
+      levelsPage({
+        levels,
+        isAdmin: req.query.auth_wr === config.auth.wr,
+        showMode: true,
+        warningLevel: config.levels.warningAt,
+        authWr: req.query.auth_wr?.toString(),
+      })
+    )
+  }
 
 export const postLevel: Route =
   ({services}) =>

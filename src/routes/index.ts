@@ -3,8 +3,8 @@ import {Config} from '../config'
 import {EmailsService, LevelsService, LogsService, RemoteControlService, ScheduledActionsService} from '../services'
 
 export * from './root'
-export * from './level'
-export * from './log'
+export * from './levels'
+export * from './logs'
 export * from './remote-control'
 export * from './scheduled-actions'
 

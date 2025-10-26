@@ -1,5 +1,16 @@
 import {Route} from '..'
 import {Severity} from '../../models'
+import {logsPage} from './logsPage'
+
+export const getLogs: Route =
+  ({services}) =>
+  async (req, res) => {
+    const logs = await services.logs.toArray({
+      limit: 1000,
+      sort: {when: -1},
+    })
+    res.send(logsPage({logs}))
+  }
 
 export const postLog: Route =
   ({services}) =>

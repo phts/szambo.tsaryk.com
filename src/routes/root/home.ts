@@ -1,7 +1,8 @@
 import * as path from 'path'
 import {readFileSync} from 'fs'
-import {Request} from 'express'
-import {Level, LevelMode, Log, Source} from '../../models'
+import {Level, LevelMode, Log} from '../../models'
+import {getLevelsTableHtml} from '../levels/levelsPage'
+import {getLogsTableHtml} from '../logs/logsPage'
 
 export interface Data {
   levels: Level[]
@@ -11,18 +12,15 @@ export interface Data {
   }
   remoteControlHref: string
   scheduledActionsHref: string
+  levelsHref: string
+  logsHref: string
   showMode: boolean
   isAdmin: boolean
   warningLevel: number
-  query: Request['query']
+  authWr?: string
 }
 
 const tmpl = readFileSync(path.resolve(__dirname, 'home.tmpl.html')).toString()
-
-const LOG_SOURCE_TO_ELEMENT = {
-  [Source.Device]: '<span title="Device">📡</span>',
-  [Source.Web]: '<span title="Web">🌐</span>',
-}
 
 export function home({
   levels,
@@ -33,42 +31,21 @@ export function home({
   showMode,
   isAdmin,
   warningLevel,
-  query,
+  authWr,
+  levelsHref,
+  logsHref,
 }: Data) {
   const adminPanelHtml = isAdmin
     ? `<div><a href="${remoteControlHref}">Remote control</a> | <a href="${scheduledActionsHref}">Scheduled actions</a></div><hr>`
     : ''
-  const levelsHtml = `<table class="levels" border=1>
-<tr><th>When</th><th>%</th><th>m&sup3;</th><th title="Error rate">⚠</th>${showMode ? '<th>Mode</th>' : ''}
-${isAdmin ? '<th>Remove</th>' : ''}</tr>
-  ${levels
-    .map(({_id, value, value_m3: m3, errorRate, when, mode}) => {
-      const props = value >= warningLevel ? ` class="warn"` : ''
-      return `\
-<tr${props}>
-<td>${when.toLocaleString()}</td>
-<td>${value}</td>
-<td>${m3 ?? ''}</td>
-<td>${typeof errorRate === 'number' ? `${errorRate}%` : ''}</td>
-${showMode ? `<td>${mode}</td>` : ''}
-${isAdmin ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.stringify(query.auth_wr)})'>×</button></td>` : ''}
-</tr>`
-    })
-    .join('')}
-</table>`
-  const logsHtml = `<table class="logs" border=1>
-  <tr><th>When</th><th>Severity</th><th>Source</th><th>Message</th></tr>
-  ${logs
-    .map(({message, severity, source, when}) => {
-      const sourceEl = LOG_SOURCE_TO_ELEMENT[source] || ''
-      return `<tr class="${severity}"><td>${when.toLocaleString()}</td><td>${severity}</td><td>${sourceEl}</td><td>${message.replaceAll('\n', '<br>')}</td></tr>`
-    })
-    .join('')}
-</table>`
+  const levelsHtml = getLevelsTableHtml({levels, showMode, isAdmin, warningLevel, authWr})
+  const logsHtml = getLogsTableHtml({logs})
 
   return tmpl
     .replace('{{adminPanel}}', adminPanelHtml)
     .replace('{{levels}}', levelsHtml)
     .replace('{{logs}}', logsHtml)
     .replace("'{{chartData}}'", JSON.stringify(chartData))
+    .replace('{{levelsHref}}', levelsHref)
+    .replace('{{logsHref}}', logsHref)
 }
