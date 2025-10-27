@@ -47,6 +47,19 @@ body.logs {
 
 .home footer {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.home h3 {
+  position: relative;
+}
+
+.home .freq {
+  font-size: smaller;
+  margin: 0 0 0 10px;
+  position: absolute;
+  top: -10px;
 }
 
 table.levels th:nth-child(2),
@@ -97,10 +110,6 @@ table.logs .fatal {
   margin: 0 0 16px;
   max-width: 800px;
   width: 100%;
-}
-
-.home a.active {
-  text-decoration: line-through;
 }
 
 

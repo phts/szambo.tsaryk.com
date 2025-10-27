@@ -9,7 +9,16 @@
   </head>
   <body class="home">
     {{adminPanel}}
-    <h3>Levels</h3>
+    <h3>
+      Levels
+      <span class="freq"
+        >[<a href="{{freq1Href}}"><sup>1</sup>&frasl;<sub>1</sub></a
+        >]&nbsp;[<a href="{{freq2Href}}"><sup>2</sup>&frasl;<sub>1</sub></a
+        >]&nbsp;[<a href="{{freq3Href}}"><sup>3</sup>&frasl;<sub>1</sub></a
+        >]&nbsp;[<a href="{{freq4Href}}"><sup>4</sup>&frasl;<sub>1</sub></a
+        >]</span
+      >
+    </h3>
     <div class="chart-wrapper">
       <canvas id="chart"></canvas>
     </div>
@@ -18,10 +27,6 @@
     {{logs}}
     <hr />
     <footer>
-      <a id="moreDataLink" href="">More data</a>
-      &nbsp;|&nbsp;
-      <a id="manualLink" href="">Auto + Manual</a>
-      &nbsp;|&nbsp;
       <a href="{{levelsHref}}">Levels</a>
       &nbsp;|&nbsp;
       <a href="{{logsHref}}">Logs</a>
@@ -30,29 +35,6 @@
       &nbsp;|&nbsp;
       <a href="https://github.com/phts/szambo.tsaryk.com" target="_blank">© Phil Tsaryk, 2025</a>
     </footer>
-    <script>
-      const moreDataLink = document.getElementById('moreDataLink')
-      const moreDataUrl = new URL(document.location)
-      if (moreDataUrl.searchParams.has('more')) {
-        moreDataUrl.searchParams.delete('more')
-        moreDataUrl.searchParams.delete('manual')
-        moreDataLink.classList.add('active')
-      } else {
-        moreDataUrl.searchParams.append('more', 'true')
-      }
-      moreDataLink.setAttribute('href', moreDataUrl.toString())
-
-      const manualLink = document.getElementById('manualLink')
-      const manualLinkUrl = new URL(document.location)
-      if (manualLinkUrl.searchParams.has('manual')) {
-        manualLinkUrl.searchParams.delete('manual')
-        manualLink.classList.add('active')
-      } else {
-        if (!manualLinkUrl.searchParams.has('more')) manualLinkUrl.searchParams.append('more', 'true')
-        manualLinkUrl.searchParams.append('manual', 'true')
-      }
-      manualLink.setAttribute('href', manualLinkUrl.toString())
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
       const dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -90,8 +72,7 @@
           animation: false,
           elements: {
             bar: {
-              backgroundColor: (ctx) =>
-                ctx.parsed.y >= 83 ? '#f60' : ctx.raw.mode === 'auto' ? (dark ? '#c8c6c3' : '#000') : '#335',
+              backgroundColor: (ctx) => (ctx.parsed.y >= 83 ? '#f60' : dark ? '#c8c6c3' : '#000'),
             },
           },
           scales: {

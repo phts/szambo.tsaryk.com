@@ -1,6 +1,6 @@
 import * as path from 'path'
 import {readFileSync} from 'fs'
-import {Level, LevelMode, Log} from '../../models'
+import {Level, Log} from '../../models'
 import {getLevelsTableHtml} from '../levels/levelsPage'
 import {getLogsTableHtml} from '../logs/logsPage'
 
@@ -8,13 +8,16 @@ export interface Data {
   levels: Level[]
   logs: Log[]
   chart: {
-    data: Array<{x: string; y: number; mode: LevelMode; label_m3: string; errorRate: string}>
+    data: Array<{x: string; y: number; label_m3: string; errorRate: string}>
   }
   remoteControlHref: string
   scheduledActionsHref: string
   levelsHref: string
   logsHref: string
-  showMode: boolean
+  freq1Href: string
+  freq2Href: string
+  freq3Href: string
+  freq4Href: string
   isAdmin: boolean
   warningLevel: number
   authWr?: string
@@ -28,17 +31,20 @@ export function home({
   chart: {data: chartData},
   remoteControlHref,
   scheduledActionsHref,
-  showMode,
   isAdmin,
   warningLevel,
   authWr,
   levelsHref,
   logsHref,
+  freq1Href,
+  freq2Href,
+  freq3Href,
+  freq4Href,
 }: Data) {
   const adminPanelHtml = isAdmin
     ? `<div><a href="${remoteControlHref}">Remote control</a> | <a href="${scheduledActionsHref}">Scheduled actions</a></div><hr>`
     : ''
-  const levelsHtml = getLevelsTableHtml({levels, showMode, isAdmin, warningLevel, authWr})
+  const levelsHtml = getLevelsTableHtml({levels, showMode: false, isAdmin, warningLevel, authWr})
   const logsHtml = getLogsTableHtml({logs})
 
   return tmpl
@@ -48,4 +54,8 @@ export function home({
     .replace("'{{chartData}}'", JSON.stringify(chartData))
     .replace('{{levelsHref}}', levelsHref)
     .replace('{{logsHref}}', logsHref)
+    .replace('{{freq1Href}}', freq1Href)
+    .replace('{{freq2Href}}', freq2Href)
+    .replace('{{freq3Href}}', freq3Href)
+    .replace('{{freq4Href}}', freq4Href)
 }

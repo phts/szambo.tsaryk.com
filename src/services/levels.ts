@@ -1,6 +1,6 @@
 import {Document, ObjectId, Sort} from 'mongodb'
 import {exec} from '../db'
-import {Level, LevelMode, NewLevel, Severity} from '../models'
+import {Level, NewLevel, Severity} from '../models'
 import {Config} from '../config'
 import {EmailsService} from './emails'
 import {LogsService} from './logs'
@@ -14,7 +14,7 @@ interface Dependencies {
 const MAX_HISTORY_DEPTH = 62
 
 export class LevelsService extends Service<Dependencies, Config['levels']> {
-  private cache: {key: ObjectId | null; data: Level[] | null} = {key: null, data: null}
+  private cache: Record<string, {key: ObjectId | null; data: Level[] | null}> = {}
 
   public async insertOne(doc: Omit<NewLevel, 'when'>): Promise<void> {
     const [previousLevel] = await this.toArray({limit: 1, sort: {when: -1}})
@@ -52,7 +52,7 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       console.warn(`Level with id=${id} does not exists`)
       return
     }
-    this.cache.key = null
+    this.cache = {}
 
     await exec<Level>('levels', async (collection) => {
       await collection.deleteOne({_id: new ObjectId(id)})
@@ -80,40 +80,57 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
     })
   }
 
-  public async toThrottledArray({limit}: {limit: number}): Promise<Level[]> {
+  public async toThrottledArray({freq, limit}: {freq: number; limit: number}): Promise<Level[]> {
+    if (freq < 0 || freq > 4) {
+      return []
+    }
     const today = new Date()
     const levels: Level[] = []
     let iteration = 0
+    let depth = 0
 
-    while (levels.length < limit && iteration < MAX_HISTORY_DEPTH) {
-      iteration++
+    let cache = this.cache[freq]
+    if (!cache) {
+      cache = {key: null, data: null}
+      this.cache[freq] = cache
+    }
+
+    const [last] = await this.toArray({
+      sort: {when: -1},
+      limit: 1,
+    })
+
+    if (last._id.equals(cache.key) && cache.data) {
+      return cache.data
+    }
+
+    while (levels.length < limit && depth < MAX_HISTORY_DEPTH) {
+      const dayPart = freq - 1 - (iteration % freq)
       const gte = new Date(today.valueOf())
-      gte.setHours(0, 0, 0)
+      gte.setHours((24 / freq) * dayPart, 0, 0)
       const lt = new Date(today.valueOf())
-      lt.setHours(23, 59, 59)
+      lt.setHours((24 / freq) * (dayPart + 1), 0, 0)
       const entries = await this.toArray({
         filter: {
-          mode: LevelMode.Auto,
           when: {
             $gte: gte,
-            $lte: lt,
+            $lt: lt,
           },
         },
         sort: {when: -1},
       })
       if (entries.length) {
-        if (iteration === 1) {
-          if (entries[0]._id.equals(this.cache.key) && this.cache.data) {
-            return this.cache.data
-          }
-          this.cache.key = entries[0]._id
-        }
         levels.push(entries[0])
       }
-      today.setDate(today.getDate() - 1)
+      if (dayPart === 0) {
+        today.setDate(today.getDate() - 1)
+        depth++
+      }
+      iteration++
     }
 
-    this.cache.data = levels
+    cache.key = last._id
+    cache.data = levels
     return levels
   }
 }
