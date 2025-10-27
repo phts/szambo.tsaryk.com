@@ -12,7 +12,7 @@ function parseNumber(raw?: string) {
   return value
 }
 
-function parseValue(raw?: unknown): Pick<NewLevel, 'value' | 'value_m3' | 'errorRate'> {
+function parseValue(capacity: number, raw?: unknown): Pick<NewLevel, 'value' | 'value_m3' | 'errorRate'> {
   if (typeof raw !== 'string') {
     throw new ParseError()
   }
@@ -21,12 +21,16 @@ function parseValue(raw?: unknown): Pick<NewLevel, 'value' | 'value_m3' | 'error
   }
 
   const parts = raw.split('|')
-  const value = parseInt(parts[0])
+  const value = parseFloat(parts[0])
   if (isNaN(value)) {
     throw new ParseError()
   }
 
-  return {value, value_m3: parseNumber(parts[1]), errorRate: parseNumber(parts[2])}
+  return {
+    value: Math.round(value),
+    value_m3: (value * capacity) / 100,
+    errorRate: parseNumber(parts[1]),
+  }
 }
 
 export const getLevels: Route =
@@ -48,10 +52,10 @@ export const getLevels: Route =
   }
 
 export const postLevel: Route =
-  ({services}) =>
+  ({services, config}) =>
   async (req, res) => {
     try {
-      const {value, value_m3, errorRate} = parseValue(req.query.value)
+      const {value, value_m3, errorRate} = parseValue(config.levels.capacity, req.query.value)
       const mode = req.query.mode === 'auto' ? LevelMode.Auto : LevelMode.Manual
       await services.levels.insertOne({value, value_m3, errorRate, mode})
       res.send({ok: true})

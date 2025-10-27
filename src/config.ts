@@ -23,6 +23,7 @@ export interface Config {
     }
   }
   levels: {
+    capacity: number
     warningAt: number
     warningHighDiffPerHour: number
   }
@@ -47,6 +48,7 @@ export function getConfig(): Config {
     EMAILS_FATAL_TEXT,
     EMAILS_HIGH_DIFF_SUBJECT,
     EMAILS_HIGH_DIFF_TEXT,
+    LEVELS_CAPACITY,
     LEVELS_WARNING_AT,
     LEVELS_WARNING_HIGH_DIFF_PER_HOUR,
     APP_AUTH_WR,
@@ -91,6 +93,9 @@ export function getConfig(): Config {
   if (!EMAILS_HIGH_DIFF_TEXT) {
     throw new Error('EMAILS_HIGH_DIFF_TEXT env variable is missing')
   }
+  if (!LEVELS_CAPACITY) {
+    throw new Error('LEVELS_CAPACITY env variable is missing')
+  }
   if (!LEVELS_WARNING_AT) {
     throw new Error('LEVELS_WARNING_AT env variable is missing')
   }
@@ -126,6 +131,7 @@ export function getConfig(): Config {
       },
     },
     levels: {
+      capacity: parseFloat(LEVELS_CAPACITY),
       warningAt: parseInt(LEVELS_WARNING_AT),
       warningHighDiffPerHour: parseInt(LEVELS_WARNING_HIGH_DIFF_PER_HOUR),
     },
