@@ -2,6 +2,28 @@ hr {
   width: 100%;
 }
 
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: #181a1b;
+    color: #e8e6e3;
+  }
+
+  a {
+    color: #3391ff
+  }
+
+  .home .logs .fatal {
+    background-color: #600;
+    color: unset;
+  }
+}
+
+
 body.login,
 body.scheduled-actions,
 body.remote-control {

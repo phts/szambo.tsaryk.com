@@ -51,6 +51,7 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+      const dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
       const ctx = document.getElementById('chart')
       const plugin = {
         id: 'horizontalLine',
@@ -85,7 +86,8 @@
           animation: false,
           elements: {
             bar: {
-              backgroundColor: (ctx) => (ctx.parsed.y >= 83 ? '#f60' : ctx.raw.mode === 'auto' ? '#000' : '#006'),
+              backgroundColor: (ctx) =>
+                ctx.parsed.y >= 83 ? '#f60' : ctx.raw.mode === 'auto' ? (dark ? '#c8c6c3' : '#000') : '#335',
             },
           },
           scales: {
@@ -111,6 +113,10 @@
               },
               ticks: {
                 callback: (value) => value + '%',
+                color: dark ? '#c8c6c3' : undefined,
+              },
+              grid: {
+                color: dark ? '#333' : undefined,
               },
             },
             cubes: {
@@ -119,6 +125,10 @@
               min: 0,
               ticks: {
                 callback: (value) => value + 'm³',
+                color: dark ? '#c8c6c3' : undefined,
+              },
+              grid: {
+                color: dark ? '#333' : undefined,
               },
             },
           },
