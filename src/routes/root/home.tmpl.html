@@ -94,9 +94,6 @@
               beginAtZero: true,
               max: 100,
               min: 0,
-              border: {
-                dash: [5, 5],
-              },
               ticks: {
                 callback: (value) => value + '%',
                 color: dark ? '#c8c6c3' : undefined,
@@ -107,14 +104,14 @@
             },
             cubes: {
               position: 'right',
-              max: 6,
+              max: 5,
               min: 0,
               ticks: {
-                callback: (value) => value + 'm³',
+                callback: (value) => value.toFixed(1) + 'm³',
                 color: dark ? '#c8c6c3' : undefined,
               },
               grid: {
-                color: dark ? '#333' : undefined,
+                display: false,
               },
             },
           },
