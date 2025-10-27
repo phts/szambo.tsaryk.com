@@ -28,12 +28,12 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       this.dependencies.emails.sendLevelNotification(doc.value)
     }
 
-    if (doc.value > previousLevel.value) {
-      const valueDiff = doc.value - previousLevel.value
+    const valueDiff = doc.value - previousLevel.value
+    if (valueDiff > 1) {
       const hoursDiff = Math.floor((when.valueOf() - previousLevel.when.valueOf()) / 1000 / 60 / 60) || 1
       const speed = valueDiff / hoursDiff
       this.dependencies.logs.insertOneFromWeb({
-        message: `Level increase rate: ${valueDiff}% ÷ ${hoursDiff}h = ${speed}%/h (warning at: ${this.config.warningHighDiffPerHour}%/h)`,
+        message: `Level increase rate: ${valueDiff.toPrecision(2)}% ÷ ${hoursDiff}h = ${speed.toPrecision(2)}%/h (warning at: ≥${this.config.warningHighDiffPerHour}%/h)`,
         severity: Severity.Debug,
       })
       if (speed >= this.config.warningHighDiffPerHour) {

@@ -1,4 +1,5 @@
 import {Route} from '..'
+import {toViewModel} from '../levels/levelsTable'
 import {login} from './login'
 import {home, Data} from './home'
 
@@ -32,16 +33,19 @@ export const getRoot: Route =
       res.sendStatus(400)
       return
     }
-    page.levels = await services.levels.toThrottledArray({
-      freq,
-      limit: 31,
-    })
+    page.levels = toViewModel(
+      await services.levels.toThrottledArray({
+        freq,
+        limit: 31,
+      }),
+      {capacity: config.levels.capacity}
+    )
     page.logs = await services.logs.toArray({limit: 40, sort: {when: -1}})
     page.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
       page.chart.data.unshift({
         x: v.when.toISOString(),
         y: v.value,
-        label_m3: typeof v.value_m3 === 'number' ? `${v.value_m3} m³` : '',
+        label_m3: `${v.m3} m³`,
         errorRate: typeof v.errorRate === 'number' ? `⚠${v.errorRate}%` : '',
       })
     })

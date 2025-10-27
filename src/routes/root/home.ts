@@ -1,11 +1,11 @@
 import * as path from 'path'
 import {readFileSync} from 'fs'
-import {Level, Log} from '../../models'
-import {getLevelsTableHtml} from '../levels/levelsPage'
+import {Log} from '../../models'
 import {getLogsTableHtml} from '../logs/logsPage'
+import {levelsTable, LevelViewModel} from '../levels/levelsTable'
 
 export interface Data {
-  levels: Level[]
+  levels: LevelViewModel[]
   logs: Log[]
   chart: {
     data: Array<{x: string; y: number; label_m3: string; errorRate: string}>
@@ -44,7 +44,7 @@ export function home({
   const adminPanelHtml = isAdmin
     ? `<div><a href="${remoteControlHref}">Remote control</a> | <a href="${scheduledActionsHref}">Scheduled actions</a></div><hr>`
     : ''
-  const levelsHtml = getLevelsTableHtml({levels, showMode: false, isAdmin, warningLevel, authWr})
+  const levelsHtml = levelsTable({levels, showMode: false, isAdmin, warningLevel, authWr})
   const logsHtml = getLogsTableHtml({logs})
 
   return tmpl

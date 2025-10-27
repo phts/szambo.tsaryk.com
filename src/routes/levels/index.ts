@@ -1,6 +1,7 @@
 import {Route} from '..'
 import {LevelMode, NewLevel} from '../../models'
 import {levelsPage} from './levelsPage'
+import {toViewModel} from './levelsTable'
 
 class ParseError extends Error {}
 
@@ -12,7 +13,7 @@ function parseNumber(raw?: string) {
   return value
 }
 
-function parseValue(capacity: number, raw?: unknown): Pick<NewLevel, 'value' | 'value_m3' | 'errorRate'> {
+function parseValue(capacity: number, raw?: unknown): Pick<NewLevel, 'value' | 'errorRate'> {
   if (typeof raw !== 'string') {
     throw new ParseError()
   }
@@ -21,14 +22,13 @@ function parseValue(capacity: number, raw?: unknown): Pick<NewLevel, 'value' | '
   }
 
   const parts = raw.split('|')
-  const value = parseFloat(parts[0])
+  const value = Math.round(parseFloat(parts[0]) * 100) / 100
   if (isNaN(value)) {
     throw new ParseError()
   }
 
   return {
-    value: Math.round(value),
-    value_m3: (value * capacity) / 100,
+    value,
     errorRate: parseNumber(parts[1]),
   }
 }
@@ -42,7 +42,7 @@ export const getLevels: Route =
     })
     res.send(
       levelsPage({
-        levels,
+        levels: toViewModel(levels, {capacity: config.levels.capacity}),
         isAdmin: req.query.auth_wr === config.auth.wr,
         showMode: true,
         warningLevel: config.levels.warningAt,
@@ -55,9 +55,9 @@ export const postLevel: Route =
   ({services, config}) =>
   async (req, res) => {
     try {
-      const {value, value_m3, errorRate} = parseValue(config.levels.capacity, req.query.value)
+      const {value, errorRate} = parseValue(config.levels.capacity, req.query.value)
       const mode = req.query.mode === 'auto' ? LevelMode.Auto : LevelMode.Manual
-      await services.levels.insertOne({value, value_m3, errorRate, mode})
+      await services.levels.insertOne({value, errorRate, mode})
       res.send({ok: true})
     } catch (e) {
       if (e instanceof ParseError) {

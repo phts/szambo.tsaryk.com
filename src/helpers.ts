@@ -15,3 +15,7 @@ export function generateRcId(item: RemoteControl) {
 export function actionWithPayloadToString(action: string, payload?: string | null) {
   return `"${action}"${payload ? ` with payload "${payload}"` : ''}`
 }
+
+export function percentageToCubeMeters(capacity: number, value: number) {
+  return (value * capacity) / 100
+}
