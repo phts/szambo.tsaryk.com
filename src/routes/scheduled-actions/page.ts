@@ -15,7 +15,7 @@ export function page(data: Data) {
     ? `<table border=1><tr><th>When</th><th>Action</th><th>Payload</th><th>Remove</th></tr>
   ${data.items
     .map((it) => [
-      it.when.toLocaleString(),
+      it.when.toLocaleString('ru'),
       it.action,
       it.payload ?? '',
       `<button onclick='removeScheduledAction(${JSON.stringify(it._id)}, ${JSON.stringify(data.query.auth_wr)})'>×</button>`,

@@ -10,7 +10,7 @@ export interface Data {
 const tmpl = readFileSync(path.resolve(__dirname, 'remote-control.tmpl.html')).toString()
 
 export function page(data: Data) {
-  const lastWhen = data.item ? data.item.when.toLocaleString() : 'never'
+  const lastWhen = data.item ? data.item.when.toLocaleString('ru') : 'never'
   const lastActions = data.item ? data.item.action : 'none'
   return tmpl
     .replace('{{lastWhen}}', lastWhen)

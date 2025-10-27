@@ -33,7 +33,7 @@ ${isAdmin ? '<th>Remove</th>' : ''}</tr>
       const props = value >= warningLevel ? ` class="warn"` : ''
       return `\
 <tr${props}>
-<td>${when.toLocaleString()}</td>
+<td>${when.toLocaleString('ru')}</td>
 <td>${value}</td>
 <td>${m3 ?? ''}</td>
 <td>${typeof errorRate === 'number' ? `${errorRate}%` : ''}</td>

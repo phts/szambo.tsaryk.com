@@ -19,7 +19,7 @@ export function getLogsTableHtml({logs}: {logs: Log[]}) {
   ${logs
     .map(({message, severity, source, when}) => {
       const sourceEl = LOG_SOURCE_TO_ELEMENT[source] || ''
-      return `<tr class="${severity}"><td>${when.toLocaleString()}</td><td>${severity}</td><td>${sourceEl}</td><td>${message.replaceAll('\n', '<br>')}</td></tr>`
+      return `<tr class="${severity}"><td>${when.toLocaleString('ru')}</td><td>${severity}</td><td>${sourceEl}</td><td>${message.replaceAll('\n', '<br>')}</td></tr>`
     })
     .join('')}
 </table>`
