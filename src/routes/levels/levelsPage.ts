@@ -35,7 +35,7 @@ ${isAdmin ? '<th>Remove</th>' : ''}</tr>
 <tr${props}>
 <td>${when.toLocaleString('ru')}</td>
 <td>${value}</td>
-<td>${m3 ?? ''}</td>
+<td>${m3?.toFixed(2) ?? ''}</td>
 <td>${typeof errorRate === 'number' ? `${errorRate}%` : ''}</td>
 ${showMode ? `<td>${mode === LevelMode.Auto ? 'a' : 'm'}</td>` : ''}
 ${isAdmin ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.stringify(authWr)})'>×</button></td>` : ''}
