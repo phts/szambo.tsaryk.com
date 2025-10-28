@@ -7,7 +7,7 @@
   "license": "ISC",
   "scripts": {
     "build": "webpack --config ./config/webpack.config.js",
-    "build:watch": "webpack --config ./config/webpack.config.js --watch",
+    "build:watch": "webpack --config ./config/webpack.config.js --watch --mode=development",
     "deploy": "bash scripts/deploy.sh",
     "dev": "run-p build:watch start:watch",
     "format": "prettier --write '**/*.{html,md,json}' && npm run lint:es -- --fix",
@@ -16,6 +16,7 @@
     "lint:es": "eslint .",
     "prebuild": "npm run lint",
     "predeploy": "npm run build",
+    "predev": "rm -rf dist",
     "start": "node dist/app.js",
     "start:watch": "nodemon --ext js,json,html dist/app.js"
   },

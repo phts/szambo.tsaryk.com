@@ -19,6 +19,7 @@ import {getConfig} from './config'
 import {init} from './db'
 import {auth} from './middlewares/auth'
 import {EmailsService, LevelsService, LogsService, RemoteControlService, ScheduledActionsService} from './services'
+import {Severity} from './models'
 
 const config = getConfig()
 init(config)
@@ -63,3 +64,7 @@ app.use((err, req, res, next) => {
 
 app.listen(3000)
 scheduledActions.watch()
+
+if (process.env.NODE_ENV === 'production') {
+  logs.insertOneFromWeb({message: 'Started web application', severity: Severity.Info})
+}
