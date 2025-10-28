@@ -11,7 +11,7 @@ export enum Source {
 export enum Severity {
   Debug = 'debug',
   Info = 'info',
-  Warning = 'warning',
+  Warning = 'warn',
   Error = 'error',
   Fatal = 'fatal',
 }
