@@ -1,11 +1,17 @@
 import * as nodemailer from 'nodemailer'
 import {Config} from '../config'
+import {Severity} from '../models'
 import {Service} from './base'
+import {LogsService} from './logs'
 
-export class EmailsService extends Service<null, Config['emails']> {
+interface Dependencies {
+  logs: LogsService | null
+}
+
+export class EmailsService extends Service<Dependencies, Config['emails']> {
   private transporter: nodemailer.Transporter
 
-  constructor(dependencies: null, config: Config['emails']) {
+  constructor(dependencies: Dependencies, config: Config['emails']) {
     super(dependencies, config)
     this.transporter = nodemailer.createTransport({
       host: config.host,
@@ -46,11 +52,12 @@ export class EmailsService extends Service<null, Config['emails']> {
   }
 
   private sendMail(mailOptions: {subject: string; text: string}) {
-    this.transporter.sendMail({...mailOptions, from: this.config.from, to: this.config.to}, (error, info) => {
+    this.transporter.sendMail({...mailOptions, from: this.config.from, to: this.config.to}, (error) => {
       if (error) {
         console.error(error)
+        this.dependencies.logs?.insertOneFromWeb({message: `Failed to send email: ${error}`, severity: Severity.Error})
       } else {
-        console.info('Email sent: ' + info.response)
+        this.dependencies.logs?.insertOneFromWeb({message: `Sent email: ${mailOptions.text}`, severity: Severity.Info})
       }
     })
   }

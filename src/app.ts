@@ -23,8 +23,9 @@ import {EmailsService, LevelsService, LogsService, RemoteControlService, Schedul
 const config = getConfig()
 init(config)
 
-const emails = new EmailsService(null, config.emails)
+const emails = new EmailsService({logs: null}, config.emails)
 const logs = new LogsService({emails}, null)
+emails.addDependency('logs', logs)
 const levels = new LevelsService({emails, logs}, config.levels)
 const remoteControl = new RemoteControlService(null, null)
 const scheduledActions = new ScheduledActionsService({logs, remoteControl}, null)
