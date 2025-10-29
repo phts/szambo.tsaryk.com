@@ -51,6 +51,14 @@ export class EmailsService extends Service<Dependencies, Config['emails']> {
     this.sendMail(mailOptions)
   }
 
+  public sendHighErrorRateNotification({errorRate}: {errorRate: number}) {
+    const mailOptions = {
+      subject: this.config.highErrorRate.subject,
+      text: this.config.highErrorRate.text.replace('{{errorRate}}', errorRate.toString()),
+    }
+    this.sendMail(mailOptions)
+  }
+
   private sendMail(mailOptions: {subject: string; text: string}) {
     this.transporter.sendMail({...mailOptions, from: this.config.from, to: this.config.to}, (error) => {
       if (error) {
