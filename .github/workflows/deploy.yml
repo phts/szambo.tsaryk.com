@@ -1,0 +1,50 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Add known hosts
+        run: ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Create .env file
+        run: |
+          touch .env
+          echo DB_URI="${{ secrets.DB_URI }}" >> .env
+          echo EMAILS_HOST="${{ secrets.EMAILS_HOST }}" >> .env
+          echo EMAILS_PORT="${{ secrets.EMAILS_PORT }}" >> .env
+          echo EMAILS_USER="${{ secrets.EMAILS_USER }}" >> .env
+          echo EMAILS_PASS="${{ secrets.EMAILS_PASS }}" >> .env
+          echo EMAILS_FROM="${{ secrets.EMAILS_FROM }}" >> .env
+          echo EMAILS_TO="${{ secrets.EMAILS_TO }}" >> .env
+          echo EMAILS_LEVEL_SUBJECT="${{ vars.EMAILS_LEVEL_SUBJECT }}" >> .env
+          echo EMAILS_LEVEL_TEXT="${{ vars.EMAILS_LEVEL_TEXT }}" >> .env
+          echo EMAILS_FATAL_SUBJECT="${{ vars.EMAILS_FATAL_SUBJECT }}" >> .env
+          echo EMAILS_FATAL_TEXT="${{ vars.EMAILS_FATAL_TEXT }}" >> .env
+          echo EMAILS_HIGH_DIFF_SUBJECT="${{ vars.EMAILS_HIGH_DIFF_SUBJECT }}" >> .env
+          echo EMAILS_HIGH_DIFF_TEXT="${{ vars.EMAILS_HIGH_DIFF_TEXT }}" >> .env
+          echo LEVELS_CAPACITY=${{ vars.LEVELS_CAPACITY }} >> .env
+          echo LEVELS_WARNING_AT=${{ vars.LEVELS_WARNING_AT }} >> .env
+          echo LEVELS_WARNING_HIGH_DIFF_PER_HOUR=${{ vars.LEVELS_WARNING_HIGH_DIFF_PER_HOUR }} >> .env
+          echo APP_AUTH_WR="${{ secrets.APP_AUTH_WR }}" >> .env
+          echo APP_AUTH_RD="${{ secrets.APP_AUTH_RD }}" >> .env
+          cat .env
+      - name: Deploy
+        run: npm run deploy
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PATH: ${{ secrets.SSH_PATH }}
+          SSH_SCRIPT: ${{ secrets.SSH_SCRIPT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
