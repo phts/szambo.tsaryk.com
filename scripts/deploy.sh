@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-if [ -f .env ]; then
-  source .env
+if [ -f .env-deploy ]; then
+  source .env-deploy
 fi
 
 if [[ -z "${SSH_HOST}" || -z "${SSH_PATH}" || -z "${SSH_SCRIPT}" || -z "${SSH_USER}" ]]; then
