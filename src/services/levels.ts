@@ -34,7 +34,7 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       const speed = valueDiff / hoursDiff
       const warning = speed >= this.config.warningHighDiffPerHour
       this.dependencies.logs.insertOneFromWeb({
-        message: `Level increase rate: ${valueDiff.toPrecision(2)}% ÷ ${hoursDiff}h = ${speed.toPrecision(2)}%/h (warning at: ≥${this.config.warningHighDiffPerHour}%/h)`,
+        message: `Level increase rate: ${valueDiff.toPrecision(2)}&nbsp;% ÷ ${hoursDiff}&nbsp;h = ${speed.toPrecision(2)}&nbsp;%/h (warning at: ≥${this.config.warningHighDiffPerHour}&nbsp;%/h)`,
         severity: warning ? Severity.Warning : Severity.Debug,
       })
       if (warning) {

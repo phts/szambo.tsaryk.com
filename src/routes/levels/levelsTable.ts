@@ -29,7 +29,7 @@ export function toViewModel(levels: Level[], {capacity}: {capacity: number}): Le
 
 export function levelsTable({levels, showMode, isAdmin, warningLevel, authWr}: LevelsTableData) {
   return `<table class="levels" border=1>
-<tr><th>When</th><th>%</th><th>m&sup3;</th><th title="Error rate">⚠</th>${showMode ? '<th>Mode</th>' : ''}
+<tr><th>When</th><th>%</th><th>m&sup3;</th><th title="Error rate">⚠%</th>${showMode ? '<th>Mode</th>' : ''}
 ${isAdmin ? '<th>Remove</th>' : ''}</tr>
   ${levels
     .map(({_id, value, m3, errorRate, when, mode}) => {
@@ -39,7 +39,7 @@ ${isAdmin ? '<th>Remove</th>' : ''}</tr>
 <td>${when.toLocaleString('ru')}</td>
 <td>${value}</td>
 <td>${m3}</td>
-<td>${typeof errorRate === 'number' ? `${errorRate}%` : ''}</td>
+<td>${typeof errorRate === 'number' ? errorRate : ''}</td>
 ${showMode ? `<td>${mode === LevelMode.Auto ? 'a' : 'm'}</td>` : ''}
 ${isAdmin ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.stringify(authWr)})'>×</button></td>` : ''}
 </tr>`

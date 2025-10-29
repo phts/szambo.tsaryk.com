@@ -46,7 +46,7 @@ export const getRoot: Route =
         x: v.when.toISOString(),
         y: v.value,
         label_m3: `${v.m3} m³`,
-        errorRate: typeof v.errorRate === 'number' ? `⚠${v.errorRate}%` : '',
+        errorRate: typeof v.errorRate === 'number' ? `⚠${v.errorRate} %` : '',
       })
     })
     res.send(home(page))
