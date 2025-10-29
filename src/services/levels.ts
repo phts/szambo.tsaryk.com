@@ -105,7 +105,7 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       return cache.data
     }
 
-    while (levels.length < limit && depth < MAX_HISTORY_DEPTH) {
+    while (levels.length <= limit && depth < MAX_HISTORY_DEPTH) {
       const dayPart = freq - 1 - (iteration % freq)
       const gte = new Date(today.valueOf())
       gte.setHours((24 / freq) * dayPart, 0, 0)
