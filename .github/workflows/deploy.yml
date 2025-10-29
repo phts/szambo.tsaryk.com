@@ -35,9 +35,12 @@ jobs:
           echo EMAILS_FATAL_TEXT="${{ vars.EMAILS_FATAL_TEXT }}" >> .env
           echo EMAILS_HIGH_DIFF_SUBJECT="${{ vars.EMAILS_HIGH_DIFF_SUBJECT }}" >> .env
           echo EMAILS_HIGH_DIFF_TEXT="${{ vars.EMAILS_HIGH_DIFF_TEXT }}" >> .env
+          echo EMAILS_HIGH_ERROR_RATE_SUBJECT="${{ vars.EMAILS_HIGH_ERROR_RATE_SUBJECT }}" >> .env
+          echo EMAILS_HIGH_ERROR_RATE_TEXT="${{ vars.EMAILS_HIGH_ERROR_RATE_TEXT }}" >> .env
           echo LEVELS_CAPACITY=${{ vars.LEVELS_CAPACITY }} >> .env
           echo LEVELS_WARNING_AT=${{ vars.LEVELS_WARNING_AT }} >> .env
           echo LEVELS_WARNING_HIGH_DIFF_PER_HOUR=${{ vars.LEVELS_WARNING_HIGH_DIFF_PER_HOUR }} >> .env
+          echo LEVELS_WARNING_HIGH_ERROR_RATE=${{ vars.LEVELS_WARNING_HIGH_ERROR_RATE }} >> .env
           echo APP_AUTH_WR="${{ secrets.APP_AUTH_WR }}" >> .env
           echo APP_AUTH_RD="${{ secrets.APP_AUTH_RD }}" >> .env
           cat .env

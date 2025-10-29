@@ -15,6 +15,7 @@ const MAX_HISTORY_DEPTH = 62
 
 export class LevelsService extends Service<Dependencies, Config['levels']> {
   private cache: Record<string, {key: ObjectId | null; data: Level[] | null}> = {}
+  private highErrorRateEmailSent: boolean = false
 
   public async insertOne(doc: Omit<NewLevel, 'when'>): Promise<void> {
     const [previousLevel] = await this.toArray({limit: 1, sort: {when: -1}})
@@ -44,6 +45,15 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
           prevValue: previousLevel.value,
         })
       }
+    }
+
+    if (doc.errorRate && doc.errorRate >= this.config.warningHighErrorRate) {
+      if (!this.highErrorRateEmailSent) {
+        this.dependencies.emails.sendHighErrorRateNotification({errorRate: doc.errorRate})
+        this.highErrorRateEmailSent = true
+      }
+    } else {
+      this.highErrorRateEmailSent = false
     }
   }
 
