@@ -66,5 +66,5 @@ app.listen(3000)
 scheduledActions.watch()
 
 if (process.env.NODE_ENV === 'production') {
-  logs.insertOneFromWeb({message: 'Started web application', severity: Severity.Info})
+  logs.insertOneFromWeb({message: 'Web application started', severity: Severity.Info})
 }

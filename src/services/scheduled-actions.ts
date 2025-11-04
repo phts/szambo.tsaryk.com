@@ -75,7 +75,7 @@ export class ScheduledActionsService extends Service<Dependencies, null> {
     const item = {when: new Date(), action, payload}
     this.dependencies.remoteControl.insertOne(item)
     this.dependencies.logs.insertOneFromWeb({
-      message: `Requested remote action  ${actionWithPayloadToString(action, payload)} (id=${generateRcId(item)}) by schedule`,
+      message: `Remote action requested by schedule: ${actionWithPayloadToString(action, payload)} (id=${generateRcId(item)})`,
       severity: Severity.Info,
     })
 

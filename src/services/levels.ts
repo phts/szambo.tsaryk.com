@@ -70,7 +70,7 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
     })
 
     await this.dependencies.logs.insertOneFromWeb({
-      message: `Removed level "${level.value}" (${level.when.toLocaleString('ru')})`,
+      message: `Level removed: "${level.value}" (${level.when.toLocaleString('ru')})`,
       severity: Severity.Info,
     })
   }
