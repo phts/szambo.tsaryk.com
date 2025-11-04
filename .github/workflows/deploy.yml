@@ -2,7 +2,9 @@ on:
   workflow_dispatch:
   push:
     branches:
+      - dev-*
       - master
+      - phts-*
 
 jobs:
   deploy:
