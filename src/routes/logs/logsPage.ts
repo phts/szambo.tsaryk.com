@@ -9,8 +9,8 @@ export interface LogsPageData {
 }
 
 const LOG_SOURCE_TO_ELEMENT = {
-  [Source.Device]: '<span title="Device">📡</span>',
-  [Source.Web]: '<span title="Web">🌐</span>',
+  [Source.Device]: '<span title="Device">🛸</span>',
+  [Source.Web]: '<span title="Web">☁️</span>',
 }
 
 export function getLogsTableHtml({logs}: {logs: Log[]}) {
