@@ -3,8 +3,6 @@ import {toViewModel} from '../levels/levelsTable'
 import {login} from './login'
 import {home, Data} from './home'
 
-const CHART_MAX_VALUES = 50
-
 export const getRoot: Route =
   ({config, services}) =>
   async (req, res) => {
@@ -36,12 +34,12 @@ export const getRoot: Route =
     page.levels = toViewModel(
       await services.levels.toThrottledArray({
         freq,
-        limit: 31,
+        limit: config.home.levelsAmount,
       }),
       {capacity: config.levels.capacity}
     )
-    page.logs = await services.logs.toArray({limit: 40, sort: {when: -1}})
-    page.levels.slice(0, CHART_MAX_VALUES).forEach((v) => {
+    page.logs = await services.logs.toArray({limit: config.home.logsAmount, sort: {when: -1}})
+    page.levels.forEach((v) => {
       page.chart.data.unshift({
         x: v.when.toISOString(),
         y: v.value,

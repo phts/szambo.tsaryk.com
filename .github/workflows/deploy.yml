@@ -45,6 +45,8 @@ jobs:
           echo LEVELS_WARNING_HIGH_ERROR_RATE=${{ vars.LEVELS_WARNING_HIGH_ERROR_RATE }} >> .env
           echo APP_AUTH_WR="${{ secrets.APP_AUTH_WR }}" >> .env
           echo APP_AUTH_RD="${{ secrets.APP_AUTH_RD }}" >> .env
+          echo HOME_LEVELS_AMOUNT="${{ vars.HOME_LEVELS_AMOUNT }}" >> .env
+          echo HOME_LOGS_AMOUNT="${{ vars.HOME_LOGS_AMOUNT }}" >> .env
           cat .env
       - name: Deploy
         run: npm run deploy

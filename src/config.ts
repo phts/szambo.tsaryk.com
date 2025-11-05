@@ -36,6 +36,10 @@ export interface Config {
     rd: string
     wr: string
   }
+  home: {
+    levelsAmount: number
+    logsAmount: number
+  }
 }
 
 export function getConfig(): Config {
@@ -61,6 +65,8 @@ export function getConfig(): Config {
     LEVELS_WARNING_HIGH_ERROR_RATE,
     APP_AUTH_WR,
     APP_AUTH_RD,
+    HOME_LEVELS_AMOUNT,
+    HOME_LOGS_AMOUNT,
   } = process.env
   if (!DB_URI) {
     throw new Error('DB_URI env variable is missing')
@@ -160,6 +166,10 @@ export function getConfig(): Config {
     auth: {
       rd: APP_AUTH_RD,
       wr: APP_AUTH_WR,
+    },
+    home: {
+      levelsAmount: parseInt(String(HOME_LEVELS_AMOUNT)) || 31,
+      logsAmount: parseInt(String(HOME_LOGS_AMOUNT)) || 35,
     },
   }
 }
