@@ -63,9 +63,15 @@ export class EmailsService extends Service<Dependencies, Config['emails']> {
     this.transporter.sendMail({...mailOptions, from: this.config.from, to: this.config.to}, (error) => {
       if (error) {
         console.error(error)
-        this.dependencies.logs?.insertOneFromWeb({message: `Email failed: ${error}`, severity: Severity.Error})
+        this.dependencies.logs?.insertOneFromWeb({
+          message: `Email failed: <code>${error}</code>`,
+          severity: Severity.Error,
+        })
       } else {
-        this.dependencies.logs?.insertOneFromWeb({message: `Email sent: ${mailOptions.text}`, severity: Severity.Info})
+        this.dependencies.logs?.insertOneFromWeb({
+          message: `Email sent: <code>${mailOptions.text}</code>`,
+          severity: Severity.Info,
+        })
       }
     })
   }
