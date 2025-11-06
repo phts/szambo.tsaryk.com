@@ -19,6 +19,11 @@ export interface LevelsTableData {
   authWr?: string
 }
 
+const MODE_TO_ELEMENT = {
+  [LevelMode.Auto]: '<span title="Auto">⏰</span>',
+  [LevelMode.Manual]: '<span title="Manual">🚀</span>',
+}
+
 export function toViewModel(levels: Level[], {capacity}: {capacity: number}): LevelViewModel[] {
   return levels.map((x) => ({
     ...x,
@@ -40,7 +45,7 @@ ${isAdmin ? '<th>Remove</th>' : ''}</tr>
 <td>${value}</td>
 <td>${m3}</td>
 <td>${typeof errorRate === 'number' ? errorRate : ''}</td>
-${showMode ? `<td>${mode === LevelMode.Auto ? 'a' : 'm'}</td>` : ''}
+${showMode ? `<td>${MODE_TO_ELEMENT[mode]}</td>` : ''}
 ${isAdmin ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.stringify(authWr)})'>×</button></td>` : ''}
 </tr>`
     })

@@ -62,18 +62,13 @@ body.logs {
   top: -10px;
 }
 
-table.levels th:nth-child(2),
-table.levels th:nth-child(3),
-table.levels th:nth-child(4) {
+table.levels td {
   min-width: 40px;
+  text-align: center;
 }
 
-table.levels td:nth-child(2),
-table.levels td:nth-child(3),
-table.levels td:nth-child(4),
-table.levels td:nth-child(5),
-table.levels td:nth-child(6) {
-  text-align: center;
+table.levels td:nth-child(1) {
+  text-align: left;
 }
 
 table.levels .warn {
