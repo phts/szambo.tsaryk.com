@@ -44,7 +44,7 @@ export function home({
   const adminPanelHtml = isAdmin
     ? `<div><a href="${remoteControlHref}">Remote control</a> | <a href="${scheduledActionsHref}">Scheduled actions</a></div><hr>`
     : ''
-  const levelsHtml = levelsTable({levels, showMode: false, isAdmin, warningLevel, authWr})
+  const levelsHtml = levelsTable({levels, showMode: false, showRemove: false, warningLevel, authWr})
   const logsHtml = getLogsTableHtml({logs})
 
   return tmpl
