@@ -4,10 +4,12 @@ import {percentageToCubeMeters} from '../../helpers'
 
 export interface LevelViewModel {
   _id: ObjectId
-  value: number
-  m3: string
+  delta_m3: string
   errorRate: number | null
+  m3_str: string
+  m3: number
   mode: LevelMode
+  value: number
   warning: boolean
   when: Date
 }
@@ -16,6 +18,7 @@ export interface LevelsTableData {
   levels: LevelViewModel[]
   showMode: boolean
   showRemove: boolean
+  showDelta: boolean
   authWr?: string
 }
 
@@ -28,26 +31,38 @@ export function toViewModel(
   levels: Level[],
   {capacity, warningLevel}: {capacity: number; warningLevel: number}
 ): LevelViewModel[] {
-  return levels.map((x) => ({
-    ...x,
-    value: Math.round(x.value),
-    warning: x.value >= warningLevel,
-    m3: percentageToCubeMeters(capacity, x.value).toFixed(2),
-  }))
+  return levels.reduce((acc, x) => {
+    const m3 = percentageToCubeMeters(capacity, x.value)
+    if (acc.length) {
+      const nextEntry = acc[acc.length - 1]
+      const delta = nextEntry.m3 - m3
+      nextEntry.delta_m3 = delta > -0.1 && delta <= 0.01 ? '' : delta.toFixed(2)
+    }
+    acc.push({
+      ...x,
+      value: Math.round(x.value),
+      warning: x.value >= warningLevel,
+      m3,
+      m3_str: m3.toFixed(2),
+      delta_m3: '',
+    })
+    return acc
+  }, [] as LevelViewModel[])
 }
 
-export function levelsTable({levels, showMode, showRemove, authWr}: LevelsTableData) {
+export function levelsTable({levels, showMode, showDelta, showRemove, authWr}: LevelsTableData) {
   return `<table class="levels" border=1>
-<tr><th>When</th><th>%</th><th>m&sup3;</th><th title="Error rate">⚠%</th>${showMode ? '<th>Mode</th>' : ''}
+<tr><th>When</th><th>%</th><th>m&sup3;</th>${showDelta ? `<th title="Delta">Δm&sup3;</th>` : ''}<th title="Error rate">⚠%</th>${showMode ? '<th>Mode</th>' : ''}
 ${showRemove ? '<th>Remove</th>' : ''}</tr>
   ${levels
-    .map(({_id, value, m3, errorRate, when, mode, warning}) => {
+    .map(({_id, value, m3_str: m3, delta_m3: delta, errorRate, when, mode, warning}) => {
       const props = warning ? ` class="warn"` : ''
       return `\
 <tr${props}>
 <td>${when.toLocaleString('ru')}</td>
 <td>${value}</td>
 <td>${m3}</td>
+${showDelta ? `<td${delta.startsWith('-') ? ' class="negativeDelta"' : ''}>${delta}</td>` : ''}
 <td>${typeof errorRate === 'number' ? errorRate : ''}</td>
 ${showMode ? `<td>${MODE_TO_ELEMENT[mode]}</td>` : ''}
 ${showRemove ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.stringify(authWr)})'>×</button></td>` : ''}

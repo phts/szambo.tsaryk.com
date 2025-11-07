@@ -6,6 +6,7 @@ const tmpl = readFileSync(path.resolve(__dirname, 'levels.tmpl.html')).toString(
 
 export interface LevelsPageData {
   levels: LevelViewModel[]
+  showDelta: boolean
   showMode: boolean
   showRemove: boolean
   authWr?: string

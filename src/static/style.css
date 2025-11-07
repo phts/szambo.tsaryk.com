@@ -63,7 +63,7 @@ body.logs {
 }
 
 table.levels td {
-  min-width: 40px;
+  padding: 0 12px;
   text-align: center;
 }
 
@@ -73,6 +73,10 @@ table.levels td:nth-child(1) {
 
 table.levels .warn {
   color: #f60;
+}
+
+table.levels .negativeDelta {
+  color: rgb(19, 172, 19);
 }
 
 table.logs td:nth-child(2),
