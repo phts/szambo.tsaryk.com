@@ -8,6 +8,7 @@ export interface LevelViewModel {
   m3: string
   errorRate: number | null
   mode: LevelMode
+  warning: boolean
   when: Date
 }
 
@@ -15,7 +16,6 @@ export interface LevelsTableData {
   levels: LevelViewModel[]
   showMode: boolean
   showRemove: boolean
-  warningLevel: number
   authWr?: string
 }
 
@@ -24,21 +24,25 @@ const MODE_TO_ELEMENT = {
   [LevelMode.Manual]: '<span title="Manual">🚀</span>',
 }
 
-export function toViewModel(levels: Level[], {capacity}: {capacity: number}): LevelViewModel[] {
+export function toViewModel(
+  levels: Level[],
+  {capacity, warningLevel}: {capacity: number; warningLevel: number}
+): LevelViewModel[] {
   return levels.map((x) => ({
     ...x,
     value: Math.round(x.value),
+    warning: x.value >= warningLevel,
     m3: percentageToCubeMeters(capacity, x.value).toFixed(2),
   }))
 }
 
-export function levelsTable({levels, showMode, showRemove, warningLevel, authWr}: LevelsTableData) {
+export function levelsTable({levels, showMode, showRemove, authWr}: LevelsTableData) {
   return `<table class="levels" border=1>
 <tr><th>When</th><th>%</th><th>m&sup3;</th><th title="Error rate">⚠%</th>${showMode ? '<th>Mode</th>' : ''}
 ${showRemove ? '<th>Remove</th>' : ''}</tr>
   ${levels
-    .map(({_id, value, m3, errorRate, when, mode}) => {
-      const props = value >= warningLevel ? ` class="warn"` : ''
+    .map(({_id, value, m3, errorRate, when, mode, warning}) => {
+      const props = warning ? ` class="warn"` : ''
       return `\
 <tr${props}>
 <td>${when.toLocaleString('ru')}</td>

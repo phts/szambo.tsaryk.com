@@ -42,10 +42,9 @@ export const getLevels: Route =
     })
     res.send(
       levelsPage({
-        levels: toViewModel(levels, {capacity: config.levels.capacity}),
+        levels: toViewModel(levels, {capacity: config.levels.capacity, warningLevel: config.levels.warningAt}),
         showRemove: req.query.auth_wr === config.auth.wr,
         showMode: true,
-        warningLevel: config.levels.warningAt,
         authWr: req.query.auth_wr?.toString(),
       })
     )

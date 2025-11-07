@@ -8,7 +8,6 @@ export interface LevelsPageData {
   levels: LevelViewModel[]
   showMode: boolean
   showRemove: boolean
-  warningLevel: number
   authWr?: string
 }
 

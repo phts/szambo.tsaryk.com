@@ -23,7 +23,6 @@ export const getRoot: Route =
       freq3Href: `/?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}&freq=3`,
       freq4Href: `/?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}&freq=4`,
       isAdmin: req.query.auth_wr === config.auth.wr,
-      warningLevel: config.levels.warningAt,
       authWr: req.query.auth_wr?.toString(),
     }
     const freq = parseInt(req.query.freq as string) || 1
@@ -36,7 +35,7 @@ export const getRoot: Route =
         freq,
         limit: config.home.levelsAmount,
       }),
-      {capacity: config.levels.capacity}
+      {capacity: config.levels.capacity, warningLevel: config.levels.warningAt}
     )
     page.logs = await services.logs.toArray({limit: config.home.logsAmount, sort: {when: -1}})
     page.levels.forEach((v) => {
