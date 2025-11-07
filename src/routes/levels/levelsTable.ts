@@ -50,6 +50,18 @@ export function toViewModel(
   }, [] as LevelViewModel[])
 }
 
+const errorRateClass = (errorRate: number | null): string => {
+  if (typeof errorRate !== 'number') {
+    return ''
+  }
+  if (errorRate > 50) {
+    return ' class="highErrorRate"'
+  } else if (errorRate > 15) {
+    return ' class="mediumErrorRate"'
+  }
+  return ' class="lowErrorRate"'
+}
+
 export function levelsTable({levels, showMode, showDelta, showRemove, authWr}: LevelsTableData) {
   return `<table class="levels" border=1>
 <tr><th>When</th><th>%</th><th>m&sup3;</th>${showDelta ? `<th title="Delta">Δm&sup3;</th>` : ''}<th title="Error rate">⚠%</th>${showMode ? '<th>Mode</th>' : ''}
@@ -63,7 +75,7 @@ ${showRemove ? '<th>Remove</th>' : ''}</tr>
 <td>${value}</td>
 <td>${m3}</td>
 ${showDelta ? `<td${delta.startsWith('-') ? ' class="negativeDelta"' : ''}>${delta}</td>` : ''}
-<td>${typeof errorRate === 'number' ? errorRate : ''}</td>
+<td${errorRateClass(errorRate)}>${typeof errorRate === 'number' ? errorRate : ''}</td>
 ${showMode ? `<td>${MODE_TO_ELEMENT[mode]}</td>` : ''}
 ${showRemove ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.stringify(authWr)})'>×</button></td>` : ''}
 </tr>`

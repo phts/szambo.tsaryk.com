@@ -79,6 +79,18 @@ table.levels .negativeDelta {
   color: rgb(19, 172, 19);
 }
 
+table.levels .highErrorRate {
+  color: #e00;
+}
+
+table.levels .mediumErrorRate {
+  color: #f60;
+}
+
+table.levels .lowErrorRate {
+  opacity: 0.5;
+}
+
 table.logs td:nth-child(2),
 table.logs td:nth-child(3) {
   text-align: center;
