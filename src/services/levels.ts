@@ -36,7 +36,7 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       const warning = speed >= this.config.warningHighDiffPerHour
       this.dependencies.logs.insertOneFromWeb({
         message: `Level increase rate: ${valueDiff.toPrecision(2)}&nbsp;% ÷ ${hoursDiff}&nbsp;h = ${speed.toPrecision(2)}&nbsp;%/h (warning at: ≥${this.config.warningHighDiffPerHour}&nbsp;%/h)`,
-        severity: warning ? Severity.Warning : Severity.Debug,
+        severity: warning ? Severity.Warning : Severity.Info,
       })
       if (warning) {
         this.dependencies.emails.sendHighDiffNotification({
