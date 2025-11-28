@@ -19,6 +19,7 @@ export interface LevelsTableData {
   showMode: boolean
   showRemove: boolean
   showDelta: boolean
+  showErrorRate: boolean
   authWr?: string
 }
 
@@ -62,13 +63,13 @@ const errorRateClass = (errorRate: number | null): string => {
   return ' class="lowErrorRate"'
 }
 
-export function levelsTable({levels, showMode, showDelta, showRemove, authWr}: LevelsTableData) {
+export function levelsTable({levels, showMode, showDelta, showRemove, showErrorRate, authWr}: LevelsTableData) {
   const ths = [
     'When',
     '%',
     'm&sup3;',
     showDelta ? ['Δm&sup3;', 'Delta'] : null,
-    ['⚠%', 'Error rate'],
+    showErrorRate ? ['⚠%', 'Error rate'] : null,
     showMode ? 'Mode' : null,
     showRemove ? 'Remove' : null,
   ]
@@ -85,7 +86,7 @@ ${levels
       `<td>${value}</td>`,
       `<td>${m3}</td>`,
       showDelta ? `<td${delta.startsWith('-') ? ' class="negativeDelta"' : ''}>${delta}</td>` : '',
-      `<td${errorRateClass(errorRate)}>${typeof errorRate === 'number' ? errorRate : ''}</td>`,
+      showErrorRate ? `<td${errorRateClass(errorRate)}>${typeof errorRate === 'number' ? errorRate : ''}</td>` : '',
       showMode ? `<td>${MODE_TO_ELEMENT[mode]}</td>` : '',
       showRemove
         ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.stringify(authWr)})'>×</button></td>`

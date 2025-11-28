@@ -46,6 +46,7 @@ export const getLevels: Route =
         showRemove: req.query.auth_wr === config.auth.wr,
         showDelta: true,
         showMode: true,
+        showErrorRate: true,
         authWr: req.query.auth_wr?.toString(),
       })
     )

@@ -9,6 +9,7 @@ export interface LevelsPageData {
   showDelta: boolean
   showMode: boolean
   showRemove: boolean
+  showErrorRate: boolean
   authWr?: string
 }
 
