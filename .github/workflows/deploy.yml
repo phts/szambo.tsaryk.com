@@ -24,6 +24,9 @@ jobs:
       - name: Create .env file
         run: |
           touch .env
+          echo APP_AUTH_WR="${{ secrets.APP_AUTH_WR }}" >> .env
+          echo APP_AUTH_RD="${{ secrets.APP_AUTH_RD }}" >> .env
+          echo APP_VERSION="${{ github.sha }}" >> .env
           echo DB_URI="${{ secrets.DB_URI }}" >> .env
           echo EMAILS_HOST="${{ secrets.EMAILS_HOST }}" >> .env
           echo EMAILS_PORT="${{ secrets.EMAILS_PORT }}" >> .env
@@ -43,8 +46,6 @@ jobs:
           echo LEVELS_WARNING_AT=${{ vars.LEVELS_WARNING_AT }} >> .env
           echo LEVELS_WARNING_HIGH_DIFF_PER_HOUR=${{ vars.LEVELS_WARNING_HIGH_DIFF_PER_HOUR }} >> .env
           echo LEVELS_WARNING_HIGH_ERROR_RATE=${{ vars.LEVELS_WARNING_HIGH_ERROR_RATE }} >> .env
-          echo APP_AUTH_WR="${{ secrets.APP_AUTH_WR }}" >> .env
-          echo APP_AUTH_RD="${{ secrets.APP_AUTH_RD }}" >> .env
           echo HOME_LEVELS_AMOUNT="${{ vars.HOME_LEVELS_AMOUNT }}" >> .env
           echo HOME_LOGS_AMOUNT="${{ vars.HOME_LOGS_AMOUNT }}" >> .env
           cat .env

@@ -40,10 +40,14 @@ export interface Config {
     levelsAmount: number
     logsAmount: number
   }
+  version: string
 }
 
 export function getConfig(): Config {
   const {
+    APP_AUTH_WR,
+    APP_AUTH_RD,
+    APP_VERSION,
     DB_URI,
     EMAILS_HOST,
     EMAILS_PORT,
@@ -63,8 +67,6 @@ export function getConfig(): Config {
     LEVELS_WARNING_AT,
     LEVELS_WARNING_HIGH_DIFF_PER_HOUR,
     LEVELS_WARNING_HIGH_ERROR_RATE,
-    APP_AUTH_WR,
-    APP_AUTH_RD,
     HOME_LEVELS_AMOUNT,
     HOME_LOGS_AMOUNT,
   } = process.env
@@ -171,5 +173,6 @@ export function getConfig(): Config {
       levelsAmount: parseInt(String(HOME_LEVELS_AMOUNT)) || 31,
       logsAmount: parseInt(String(HOME_LOGS_AMOUNT)) || 35,
     },
+    version: APP_VERSION || 'unknown',
   }
 }

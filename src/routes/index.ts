@@ -7,6 +7,7 @@ export * from './levels'
 export * from './logs'
 export * from './remote-control'
 export * from './scheduled-actions'
+export * from './version'
 
 interface RouteParams {
   config: Config

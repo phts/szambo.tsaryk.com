@@ -11,6 +11,7 @@ import {
   getRemoteControl,
   getRoot,
   getScheduledActions,
+  getVersion,
   postLevel,
   postLog,
   postRemoteControl,
@@ -42,6 +43,7 @@ const app = express()
 app.use(bodyParser.urlencoded())
 app.use(auth({config}))
 app.use('/', express.static(path.join(__dirname, 'static')))
+app.get('/version', getVersion({config, services}))
 app.get('/levels', getLevels({config, services}))
 app.get('/logs', getLogs({config, services}))
 app.get('/remote-control', getRemoteControl({config, services}))
