@@ -63,24 +63,37 @@ const errorRateClass = (errorRate: number | null): string => {
 }
 
 export function levelsTable({levels, showMode, showDelta, showRemove, authWr}: LevelsTableData) {
+  const ths = [
+    'When',
+    '%',
+    'm&sup3;',
+    showDelta ? ['Δm&sup3;', 'Delta'] : null,
+    ['⚠%', 'Error rate'],
+    showMode ? 'Mode' : null,
+    showRemove ? 'Remove' : null,
+  ]
+    .filter(Boolean)
+    .map((x) => (Array.isArray(x) ? `<th title="${x[1]}">${x[0]}</th>` : `<th>${x}</th>`))
+    .join('')
   return `<table class="levels" border=1>
-<tr><th>When</th><th>%</th><th>m&sup3;</th>${showDelta ? `<th title="Delta">Δm&sup3;</th>` : ''}<th title="Error rate">⚠%</th>${showMode ? '<th>Mode</th>' : ''}
-${showRemove ? '<th>Remove</th>' : ''}</tr>
-  ${levels
-    .map(({_id, value, m3_str: m3, delta_m3: delta, errorRate, when, mode, warning}) => {
-      const props = warning ? ` class="warn"` : ''
-      return `\
-<tr${props}>
-<td>${when.toLocaleString('ru')}</td>
-<td>${value}</td>
-<td>${m3}</td>
-${showDelta ? `<td${delta.startsWith('-') ? ' class="negativeDelta"' : ''}>${delta}</td>` : ''}
-<td${errorRateClass(errorRate)}>${typeof errorRate === 'number' ? errorRate : ''}</td>
-${showMode ? `<td>${MODE_TO_ELEMENT[mode]}</td>` : ''}
-${showRemove ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.stringify(authWr)})'>×</button></td>` : ''}
-</tr>`
-    })
-    .join('')}
+<tr>${ths}</tr>
+${levels
+  .map(({_id, value, m3_str: m3, delta_m3: delta, errorRate, when, mode, warning}) => {
+    const props = warning ? ` class="warn"` : ''
+    const tds = [
+      `<td>${when.toLocaleString('ru')}</td>`,
+      `<td>${value}</td>`,
+      `<td>${m3}</td>`,
+      showDelta ? `<td${delta.startsWith('-') ? ' class="negativeDelta"' : ''}>${delta}</td>` : '',
+      `<td${errorRateClass(errorRate)}>${typeof errorRate === 'number' ? errorRate : ''}</td>`,
+      showMode ? `<td>${MODE_TO_ELEMENT[mode]}</td>` : '',
+      showRemove
+        ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.stringify(authWr)})'>×</button></td>`
+        : '',
+    ]
+    return `<tr${props}>${tds.join('')}</tr>`
+  })
+  .join('')}
 </table>
 <script>
   async function removeLevel(id, auth) {
