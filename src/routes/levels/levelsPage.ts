@@ -10,6 +10,7 @@ export interface LevelsPageData {
   showMode: boolean
   showRemove: boolean
   showErrorRate: boolean
+  showDeviation: boolean
   authWr?: string
   warningHighErrorRate: number
 }

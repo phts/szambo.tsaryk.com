@@ -36,7 +36,10 @@ export const getRoot: Route =
         freq,
         limit: config.home.levelsAmount,
       }),
-      {capacity: config.levels.capacity, warningLevel: config.levels.warningAt}
+      {
+        capacity: config.levels.capacity,
+        warningLevel: config.levels.warningAt,
+      }
     )
     page.logs = await services.logs.toArray({limit: config.home.logsAmount, sort: {when: -1}})
     page.levels.forEach((v) => {

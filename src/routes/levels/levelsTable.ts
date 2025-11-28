@@ -1,6 +1,6 @@
 import {ObjectId} from 'mongodb'
 import {Level, LevelMode} from '../../models'
-import {percentageToCubeMeters} from '../../helpers'
+import {percentageToCubeMeters, calcDeviation} from '../../helpers'
 
 export interface LevelViewModel {
   raw: {
@@ -10,16 +10,19 @@ export interface LevelViewModel {
     m3: number
     delta: number
     errorRate: number | null
+    deviation: number | null
     mode: LevelMode
   }
+  warning: boolean
   when: string
   delta: string
   deltaLow?: boolean
   deltaNegative?: boolean
   m3: string
   errorRate: string
+  deviation: string
+  samples: string
   mode: string
-  warning: boolean
 }
 
 export interface LevelsTableData {
@@ -28,6 +31,7 @@ export interface LevelsTableData {
   showRemove: boolean
   showDelta: boolean
   showErrorRate: boolean
+  showDeviation: boolean
   authWr?: string
   warningHighErrorRate: number
 }
@@ -43,6 +47,7 @@ export function toViewModel(
 ): LevelViewModel[] {
   return levels.reduce((acc, x) => {
     const m3 = percentageToCubeMeters(capacity, x.value)
+    const deviation = x.samples ? calcDeviation(x.samples) : null
     if (acc.length) {
       const nextEntry = acc[acc.length - 1]
       const delta = nextEntry.raw.m3 - m3
@@ -50,12 +55,14 @@ export function toViewModel(
       nextEntry.deltaNegative = delta <= -0.1
       nextEntry.delta = delta.toFixed(2)
     }
+
     acc.push({
       raw: {
         ...x,
         value: Math.round(x.value),
         m3,
         delta: 0,
+        deviation,
       },
       when: x.when.toLocaleString('ru'),
       warning: x.value >= warningLevel,
@@ -63,6 +70,8 @@ export function toViewModel(
       delta: '',
       errorRate: typeof x.errorRate === 'number' ? x.errorRate.toString() : '',
       mode: MODE_TO_ELEMENT[x.mode],
+      samples: x.samples ? x.samples.join(', ') : '',
+      deviation: deviation === null ? '' : deviation.toFixed(2),
     })
     return acc
   }, [] as LevelViewModel[])
@@ -85,6 +94,7 @@ export function levelsTable({
   showMode,
   showDelta,
   showRemove,
+  showDeviation,
   showErrorRate,
   authWr,
   warningHighErrorRate,
@@ -95,6 +105,7 @@ export function levelsTable({
     'm&sup3;',
     showDelta ? ['Δm&sup3;', 'Delta'] : null,
     showErrorRate ? ['⚠%', 'Error rate'] : null,
+    showDeviation ? ['σ cm', 'Standard deviation'] : null,
     showMode ? 'Mode' : null,
     showRemove ? 'Remove' : null,
   ]
@@ -104,7 +115,7 @@ export function levelsTable({
   return `<table class="levels" border=1>
 <tr>${ths}</tr>
 ${levels
-  .map(({raw, m3, delta, deltaNegative, deltaLow, errorRate, when, mode, warning}) => {
+  .map(({raw, when, m3, delta, deltaNegative, deltaLow, errorRate, deviation, samples, mode, warning}) => {
     const props = warning ? ` class="warn"` : ''
     const tds = [
       `<td>${when}</td>`,
@@ -112,6 +123,7 @@ ${levels
       `<td>${m3}</td>`,
       showDelta ? `<td class="${deltaNegative ? 'negativeDelta' : deltaLow ? 'lowValue' : ''}">${delta}</td>` : '',
       showErrorRate ? `<td class=${valueClass(raw.errorRate, [15, warningHighErrorRate])}>${errorRate}</td>` : '',
+      showDeviation ? `<td class="${valueClass(raw.deviation, [2, 5])}" title="${samples}">${deviation}</td>` : '',
       showMode ? `<td>${mode}</td>` : '',
       showRemove
         ? `<td><button onclick='removeLevel(${JSON.stringify(raw._id)}, ${JSON.stringify(authWr)})'>×</button></td>`

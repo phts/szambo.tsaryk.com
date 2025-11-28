@@ -111,6 +111,9 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       limit: 1,
     })
 
+    if (!last) {
+      return []
+    }
     if (last._id.equals(cache.key) && cache.data) {
       return cache.data
     }

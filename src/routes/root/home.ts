@@ -48,6 +48,7 @@ export function home({
     levels,
     showMode: false,
     showRemove: false,
+    showDeviation: false,
     showDelta: true,
     showErrorRate: false,
     authWr,

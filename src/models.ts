@@ -18,6 +18,7 @@ export enum Severity {
 export interface NewLevel {
   value: number
   errorRate: number | null
+  samples: number[] | null
   mode: LevelMode
   when: Date
 }

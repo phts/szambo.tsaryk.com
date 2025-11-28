@@ -31,6 +31,7 @@ export interface Config {
     warningAt: number
     warningHighDiffPerHour: number
     warningHighErrorRate: number
+    warningHighDeviation: number
   }
   auth: {
     rd: string
@@ -63,10 +64,13 @@ export function getConfig(): Config {
     EMAILS_HIGH_DIFF_TEXT,
     EMAILS_HIGH_ERROR_RATE_SUBJECT,
     EMAILS_HIGH_ERROR_RATE_TEXT,
+    EMAILS_HIGH_DEVIATION_SUBJECT,
+    EMAILS_HIGH_DEVIATION_TEXT,
     LEVELS_CAPACITY,
     LEVELS_WARNING_AT,
     LEVELS_WARNING_HIGH_DIFF_PER_HOUR,
     LEVELS_WARNING_HIGH_ERROR_RATE,
+    LEVELS_WARNING_HIGH_DEVIATION,
     HOME_LEVELS_AMOUNT,
     HOME_LOGS_AMOUNT,
   } = process.env
@@ -115,6 +119,12 @@ export function getConfig(): Config {
   if (!EMAILS_HIGH_ERROR_RATE_TEXT) {
     throw new Error('EMAILS_HIGH_ERROR_RATE_TEXT env variable is missing')
   }
+  if (!EMAILS_HIGH_DEVIATION_SUBJECT) {
+    throw new Error('EMAILS_HIGH_DEVIATION_SUBJECT env variable is missing')
+  }
+  if (!EMAILS_HIGH_DEVIATION_TEXT) {
+    throw new Error('EMAILS_HIGH_DEVIATION_TEXT env variable is missing')
+  }
   if (!LEVELS_CAPACITY) {
     throw new Error('LEVELS_CAPACITY env variable is missing')
   }
@@ -126,6 +136,9 @@ export function getConfig(): Config {
   }
   if (!LEVELS_WARNING_HIGH_ERROR_RATE) {
     throw new Error('LEVELS_WARNING_HIGH_ERROR_RATE env variable is missing')
+  }
+  if (!LEVELS_WARNING_HIGH_DEVIATION) {
+    throw new Error('LEVELS_WARNING_HIGH_DEVIATION env variable is missing')
   }
   if (!APP_AUTH_WR) {
     throw new Error('APP_AUTH_WR env variable is missing')
@@ -164,6 +177,7 @@ export function getConfig(): Config {
       warningAt: parseInt(LEVELS_WARNING_AT),
       warningHighDiffPerHour: parseInt(LEVELS_WARNING_HIGH_DIFF_PER_HOUR),
       warningHighErrorRate: parseInt(LEVELS_WARNING_HIGH_ERROR_RATE),
+      warningHighDeviation: parseInt(LEVELS_WARNING_HIGH_DEVIATION),
     },
     auth: {
       rd: APP_AUTH_RD,

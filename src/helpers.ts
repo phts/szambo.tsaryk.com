@@ -19,3 +19,8 @@ export function actionWithPayloadToString(action: string, payload?: string | nul
 export function percentageToCubeMeters(capacity: number, value: number) {
   return (value * capacity) / 100
 }
+
+export function calcDeviation(samples: number[]) {
+  const mean = samples.reduce((sum, x) => sum + x, 0) / samples.length
+  return Math.sqrt(samples.map((x) => Math.pow(x - mean, 2)).reduce((sum, x) => sum + x, 0) / samples.length)
+}
