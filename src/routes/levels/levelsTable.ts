@@ -3,15 +3,21 @@ import {Level, LevelMode} from '../../models'
 import {percentageToCubeMeters} from '../../helpers'
 
 export interface LevelViewModel {
-  _id: ObjectId
-  delta_m3: string
-  errorRate: number | null
-  m3_str: string
-  m3: number
-  mode: LevelMode
-  value: number
+  raw: {
+    _id: ObjectId
+    when: Date
+    value: number
+    m3: number
+    delta: number
+    errorRate: number | null
+    mode: LevelMode
+  }
+  when: string
+  delta: string
+  m3: string
+  errorRate: string
+  mode: string
   warning: boolean
-  when: Date
 }
 
 export interface LevelsTableData {
@@ -26,7 +32,7 @@ export interface LevelsTableData {
 const MODE_TO_ELEMENT = {
   [LevelMode.Auto]: '<span title="Auto">⏰</span>',
   [LevelMode.Manual]: '<span title="Manual">🚀</span>',
-}
+} as const
 
 export function toViewModel(
   levels: Level[],
@@ -36,16 +42,23 @@ export function toViewModel(
     const m3 = percentageToCubeMeters(capacity, x.value)
     if (acc.length) {
       const nextEntry = acc[acc.length - 1]
-      const delta = nextEntry.m3 - m3
-      nextEntry.delta_m3 = delta > -0.1 && delta <= 0.01 ? '' : delta.toFixed(2)
+      const delta = nextEntry.raw.m3 - m3
+      nextEntry.raw.delta = delta
+      nextEntry.delta = delta > -0.1 && delta <= 0.01 ? '' : delta.toFixed(2)
     }
     acc.push({
-      ...x,
-      value: Math.round(x.value),
+      raw: {
+        ...x,
+        value: Math.round(x.value),
+        m3,
+        delta: 0,
+      },
+      when: x.when.toLocaleString('ru'),
       warning: x.value >= warningLevel,
-      m3,
-      m3_str: m3.toFixed(2),
-      delta_m3: '',
+      m3: m3.toFixed(2),
+      delta: '',
+      errorRate: typeof x.errorRate === 'number' ? x.errorRate.toString() : '',
+      mode: MODE_TO_ELEMENT[x.mode],
     })
     return acc
   }, [] as LevelViewModel[])
@@ -79,17 +92,17 @@ export function levelsTable({levels, showMode, showDelta, showRemove, showErrorR
   return `<table class="levels" border=1>
 <tr>${ths}</tr>
 ${levels
-  .map(({_id, value, m3_str: m3, delta_m3: delta, errorRate, when, mode, warning}) => {
+  .map(({raw, m3, delta, errorRate, when, mode, warning}) => {
     const props = warning ? ` class="warn"` : ''
     const tds = [
-      `<td>${when.toLocaleString('ru')}</td>`,
-      `<td>${value}</td>`,
+      `<td>${when}</td>`,
+      `<td>${raw.value}</td>`,
       `<td>${m3}</td>`,
       showDelta ? `<td${delta.startsWith('-') ? ' class="negativeDelta"' : ''}>${delta}</td>` : '',
-      showErrorRate ? `<td${errorRateClass(errorRate)}>${typeof errorRate === 'number' ? errorRate : ''}</td>` : '',
-      showMode ? `<td>${MODE_TO_ELEMENT[mode]}</td>` : '',
+      showErrorRate ? `<td${errorRateClass(raw.errorRate)}>${errorRate}</td>` : '',
+      showMode ? `<td>${mode}</td>` : '',
       showRemove
-        ? `<td><button onclick='removeLevel(${JSON.stringify(_id)}, ${JSON.stringify(authWr)})'>×</button></td>`
+        ? `<td><button onclick='removeLevel(${JSON.stringify(raw._id)}, ${JSON.stringify(authWr)})'>×</button></td>`
         : '',
     ]
     return `<tr${props}>${tds.join('')}</tr>`

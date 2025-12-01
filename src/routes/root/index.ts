@@ -40,8 +40,8 @@ export const getRoot: Route =
     page.logs = await services.logs.toArray({limit: config.home.logsAmount, sort: {when: -1}})
     page.levels.forEach((v) => {
       page.chart.data.unshift({
-        x: v.when.toISOString(),
-        y: v.value,
+        x: v.raw.when.toISOString(),
+        y: v.raw.value,
         label_m3: `${v.m3} m³`,
         errorRate: typeof v.errorRate === 'number' ? `⚠${v.errorRate} %` : '',
       })
