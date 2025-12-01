@@ -79,15 +79,15 @@ table.levels .negativeDelta {
   color: rgb(19, 172, 19);
 }
 
-table.levels .highErrorRate {
+table.levels .highValue {
   color: #e00;
 }
 
-table.levels .mediumErrorRate {
+table.levels .mediumValue {
   color: #f60;
 }
 
-table.levels .lowErrorRate {
+table.levels .lowValue {
   opacity: 0.5;
 }
 
