@@ -22,8 +22,9 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
 
     const when = new Date()
     await exec<NewLevel>('levels', async (collection) => {
-      await collection.insertOne({...doc, when})
+      await collection.insertOne({...doc, when, samples: this.dependencies.logs.samplesShim.getSamples() || null})
     })
+    this.dependencies.logs.samplesShim.reset()
 
     if (doc.value >= this.config.warningAt) {
       this.dependencies.emails.sendLevelNotification(doc.value)
