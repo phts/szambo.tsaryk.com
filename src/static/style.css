@@ -36,6 +36,16 @@ body.remote-control {
   padding: 0;
 }
 
+@media (max-width: 600px) {
+  body.levels {
+    display: unset !important;
+    margin: 0;
+  }
+
+  body.levels table td:first-child {
+    white-space: nowrap;
+  }
+}
 
 body.home,
 body.levels,
