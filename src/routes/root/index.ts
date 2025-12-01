@@ -24,6 +24,7 @@ export const getRoot: Route =
       freq4Href: `/?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}&freq=4`,
       isAdmin: req.query.auth_wr === config.auth.wr,
       authWr: req.query.auth_wr?.toString(),
+      warningHighErrorRate: config.levels.warningHighErrorRate,
     }
     const freq = parseInt(req.query.freq as string) || 1
     if (freq < 0 || freq > 4) {

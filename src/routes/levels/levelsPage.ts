@@ -11,6 +11,7 @@ export interface LevelsPageData {
   showRemove: boolean
   showErrorRate: boolean
   authWr?: string
+  warningHighErrorRate: number
 }
 
 export function levelsPage(data: LevelsPageData) {

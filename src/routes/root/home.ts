@@ -20,6 +20,7 @@ export interface Data {
   freq4Href: string
   isAdmin: boolean
   authWr?: string
+  warningHighErrorRate: number
 }
 
 const tmpl = readFileSync(path.resolve(__dirname, 'home.tmpl.html')).toString()
@@ -38,6 +39,7 @@ export function home({
   freq2Href,
   freq3Href,
   freq4Href,
+  warningHighErrorRate,
 }: Data) {
   const adminPanelHtml = isAdmin
     ? `<div><a href="${remoteControlHref}">Remote control</a> | <a href="${scheduledActionsHref}">Scheduled actions</a></div><hr>`
@@ -49,6 +51,7 @@ export function home({
     showDelta: true,
     showErrorRate: false,
     authWr,
+    warningHighErrorRate,
   })
   const logsHtml = getLogsTableHtml({logs})
 

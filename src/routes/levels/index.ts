@@ -48,6 +48,7 @@ export const getLevels: Route =
         showMode: true,
         showErrorRate: true,
         authWr: req.query.auth_wr?.toString(),
+        warningHighErrorRate: config.levels.warningHighErrorRate,
       })
     )
   }
