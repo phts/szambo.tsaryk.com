@@ -14,6 +14,8 @@ export interface LevelViewModel {
   }
   when: string
   delta: string
+  deltaLow?: boolean
+  deltaNegative?: boolean
   m3: string
   errorRate: string
   mode: string
@@ -44,8 +46,9 @@ export function toViewModel(
     if (acc.length) {
       const nextEntry = acc[acc.length - 1]
       const delta = nextEntry.raw.m3 - m3
-      nextEntry.raw.delta = delta
-      nextEntry.delta = delta > -0.1 && delta <= 0.01 ? '' : delta.toFixed(2)
+      nextEntry.deltaLow = delta > -0.1 && delta <= 0.01
+      nextEntry.deltaNegative = delta <= -0.1
+      nextEntry.delta = delta.toFixed(2)
     }
     acc.push({
       raw: {
@@ -101,13 +104,13 @@ export function levelsTable({
   return `<table class="levels" border=1>
 <tr>${ths}</tr>
 ${levels
-  .map(({raw, m3, delta, errorRate, when, mode, warning}) => {
+  .map(({raw, m3, delta, deltaNegative, deltaLow, errorRate, when, mode, warning}) => {
     const props = warning ? ` class="warn"` : ''
     const tds = [
       `<td>${when}</td>`,
       `<td>${raw.value}</td>`,
       `<td>${m3}</td>`,
-      showDelta ? `<td${delta.startsWith('-') ? ' class="negativeDelta"' : ''}>${delta}</td>` : '',
+      showDelta ? `<td class="${deltaNegative ? 'negativeDelta' : deltaLow ? 'lowValue' : ''}">${delta}</td>` : '',
       showErrorRate ? `<td class=${valueClass(raw.errorRate, [15, warningHighErrorRate])}>${errorRate}</td>` : '',
       showMode ? `<td>${mode}</td>` : '',
       showRemove
