@@ -2,6 +2,7 @@ import {Document, ObjectId, Sort} from 'mongodb'
 import {exec} from '../db'
 import {Level, NewLevel, Severity} from '../models'
 import {Config} from '../config'
+import {calcDeviation} from '../helpers'
 import {EmailsService} from './emails'
 import {LogsService} from './logs'
 import {Service} from './base'
@@ -20,9 +21,10 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
   public async insertOne(doc: Omit<NewLevel, 'when'>): Promise<void> {
     const [previousLevel] = await this.toArray({limit: 1, sort: {when: -1}})
 
+    const samples = this.dependencies.logs.samplesShim.getSamples() || null
     const when = new Date()
     await exec<NewLevel>('levels', async (collection) => {
-      await collection.insertOne({...doc, when, samples: this.dependencies.logs.samplesShim.getSamples() || null})
+      await collection.insertOne({...doc, when, samples})
     })
     this.dependencies.logs.samplesShim.reset()
 
@@ -55,6 +57,13 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       }
     } else {
       this.highErrorRateEmailSent = false
+    }
+
+    if (samples) {
+      const deviation = calcDeviation(samples)
+      if (deviation >= this.config.warningHighDeviation) {
+        this.dependencies.emails.sendHighDeviationNotification({deviation, samples})
+      }
     }
   }
 

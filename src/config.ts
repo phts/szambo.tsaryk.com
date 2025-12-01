@@ -25,6 +25,10 @@ export interface Config {
       subject: string
       text: string
     }
+    highDeviation: {
+      subject: string
+      text: string
+    }
   }
   levels: {
     capacity: number
@@ -170,6 +174,10 @@ export function getConfig(): Config {
       highErrorRate: {
         subject: EMAILS_HIGH_ERROR_RATE_SUBJECT,
         text: EMAILS_HIGH_ERROR_RATE_TEXT,
+      },
+      highDeviation: {
+        subject: EMAILS_HIGH_DEVIATION_SUBJECT,
+        text: EMAILS_HIGH_DEVIATION_TEXT,
       },
     },
     levels: {

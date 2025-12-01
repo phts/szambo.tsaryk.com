@@ -59,6 +59,16 @@ export class EmailsService extends Service<Dependencies, Config['emails']> {
     this.sendMail(mailOptions)
   }
 
+  public sendHighDeviationNotification({deviation, samples}: {deviation: number; samples: number[]}) {
+    const mailOptions = {
+      subject: this.config.highDeviation.subject,
+      text: this.config.highDeviation.text
+        .replace('{{value}}', deviation.toFixed(2))
+        .replace('{{samples}}', samples.join(', ')),
+    }
+    this.sendMail(mailOptions)
+  }
+
   private sendMail(mailOptions: {subject: string; text: string}) {
     this.transporter.sendMail({...mailOptions, from: this.config.from, to: this.config.to}, (error) => {
       if (error) {
