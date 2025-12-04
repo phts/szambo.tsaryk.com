@@ -23,6 +23,25 @@ hr {
   }
 }
 
+@media (pointer: coarse),
+(hover: none) {
+  [title] {
+    position: relative;
+  }
+
+  [title]:hover::after {
+    background-color: #fff;
+    border: 1px solid;
+    color: #000;
+    content: attr(title);
+    font-size: 8px;
+    padding: 3px;
+    position: absolute;
+    top: 90%;
+    width: fit-content;
+    z-index: 1;
+  }
+}
 
 body.login,
 body.scheduled-actions,
