@@ -59,6 +59,16 @@ export class EmailsService extends Service<Dependencies, Config['emails']> {
     this.sendMail(mailOptions)
   }
 
+  public sendHighRangeNotification({range, samples}: {range: number; samples: number[]}) {
+    const mailOptions = {
+      subject: this.config.highRange.subject,
+      text: this.config.highRange.text
+        .replace('{{value}}', range.toFixed(2))
+        .replace('{{samples}}', samples.join(', ')),
+    }
+    this.sendMail(mailOptions)
+  }
+
   private sendMail(mailOptions: {subject: string; text: string}) {
     this.transporter.sendMail({...mailOptions, from: this.config.from, to: this.config.to}, (error) => {
       if (error) {

@@ -42,10 +42,13 @@ jobs:
           echo EMAILS_HIGH_DIFF_TEXT="${{ vars.EMAILS_HIGH_DIFF_TEXT }}" >> .env
           echo EMAILS_HIGH_ERROR_RATE_SUBJECT="${{ vars.EMAILS_HIGH_ERROR_RATE_SUBJECT }}" >> .env
           echo EMAILS_HIGH_ERROR_RATE_TEXT="${{ vars.EMAILS_HIGH_ERROR_RATE_TEXT }}" >> .env
+          echo EMAILS_HIGH_RANGE_SUBJECT="${{ vars.EMAILS_HIGH_RANGE_SUBJECT }}" >> .env
+          echo EMAILS_HIGH_RANGE_TEXT="${{ vars.EMAILS_HIGH_RANGE_TEXT }}" >> .env
           echo LEVELS_CAPACITY=${{ vars.LEVELS_CAPACITY }} >> .env
           echo LEVELS_WARNING_AT=${{ vars.LEVELS_WARNING_AT }} >> .env
           echo LEVELS_WARNING_HIGH_DIFF_PER_HOUR=${{ vars.LEVELS_WARNING_HIGH_DIFF_PER_HOUR }} >> .env
           echo LEVELS_WARNING_HIGH_ERROR_RATE=${{ vars.LEVELS_WARNING_HIGH_ERROR_RATE }} >> .env
+          echo LEVELS_WARNING_HIGH_RANGE=${{ vars.LEVELS_WARNING_HIGH_RANGE }} >> .env
           echo HOME_LEVELS_AMOUNT="${{ vars.HOME_LEVELS_AMOUNT }}" >> .env
           echo HOME_LOGS_AMOUNT="${{ vars.HOME_LOGS_AMOUNT }}" >> .env
           cat .env

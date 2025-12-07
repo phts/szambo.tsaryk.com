@@ -2,6 +2,7 @@ import {Document, ObjectId, Sort} from 'mongodb'
 import {exec} from '../db'
 import {Level, NewLevel, Severity} from '../models'
 import {Config} from '../config'
+import {calcRange} from '../helpers'
 import {EmailsService} from './emails'
 import {LogsService} from './logs'
 import {Service} from './base'
@@ -54,6 +55,13 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       }
     } else {
       this.highErrorRateEmailSent = false
+    }
+
+    if (doc.samples) {
+      const range = calcRange(doc.samples)
+      if (range >= this.config.warningHighRange) {
+        this.dependencies.emails.sendHighRangeNotification({range, samples: doc.samples})
+      }
     }
   }
 

@@ -10,8 +10,10 @@ export interface LevelsPageData {
   showMode: boolean
   showRemove: boolean
   showErrorRate: boolean
+  showRange: boolean
   authWr?: string
   warningHighErrorRate: number
+  warningHighRange: number
 }
 
 export function levelsPage(data: LevelsPageData) {

@@ -25,12 +25,17 @@ export interface Config {
       subject: string
       text: string
     }
+    highRange: {
+      subject: string
+      text: string
+    }
   }
   levels: {
     capacity: number
     warningAt: number
     warningHighDiffPerHour: number
     warningHighErrorRate: number
+    warningHighRange: number
   }
   auth: {
     rd: string
@@ -63,10 +68,13 @@ export function getConfig(): Config {
     EMAILS_HIGH_DIFF_TEXT,
     EMAILS_HIGH_ERROR_RATE_SUBJECT,
     EMAILS_HIGH_ERROR_RATE_TEXT,
+    EMAILS_HIGH_RANGE_SUBJECT,
+    EMAILS_HIGH_RANGE_TEXT,
     LEVELS_CAPACITY,
     LEVELS_WARNING_AT,
     LEVELS_WARNING_HIGH_DIFF_PER_HOUR,
     LEVELS_WARNING_HIGH_ERROR_RATE,
+    LEVELS_WARNING_HIGH_RANGE,
     HOME_LEVELS_AMOUNT,
     HOME_LOGS_AMOUNT,
   } = process.env
@@ -115,6 +123,12 @@ export function getConfig(): Config {
   if (!EMAILS_HIGH_ERROR_RATE_TEXT) {
     throw new Error('EMAILS_HIGH_ERROR_RATE_TEXT env variable is missing')
   }
+  if (!EMAILS_HIGH_RANGE_SUBJECT) {
+    throw new Error('EMAILS_HIGH_RANGE_SUBJECT env variable is missing')
+  }
+  if (!EMAILS_HIGH_RANGE_TEXT) {
+    throw new Error('EMAILS_HIGH_RANGE_TEXT env variable is missing')
+  }
   if (!LEVELS_CAPACITY) {
     throw new Error('LEVELS_CAPACITY env variable is missing')
   }
@@ -126,6 +140,9 @@ export function getConfig(): Config {
   }
   if (!LEVELS_WARNING_HIGH_ERROR_RATE) {
     throw new Error('LEVELS_WARNING_HIGH_ERROR_RATE env variable is missing')
+  }
+  if (!LEVELS_WARNING_HIGH_RANGE) {
+    throw new Error('LEVELS_WARNING_HIGH_RANGE env variable is missing')
   }
   if (!APP_AUTH_WR) {
     throw new Error('APP_AUTH_WR env variable is missing')
@@ -158,12 +175,17 @@ export function getConfig(): Config {
         subject: EMAILS_HIGH_ERROR_RATE_SUBJECT,
         text: EMAILS_HIGH_ERROR_RATE_TEXT,
       },
+      highRange: {
+        subject: EMAILS_HIGH_RANGE_SUBJECT,
+        text: EMAILS_HIGH_RANGE_TEXT,
+      },
     },
     levels: {
       capacity: parseFloat(LEVELS_CAPACITY),
       warningAt: parseInt(LEVELS_WARNING_AT),
       warningHighDiffPerHour: parseInt(LEVELS_WARNING_HIGH_DIFF_PER_HOUR),
       warningHighErrorRate: parseInt(LEVELS_WARNING_HIGH_ERROR_RATE),
+      warningHighRange: parseInt(LEVELS_WARNING_HIGH_RANGE),
     },
     auth: {
       rd: APP_AUTH_RD,

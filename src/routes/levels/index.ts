@@ -13,7 +13,7 @@ function parseNumber(raw?: string) {
   return value
 }
 
-function parseValue(capacity: number, raw?: unknown): Pick<NewLevel, 'value' | 'errorRate'> {
+function parseValue(capacity: number, raw?: unknown): Pick<NewLevel, 'value' | 'errorRate' | 'samples'> {
   if (typeof raw !== 'string') {
     throw new ParseError()
   }
@@ -27,9 +27,25 @@ function parseValue(capacity: number, raw?: unknown): Pick<NewLevel, 'value' | '
     throw new ParseError()
   }
 
+  if (parts.length === 1) {
+    return {value, errorRate: null, samples: null}
+  }
+
+  const errorRate = parseNumber(parts[1])
+  if (parts.length === 2) {
+    return {value, errorRate, samples: null}
+  }
+
+  let samples: number[] | null = parts[2].split(',').map(parseFloat)
+  samples.sort((a, b) => a - b)
+  if (samples.some(isNaN)) {
+    samples = null
+  }
+
   return {
     value,
-    errorRate: parseNumber(parts[1]),
+    errorRate,
+    samples,
   }
 }
 
@@ -42,13 +58,18 @@ export const getLevels: Route =
     })
     res.send(
       levelsPage({
-        levels: toViewModel(levels, {capacity: config.levels.capacity, warningLevel: config.levels.warningAt}),
+        levels: toViewModel(levels, {
+          capacity: config.levels.capacity,
+          warningLevel: config.levels.warningAt,
+        }),
         showRemove: req.query.auth_wr === config.auth.wr,
         showDelta: true,
         showMode: true,
         showErrorRate: true,
+        showRange: true,
         authWr: req.query.auth_wr?.toString(),
         warningHighErrorRate: config.levels.warningHighErrorRate,
+        warningHighRange: config.levels.warningHighRange,
       })
     )
   }
@@ -57,9 +78,9 @@ export const postLevel: Route =
   ({services, config}) =>
   async (req, res) => {
     try {
-      const {value, errorRate} = parseValue(config.levels.capacity, req.query.value)
+      const {value, errorRate, samples} = parseValue(config.levels.capacity, req.query.value)
       const mode = req.query.mode === 'auto' ? LevelMode.Auto : LevelMode.Manual
-      await services.levels.insertOne({value, errorRate, mode})
+      await services.levels.insertOne({value, errorRate, mode, samples})
       res.send({ok: true})
     } catch (e) {
       if (e instanceof ParseError) {

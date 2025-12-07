@@ -25,6 +25,7 @@ export const getRoot: Route =
       isAdmin: req.query.auth_wr === config.auth.wr,
       authWr: req.query.auth_wr?.toString(),
       warningHighErrorRate: config.levels.warningHighErrorRate,
+      warningHighRange: config.levels.warningHighRange,
     }
     const freq = parseInt(req.query.freq as string) || 1
     if (freq < 0 || freq > 4) {
@@ -36,7 +37,10 @@ export const getRoot: Route =
         freq,
         limit: config.home.levelsAmount,
       }),
-      {capacity: config.levels.capacity, warningLevel: config.levels.warningAt}
+      {
+        capacity: config.levels.capacity,
+        warningLevel: config.levels.warningAt,
+      }
     )
     page.logs = await services.logs.toArray({limit: config.home.logsAmount, sort: {when: -1}})
     page.levels.forEach((v) => {

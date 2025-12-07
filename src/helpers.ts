@@ -19,3 +19,7 @@ export function actionWithPayloadToString(action: string, payload?: string | nul
 export function percentageToCubeMeters(capacity: number, value: number) {
   return (value * capacity) / 100
 }
+
+export function calcRange(samples: number[]) {
+  return samples[samples.length - 1] - samples[0]
+}
