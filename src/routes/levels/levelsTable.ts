@@ -39,7 +39,7 @@ export interface LevelsTableData {
 
 const MODE_TO_ELEMENT = {
   [LevelMode.Auto]: '<span title="Auto">⏰</span>',
-  [LevelMode.Manual]: '<span title="Manual">🚀</span>',
+  [LevelMode.Manual]: '<span title="Manual">⚡️</span>',
 } as const
 
 export function toViewModel(
