@@ -13,7 +13,7 @@ function parseNumber(raw?: string) {
   return value
 }
 
-function parseValue(capacity: number, raw?: unknown): Pick<NewLevel, 'value' | 'errorRate' | 'samples'> {
+function parseValue(raw?: unknown): Pick<NewLevel, 'value' | 'errorRate' | 'samples'> {
   if (typeof raw !== 'string') {
     throw new ParseError()
   }
@@ -75,10 +75,10 @@ export const getLevels: Route =
   }
 
 export const postLevel: Route =
-  ({services, config}) =>
+  ({services}) =>
   async (req, res) => {
     try {
-      const {value, errorRate, samples} = parseValue(config.levels.capacity, req.query.value)
+      const {value, errorRate, samples} = parseValue(req.query.value)
       const mode = req.query.mode === 'auto' ? LevelMode.Auto : LevelMode.Manual
       await services.levels.insertOne({value, errorRate, mode, samples})
       res.send({ok: true})
