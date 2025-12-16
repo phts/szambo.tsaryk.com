@@ -21,6 +21,7 @@ export interface NewLevel {
   samples: number[] | null
   mode: LevelMode
   when: Date
+  hidden?: boolean | null
 }
 export interface Level extends NewLevel {
   _id: ObjectId

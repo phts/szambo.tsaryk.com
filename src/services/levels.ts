@@ -24,7 +24,7 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
     const samples = doc.samples || this.dependencies.logs.samplesShim.getSamples() || null
     const when = new Date()
     await exec<NewLevel>('levels', async (collection) => {
-      await collection.insertOne({...doc, when, samples})
+      await collection.insertOne({...doc, when, samples, hidden: false})
     })
     this.dependencies.logs.samplesShim.reset()
 
@@ -76,11 +76,11 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
     this.cache = {}
 
     await exec<Level>('levels', async (collection) => {
-      await collection.deleteOne({_id: new ObjectId(id)})
+      await collection.updateOne({_id: new ObjectId(id)}, {$set: {hidden: true}})
     })
 
     await this.dependencies.logs.insertOneFromWeb({
-      message: `Level removed: "${level.value}" (${level.when.toLocaleString('ru')})`,
+      message: `Level hidden: "${level.value}" (${level.when.toLocaleString('ru')})`,
       severity: Severity.Info,
     })
   }
@@ -91,9 +91,10 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       if (sort) {
         cursor = cursor.sort(sort)
       }
-      if (filter) {
-        cursor = cursor.filter(filter)
-      }
+      cursor = cursor.filter({
+        $or: [{hidden: false}, {hidden: null}],
+        ...filter,
+      })
       if (limit) {
         cursor = cursor.limit(limit)
       }
