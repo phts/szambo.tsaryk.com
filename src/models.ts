@@ -37,6 +37,7 @@ export enum RemoteControlAction {
   Measure = 'measure',
   MeasureAndResetTimer = 'measure+reset',
   MeasureInterval = 'interval',
+  LedOff = 'led-off',
 }
 export interface RemoteControl {
   when: Date
