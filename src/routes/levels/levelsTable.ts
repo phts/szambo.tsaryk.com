@@ -107,7 +107,7 @@ export function levelsTable({
     'm&sup3;',
     showDelta ? ['Δm&sup3;', 'Delta'] : null,
     showErrorRate ? ['⚠%', 'Error rate'] : null,
-    showRange ? ['D<sub>max</sub>&minus;D<sub>min</sub>', 'Distance range'] : null,
+    showRange ? 'Range' : null,
     showMode ? 'Mode' : null,
     showRemove ? 'Remove' : null,
   ]

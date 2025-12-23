@@ -21,12 +21,10 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
   public async insertOne(doc: Omit<NewLevel, 'when'>): Promise<void> {
     const [previousLevel] = await this.toArray({limit: 1, sort: {when: -1}})
 
-    const samples = doc.samples || this.dependencies.logs.samplesShim.getSamples() || null
     const when = new Date()
     await exec<NewLevel>('levels', async (collection) => {
-      await collection.insertOne({...doc, when, samples, hidden: false})
+      await collection.insertOne({...doc, when, hidden: false})
     })
-    this.dependencies.logs.samplesShim.reset()
 
     if (doc.value >= this.config.warningAt) {
       this.dependencies.emails.sendLevelNotification(doc.value)
@@ -59,10 +57,10 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       this.highErrorRateEmailSent = false
     }
 
-    if (samples) {
-      const range = calcRange(samples)
+    if (doc.samples) {
+      const range = calcRange(doc.samples)
       if (range >= this.config.warningHighRange) {
-        this.dependencies.emails.sendHighRangeNotification({range, samples})
+        this.dependencies.emails.sendHighRangeNotification({range, samples: doc.samples})
       }
     }
   }
