@@ -59,6 +59,10 @@
           ctx.stroke()
         },
       }
+      const toXLabel = (isoDate) => {
+        const date = new Date(Date.parse(isoDate))
+        return date.getDate().toString().padStart('2', '0') + '.' + (date.getMonth() + 1).toString().padStart('2', '0')
+      }
       Chart.register(plugin)
       new Chart(ctx, {
         type: 'bar',
@@ -83,9 +87,17 @@
                 autoSkip: false,
                 maxRotation: 90,
                 minRotation: 90,
-                callback: function (value) {
-                  const date = new Date(Date.parse(this.getLabelForValue(value)))
-                  return `${date.getDate().toString().padStart('2', '0')}.${(date.getMonth() + 1).toString().padStart('2', '0')}`
+                callback: function (value, index) {
+                  const label = toXLabel(this.getLabelForValue(value))
+                  if (index === 0) {
+                    return label
+                  }
+                  const prevValue = this.ticks[index - 1].value
+                  const prevLabel = toXLabel(this.getLabelForValue(prevValue))
+                  if (label === prevLabel) {
+                    return ''
+                  }
+                  return label
                 },
               },
               grid: {
