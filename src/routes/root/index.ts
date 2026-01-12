@@ -10,6 +10,7 @@ export const getRoot: Route =
       res.send(login())
       return
     }
+    const isAdmin = req.query.auth_wr === config.auth.wr
     const page: Data = {
       levels: [],
       logs: [],
@@ -22,10 +23,11 @@ export const getRoot: Route =
       freq2Href: `/?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}&freq=2`,
       freq3Href: `/?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}&freq=3`,
       freq4Href: `/?auth=${req.query.auth}&auth_wr=${req.query.auth_wr}&freq=4`,
-      isAdmin: req.query.auth_wr === config.auth.wr,
+      isAdmin,
       authWr: req.query.auth_wr?.toString(),
       warningHighErrorRate: config.levels.warningHighErrorRate,
       warningHighRange: config.levels.warningHighRange,
+      adminModeLinkStyle: isAdmin ? 'display:none' : '',
     }
     const freq = parseInt(req.query.freq as string) || 1
     if (freq < 0 || freq > 4) {

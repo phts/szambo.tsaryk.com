@@ -22,6 +22,7 @@ export interface Data {
   authWr?: string
   warningHighErrorRate: number
   warningHighRange: number
+  adminModeLinkStyle: string
 }
 
 const tmpl = readFileSync(path.resolve(__dirname, 'home.tmpl.html')).toString()
@@ -42,6 +43,7 @@ export function home({
   freq4Href,
   warningHighErrorRate,
   warningHighRange,
+  adminModeLinkStyle,
 }: Data) {
   const adminPanelHtml = isAdmin
     ? `<div><a href="${remoteControlHref}">Remote control</a> | <a href="${scheduledActionsHref}">Scheduled actions</a></div><hr>`
@@ -70,4 +72,5 @@ export function home({
     .replace('{{freq2Href}}', freq2Href)
     .replace('{{freq3Href}}', freq3Href)
     .replace('{{freq4Href}}', freq4Href)
+    .replace('{{adminModeLinkStyle}}', adminModeLinkStyle)
 }
