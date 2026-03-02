@@ -60,6 +60,7 @@ export const getLevels: Route =
       levelsPage({
         levels: toViewModel(levels, {
           capacity: config.levels.capacity,
+          trimSamples: config.levels.trimSamples,
           warningLevel: config.levels.warningAt,
         }),
         showRemove: req.query.auth_wr === config.auth.wr,

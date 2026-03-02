@@ -20,6 +20,7 @@ export function percentageToCubeMeters(capacity: number, value: number) {
   return (value * capacity) / 100
 }
 
-export function calcRange(samples: number[]) {
-  return samples[samples.length - 1] - samples[0]
+export function calcRange(samples: number[], trimSamples: number) {
+  const trimmed = samples.slice(trimSamples, -trimSamples)
+  return trimmed[trimmed.length - 1] - trimmed[0]
 }

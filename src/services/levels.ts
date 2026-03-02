@@ -58,7 +58,7 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
     }
 
     if (doc.samples) {
-      const range = calcRange(doc.samples)
+      const range = calcRange(doc.samples, this.config.trimSamples)
       if (range >= this.config.warningHighRange) {
         this.dependencies.emails.sendHighRangeNotification({range, samples: doc.samples})
       }

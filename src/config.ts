@@ -32,6 +32,7 @@ export interface Config {
   }
   levels: {
     capacity: number
+    trimSamples: number
     warningAt: number
     warningHighDiffPerHour: number
     warningHighErrorRate: number
@@ -75,6 +76,7 @@ export function getConfig(): Config {
     LEVELS_WARNING_HIGH_DIFF_PER_HOUR,
     LEVELS_WARNING_HIGH_ERROR_RATE,
     LEVELS_WARNING_HIGH_RANGE,
+    LEVELS_TRIM_SAMPLES,
     HOME_LEVELS_AMOUNT,
     HOME_LOGS_AMOUNT,
   } = process.env
@@ -132,6 +134,9 @@ export function getConfig(): Config {
   if (!LEVELS_CAPACITY) {
     throw new Error('LEVELS_CAPACITY env variable is missing')
   }
+  if (!LEVELS_TRIM_SAMPLES) {
+    throw new Error('LEVELS_TRIM_SAMPLES env variable is missing')
+  }
   if (!LEVELS_WARNING_AT) {
     throw new Error('LEVELS_WARNING_AT env variable is missing')
   }
@@ -182,6 +187,7 @@ export function getConfig(): Config {
     },
     levels: {
       capacity: parseFloat(LEVELS_CAPACITY),
+      trimSamples: parseInt(LEVELS_TRIM_SAMPLES),
       warningAt: parseInt(LEVELS_WARNING_AT),
       warningHighDiffPerHour: parseInt(LEVELS_WARNING_HIGH_DIFF_PER_HOUR),
       warningHighErrorRate: parseInt(LEVELS_WARNING_HIGH_ERROR_RATE),

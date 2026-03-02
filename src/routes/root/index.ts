@@ -41,6 +41,7 @@ export const getRoot: Route =
       }),
       {
         capacity: config.levels.capacity,
+        trimSamples: config.levels.trimSamples,
         warningLevel: config.levels.warningAt,
       }
     )

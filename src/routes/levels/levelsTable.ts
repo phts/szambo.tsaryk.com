@@ -44,11 +44,11 @@ const MODE_TO_ELEMENT = {
 
 export function toViewModel(
   levels: Level[],
-  {capacity, warningLevel}: {capacity: number; warningLevel: number}
+  {capacity, trimSamples, warningLevel}: {capacity: number; trimSamples: number; warningLevel: number}
 ): LevelViewModel[] {
   return levels.reduce((acc, x) => {
     const m3 = percentageToCubeMeters(capacity, x.value)
-    const range = x.samples ? calcRange(x.samples) : null
+    const range = x.samples ? calcRange(x.samples, trimSamples) : null
     if (acc.length) {
       const nextEntry = acc[acc.length - 1]
       const delta = nextEntry.raw.m3 - m3
