@@ -19,16 +19,24 @@ import {
 import {getConfig} from './config'
 import {init} from './db'
 import {auth} from './middlewares/auth'
-import {EmailsService, LevelsService, LogsService, RemoteControlService, ScheduledActionsService} from './services'
+import {
+  EmailsService,
+  LevelsService,
+  LogsService,
+  RemoteControlService,
+  ScheduledActionsService,
+  DeviceHealthService,
+} from './services'
 import {Severity} from './models'
 
 const config = getConfig()
 init(config)
 
 const emails = new EmailsService({logs: null}, config.emails)
-const logs = new LogsService({emails}, null)
+const deviceHealth = new DeviceHealthService({emails}, config.deviceHealth)
+const logs = new LogsService({emails, deviceHealth}, null)
 emails.addDependency('logs', logs)
-const levels = new LevelsService({emails, logs}, config.levels)
+const levels = new LevelsService({emails, logs, deviceHealth}, config.levels)
 const remoteControl = new RemoteControlService(null, null)
 const scheduledActions = new ScheduledActionsService({logs, remoteControl}, null)
 const services = {
@@ -37,6 +45,7 @@ const services = {
   logs,
   remoteControl,
   scheduledActions,
+  deviceHealth,
 }
 
 const app = express()

@@ -2,10 +2,12 @@ import {Sort} from 'mongodb'
 import {exec} from '../db'
 import {Log, Severity, Source} from '../models'
 import {Service} from './base'
+import {DeviceHealthService} from './device-health'
 import {EmailsService} from './emails'
 
 interface Dependencies {
   emails: EmailsService
+  deviceHealth: DeviceHealthService
 }
 
 export class LogsService extends Service<Dependencies, null> {
@@ -37,7 +39,7 @@ export class LogsService extends Service<Dependencies, null> {
       })
     })
     if (doc.severity === Severity.Fatal) {
-      this.dependencies.emails.sendFatalNotification(doc.message)
+      this.dependencies.deviceHealth.registerFailure()
     }
   }
 }

@@ -13,19 +13,15 @@ export interface Config {
       subject: string
       text: string
     }
-    fatal: {
-      subject: string
-      text: string
-    }
     highDiff: {
       subject: string
       text: string
     }
-    highErrorRate: {
+    unstable: {
       subject: string
       text: string
     }
-    highRange: {
+    unstableResolved: {
       subject: string
       text: string
     }
@@ -37,6 +33,9 @@ export interface Config {
     warningHighDiffPerHour: number
     warningHighErrorRate: number
     warningHighRange: number
+  }
+  deviceHealth: {
+    minSequentialFailures: number
   }
   auth: {
     rd: string
@@ -63,20 +62,19 @@ export function getConfig(): Config {
     EMAILS_TO,
     EMAILS_LEVEL_SUBJECT,
     EMAILS_LEVEL_TEXT,
-    EMAILS_FATAL_SUBJECT,
-    EMAILS_FATAL_TEXT,
     EMAILS_HIGH_DIFF_SUBJECT,
     EMAILS_HIGH_DIFF_TEXT,
-    EMAILS_HIGH_ERROR_RATE_SUBJECT,
-    EMAILS_HIGH_ERROR_RATE_TEXT,
-    EMAILS_HIGH_RANGE_SUBJECT,
-    EMAILS_HIGH_RANGE_TEXT,
+    EMAILS_UNSTABLE_SUBJECT,
+    EMAILS_UNSTABLE_TEXT,
+    EMAILS_UNSTABLE_RESOLVED_SUBJECT,
+    EMAILS_UNSTABLE_RESOLVED_TEXT,
     LEVELS_CAPACITY,
     LEVELS_WARNING_AT,
     LEVELS_WARNING_HIGH_DIFF_PER_HOUR,
     LEVELS_WARNING_HIGH_ERROR_RATE,
     LEVELS_WARNING_HIGH_RANGE,
     LEVELS_TRIM_SAMPLES,
+    DEVICE_HEALTH_MIN_SEQUENTIAL_FAILURES,
     HOME_LEVELS_AMOUNT,
     HOME_LOGS_AMOUNT,
   } = process.env
@@ -107,29 +105,23 @@ export function getConfig(): Config {
   if (!EMAILS_LEVEL_TEXT) {
     throw new Error('EMAILS_TEXT env variable is missing')
   }
-  if (!EMAILS_FATAL_SUBJECT) {
-    throw new Error('EMAILS_FATAL_SUBJECT env variable is missing')
-  }
-  if (!EMAILS_FATAL_TEXT) {
-    throw new Error('EMAILS_FATAL_TEXT env variable is missing')
-  }
   if (!EMAILS_HIGH_DIFF_SUBJECT) {
     throw new Error('EMAILS_HIGH_DIFF_SUBJECT env variable is missing')
   }
   if (!EMAILS_HIGH_DIFF_TEXT) {
     throw new Error('EMAILS_HIGH_DIFF_TEXT env variable is missing')
   }
-  if (!EMAILS_HIGH_ERROR_RATE_SUBJECT) {
-    throw new Error('EMAILS_HIGH_ERROR_RATE_SUBJECT env variable is missing')
+  if (!EMAILS_UNSTABLE_SUBJECT) {
+    throw new Error('EMAILS_UNSTABLE_SUBJECT env variable is missing')
   }
-  if (!EMAILS_HIGH_ERROR_RATE_TEXT) {
-    throw new Error('EMAILS_HIGH_ERROR_RATE_TEXT env variable is missing')
+  if (!EMAILS_UNSTABLE_TEXT) {
+    throw new Error('EMAILS_UNSTABLE_TEXT env variable is missing')
   }
-  if (!EMAILS_HIGH_RANGE_SUBJECT) {
-    throw new Error('EMAILS_HIGH_RANGE_SUBJECT env variable is missing')
+  if (!EMAILS_UNSTABLE_RESOLVED_SUBJECT) {
+    throw new Error('EMAILS_UNSTABLE_RESOLVED_SUBJECT env variable is missing')
   }
-  if (!EMAILS_HIGH_RANGE_TEXT) {
-    throw new Error('EMAILS_HIGH_RANGE_TEXT env variable is missing')
+  if (!EMAILS_UNSTABLE_RESOLVED_TEXT) {
+    throw new Error('EMAILS_UNSTABLE_RESOLVED_TEXT env variable is missing')
   }
   if (!LEVELS_CAPACITY) {
     throw new Error('LEVELS_CAPACITY env variable is missing')
@@ -168,21 +160,17 @@ export function getConfig(): Config {
         subject: EMAILS_LEVEL_SUBJECT,
         text: EMAILS_LEVEL_TEXT,
       },
-      fatal: {
-        subject: EMAILS_FATAL_SUBJECT,
-        text: EMAILS_FATAL_TEXT,
-      },
       highDiff: {
         subject: EMAILS_HIGH_DIFF_SUBJECT,
         text: EMAILS_HIGH_DIFF_TEXT,
       },
-      highErrorRate: {
-        subject: EMAILS_HIGH_ERROR_RATE_SUBJECT,
-        text: EMAILS_HIGH_ERROR_RATE_TEXT,
+      unstable: {
+        subject: EMAILS_UNSTABLE_SUBJECT,
+        text: EMAILS_UNSTABLE_TEXT,
       },
-      highRange: {
-        subject: EMAILS_HIGH_RANGE_SUBJECT,
-        text: EMAILS_HIGH_RANGE_TEXT,
+      unstableResolved: {
+        subject: EMAILS_UNSTABLE_RESOLVED_SUBJECT,
+        text: EMAILS_UNSTABLE_RESOLVED_TEXT,
       },
     },
     levels: {
@@ -192,6 +180,10 @@ export function getConfig(): Config {
       warningHighDiffPerHour: parseInt(LEVELS_WARNING_HIGH_DIFF_PER_HOUR),
       warningHighErrorRate: parseInt(LEVELS_WARNING_HIGH_ERROR_RATE),
       warningHighRange: parseInt(LEVELS_WARNING_HIGH_RANGE),
+    },
+    deviceHealth: {
+      minSequentialFailures: parseInt(String(DEVICE_HEALTH_MIN_SEQUENTIAL_FAILURES)) || 3,
+    },
     },
     auth: {
       rd: APP_AUTH_RD,

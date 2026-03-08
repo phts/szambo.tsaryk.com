@@ -3,6 +3,7 @@ import {readFileSync} from 'fs'
 import {Log} from '../../models'
 import {getLogsTableHtml} from '../logs/logsPage'
 import {levelsTable, LevelViewModel} from '../levels/levelsTable'
+import {Health} from '../../services'
 
 export interface Data {
   levels: LevelViewModel[]
@@ -23,6 +24,7 @@ export interface Data {
   warningHighErrorRate: number
   warningHighRange: number
   adminModeLinkStyle: string
+  deviceHealth: Health
 }
 
 const tmpl = readFileSync(path.resolve(__dirname, 'home.tmpl.html')).toString()
@@ -44,10 +46,17 @@ export function home({
   warningHighErrorRate,
   warningHighRange,
   adminModeLinkStyle,
+  deviceHealth,
 }: Data) {
+  const healthHtml =
+    deviceHealth === Health.OK
+      ? '<span title="Device health: OK">☀️</span>'
+      : deviceHealth === Health.Unstable
+        ? '<span title="Device health: Unstable">⛈️</span>'
+        : '<span title="Device health: Partially OK">⛅</span>'
   const adminPanelHtml = isAdmin
-    ? `<div><a href="${remoteControlHref}">Remote control</a> | <a href="${scheduledActionsHref}">Scheduled actions</a></div><hr>`
-    : ''
+    ? `<div>${healthHtml} | <a href="${remoteControlHref}">Remote control</a> | <a href="${scheduledActionsHref}">Scheduled actions</a></div>`
+    : healthHtml
   const levelsHtml = levelsTable({
     levels,
     showMode: false,

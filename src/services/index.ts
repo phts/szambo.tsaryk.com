@@ -1,5 +1,6 @@
 export * from './emails'
 export * from './levels'
 export * from './logs'
+export * from './device-health'
 export * from './remote-control'
 export * from './scheduled-actions'

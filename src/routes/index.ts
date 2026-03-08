@@ -1,6 +1,13 @@
 import {RequestHandler} from 'express'
 import {Config} from '../config'
-import {EmailsService, LevelsService, LogsService, RemoteControlService, ScheduledActionsService} from '../services'
+import {
+  EmailsService,
+  LevelsService,
+  LogsService,
+  RemoteControlService,
+  ScheduledActionsService,
+  DeviceHealthService,
+} from '../services'
 
 export * from './root'
 export * from './levels'
@@ -17,6 +24,7 @@ interface RouteParams {
     logs: LogsService
     remoteControl: RemoteControlService
     scheduledActions: ScheduledActionsService
+    deviceHealth: DeviceHealthService
   }
 }
 

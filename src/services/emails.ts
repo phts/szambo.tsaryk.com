@@ -32,14 +32,6 @@ export class EmailsService extends Service<Dependencies, Config['emails']> {
     this.sendMail(mailOptions)
   }
 
-  public sendFatalNotification(message: string) {
-    const mailOptions = {
-      subject: this.config.fatal.subject,
-      text: this.config.fatal.text.replace('{{message}}', message),
-    }
-    this.sendMail(mailOptions)
-  }
-
   public sendHighDiffNotification({hours, value, prevValue}: {hours: number; value: number; prevValue: number}) {
     const mailOptions = {
       subject: this.config.highDiff.subject,
@@ -51,20 +43,17 @@ export class EmailsService extends Service<Dependencies, Config['emails']> {
     this.sendMail(mailOptions)
   }
 
-  public sendHighErrorRateNotification({errorRate}: {errorRate: number}) {
+  public sendUnstableNotification() {
     const mailOptions = {
-      subject: this.config.highErrorRate.subject,
-      text: this.config.highErrorRate.text.replace('{{errorRate}}', errorRate.toString()),
+      subject: this.config.unstable.subject,
+      text: this.config.unstable.text,
     }
     this.sendMail(mailOptions)
   }
-
-  public sendHighRangeNotification({range, samples}: {range: number; samples: number[]}) {
+  public sendUnstableResolvedNotification() {
     const mailOptions = {
-      subject: this.config.highRange.subject,
-      text: this.config.highRange.text
-        .replace('{{value}}', range.toFixed(2))
-        .replace('{{samples}}', samples.join(', ')),
+      subject: this.config.unstableResolved.subject,
+      text: this.config.unstableResolved.text,
     }
     this.sendMail(mailOptions)
   }

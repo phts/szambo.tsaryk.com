@@ -28,6 +28,7 @@ export const getRoot: Route =
       warningHighErrorRate: config.levels.warningHighErrorRate,
       warningHighRange: config.levels.warningHighRange,
       adminModeLinkStyle: isAdmin ? 'display:none' : '',
+      deviceHealth: services.deviceHealth.getHealth(),
     }
     const freq = parseInt(req.query.freq as string) || 1
     if (freq < 0 || freq > 4) {

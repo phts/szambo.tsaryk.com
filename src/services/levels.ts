@@ -6,17 +6,18 @@ import {calcRange} from '../helpers'
 import {EmailsService} from './emails'
 import {LogsService} from './logs'
 import {Service} from './base'
+import {DeviceHealthService} from './device-health'
 
 interface Dependencies {
   emails: EmailsService
   logs: LogsService
+  deviceHealth: DeviceHealthService
 }
 
 const MAX_HISTORY_DEPTH = 62
 
 export class LevelsService extends Service<Dependencies, Config['levels']> {
   private cache: Record<string, {key: ObjectId | null; data: Level[] | null}> = {}
-  private highErrorRateEmailSent: boolean = false
 
   public async insertOne(doc: Omit<NewLevel, 'when'>): Promise<void> {
     const [previousLevel] = await this.toArray({limit: 1, sort: {when: -1}})
@@ -48,20 +49,31 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       }
     }
 
+    let withFailures: boolean = false
+
     if (doc.errorRate && doc.errorRate >= this.config.warningHighErrorRate) {
-      if (!this.highErrorRateEmailSent) {
-        this.dependencies.emails.sendHighErrorRateNotification({errorRate: doc.errorRate})
-        this.highErrorRateEmailSent = true
-      }
-    } else {
-      this.highErrorRateEmailSent = false
+      withFailures = true
+      this.dependencies.deviceHealth.registerFailure()
+      this.dependencies.logs.insertOneFromWeb({
+        message: `Sensor high error rate: ${doc.errorRate}`,
+        severity: Severity.Error,
+      })
     }
 
     if (doc.samples) {
       const range = calcRange(doc.samples, this.config.trimSamples)
       if (range >= this.config.warningHighRange) {
-        this.dependencies.emails.sendHighRangeNotification({range, samples: doc.samples})
+        withFailures = true
+        this.dependencies.deviceHealth.registerFailure()
+        this.dependencies.logs.insertOneFromWeb({
+          message: `Sensor high values range: ${range}`,
+          severity: Severity.Error,
+        })
       }
+    }
+
+    if (!withFailures) {
+      this.dependencies.deviceHealth.registerOk()
     }
   }
 
