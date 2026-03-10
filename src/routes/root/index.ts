@@ -1,5 +1,6 @@
 import {Route} from '..'
 import {toViewModel} from '../levels/levelsTable'
+import {Severity} from '../../models'
 import {login} from './login'
 import {home, Data} from './home'
 
@@ -46,7 +47,11 @@ export const getRoot: Route =
         warningLevel: config.levels.warningAt,
       }
     )
-    page.logs = await services.logs.toArray({limit: config.home.logsAmount, sort: {when: -1}})
+    page.logs = await services.logs.toArray({
+      limit: config.home.logsAmount,
+      sort: {when: -1},
+      filter: {severity: {$ne: Severity.Debug}},
+    })
     page.levels.forEach((v) => {
       page.chart.data.unshift({
         x: v.raw.when.toISOString(),

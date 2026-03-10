@@ -191,7 +191,7 @@ export function getConfig(): Config {
     },
     home: {
       levelsAmount: parseInt(String(HOME_LEVELS_AMOUNT)) || 31,
-      logsAmount: parseInt(String(HOME_LOGS_AMOUNT)) || 35,
+      logsAmount: parseInt(String(HOME_LOGS_AMOUNT)) || 20,
     },
     version: APP_VERSION || 'unknown',
   }
