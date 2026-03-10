@@ -28,6 +28,7 @@ import {
   DeviceHealthService,
 } from './services'
 import {Severity} from './models'
+import {DeviceConnectionService} from './services/device-connection'
 
 const config = getConfig()
 init(config)
@@ -39,6 +40,7 @@ emails.addDependency('logs', logs)
 const levels = new LevelsService({emails, logs, deviceHealth}, config.levels)
 const remoteControl = new RemoteControlService(null, null)
 const scheduledActions = new ScheduledActionsService({logs, remoteControl}, null)
+const deviceConnection = new DeviceConnectionService({levels, logs, deviceHealth}, config.deviceConnection)
 const services = {
   emails,
   levels,
@@ -46,6 +48,7 @@ const services = {
   remoteControl,
   scheduledActions,
   deviceHealth,
+  deviceConnection,
 }
 
 const app = express()
@@ -75,6 +78,7 @@ app.use((err, req, res, next) => {
 
 app.listen(3000)
 scheduledActions.watch()
+deviceConnection.watch()
 
 if (process.env.NODE_ENV === 'production') {
   logs.insertOneFromWeb({message: 'Web application started', severity: Severity.Info})

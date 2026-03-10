@@ -37,6 +37,9 @@ export interface Config {
   deviceHealth: {
     minSequentialFailures: number
   }
+  deviceConnection: {
+    interval: number
+  }
   auth: {
     rd: string
     wr: string
@@ -75,6 +78,7 @@ export function getConfig(): Config {
     LEVELS_WARNING_HIGH_RANGE,
     LEVELS_TRIM_SAMPLES,
     DEVICE_HEALTH_MIN_SEQUENTIAL_FAILURES,
+    DEVICE_CONNECTION_INTERVAL,
     HOME_LEVELS_AMOUNT,
     HOME_LOGS_AMOUNT,
   } = process.env
@@ -184,6 +188,8 @@ export function getConfig(): Config {
     deviceHealth: {
       minSequentialFailures: parseInt(String(DEVICE_HEALTH_MIN_SEQUENTIAL_FAILURES)) || 3,
     },
+    deviceConnection: {
+      interval: parseInt(String(DEVICE_CONNECTION_INTERVAL)) || 24,
     },
     auth: {
       rd: APP_AUTH_RD,
