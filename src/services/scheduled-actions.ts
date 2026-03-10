@@ -1,6 +1,6 @@
 import {Document, ObjectId, Sort} from 'mongodb'
 import {exec} from '../db'
-import {NewScheduledAction, ScheduledAction, Severity} from '../models'
+import {New, ScheduledAction, Severity} from '../models'
 import {actionWithPayloadToString, generateRcId} from '../helpers'
 import {LogsService} from './logs'
 import {RemoteControlService} from './remote-control'
@@ -14,8 +14,8 @@ interface Dependencies {
 export class ScheduledActionsService extends Service<Dependencies, null> {
   private watcher?: NodeJS.Timeout
 
-  public async insertOne(doc: NewScheduledAction): Promise<void> {
-    await exec<NewScheduledAction>('scheduled-actions', async (collection) => {
+  public async insertOne(doc: New<ScheduledAction>): Promise<void> {
+    await exec<New<ScheduledAction>>('scheduled-actions', async (collection) => {
       await collection.insertOne(doc)
     })
   }

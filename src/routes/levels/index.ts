@@ -1,5 +1,5 @@
 import {Route} from '..'
-import {LevelMode, NewLevel} from '../../models'
+import {LevelMode, Level} from '../../models'
 import {levelsPage} from './levelsPage'
 import {toViewModel} from './levelsTable'
 
@@ -13,7 +13,7 @@ function parseNumber(raw?: string) {
   return value
 }
 
-function parseValue(raw?: unknown): Pick<NewLevel, 'value' | 'errorRate' | 'samples'> {
+function parseValue(raw?: unknown): Pick<Level, 'value' | 'errorRate' | 'samples'> {
   if (typeof raw !== 'string') {
     throw new ParseError()
   }

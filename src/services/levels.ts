@@ -1,6 +1,6 @@
 import {Document, ObjectId, Sort} from 'mongodb'
 import {exec} from '../db'
-import {Level, NewLevel, Severity} from '../models'
+import {Level, New, Severity} from '../models'
 import {Config} from '../config'
 import {calcRange} from '../helpers'
 import {EmailsService} from './emails'
@@ -19,11 +19,11 @@ const MAX_HISTORY_DEPTH = 62
 export class LevelsService extends Service<Dependencies, Config['levels']> {
   private cache: Record<string, {key: ObjectId | null; data: Level[] | null}> = {}
 
-  public async insertOne(doc: Omit<NewLevel, 'when'>): Promise<void> {
+  public async insertOne(doc: Omit<New<Level>, 'when'>): Promise<void> {
     const [previousLevel] = await this.toArray({limit: 1, sort: {when: -1}})
 
     const when = new Date()
-    await exec<NewLevel>('levels', async (collection) => {
+    await exec<New<Level>>('levels', async (collection) => {
       await collection.insertOne({...doc, when, hidden: false})
     })
 

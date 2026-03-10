@@ -1,5 +1,5 @@
 import {Route} from '..'
-import {RemoteControl, RemoteControlAction, Severity} from '../../models'
+import {New, RemoteControl, RemoteControlAction, Severity} from '../../models'
 import {RemoteControlService} from '../../services'
 import {tzOffsetToIsoTimezone} from '../../utils'
 import {actionWithPayloadToString, generateRcId} from '../../helpers'
@@ -46,7 +46,7 @@ export const postRemoteControl: Route =
       payload = interval
     }
 
-    const item: RemoteControl = {action, when: new Date(), ...(payload ? {payload} : null)}
+    const item: New<RemoteControl> = {action, when: new Date(), ...(payload ? {payload} : null)}
 
     if (when === 'now') {
       await services.remoteControl.insertOne(item)

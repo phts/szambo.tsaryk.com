@@ -1,6 +1,6 @@
 import {RemoteControl} from './models'
 
-export function generateRcId(item: RemoteControl) {
+export function generateRcId(item: Pick<RemoteControl, 'when'>) {
   const {when} = item
   return [
     when.getFullYear(),

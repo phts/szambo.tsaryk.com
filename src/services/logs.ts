@@ -1,6 +1,6 @@
 import {Sort, Document} from 'mongodb'
 import {exec} from '../db'
-import {Log, Severity, Source} from '../models'
+import {Log, New, Severity, Source} from '../models'
 import {Service} from './base'
 import {DeviceHealthService} from './device-health'
 import {EmailsService} from './emails'
@@ -35,7 +35,7 @@ export class LogsService extends Service<Dependencies, null> {
   }
 
   private async insertOne(doc: {message: string; severity: Severity; source: Source}): Promise<void> {
-    await exec<Log>('logs', async (collection) => {
+    await exec<New<Log>>('logs', async (collection) => {
       await collection.insertOne({
         ...doc,
         when: new Date(),

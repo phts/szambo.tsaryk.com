@@ -15,7 +15,12 @@ export enum Severity {
   Error = 'error',
   Fatal = 'fatal',
 }
-export interface NewLevel {
+
+interface MongodbDocument {
+  _id: ObjectId
+}
+
+export interface Level extends MongodbDocument {
   value: number
   errorRate: number | null
   samples: number[] | null
@@ -23,10 +28,8 @@ export interface NewLevel {
   when: Date
   hidden?: boolean | null
 }
-export interface Level extends NewLevel {
-  _id: ObjectId
-}
-export interface Log {
+
+export interface Log extends MongodbDocument {
   message: string
   severity: Severity
   source: Source
@@ -39,13 +42,14 @@ export enum RemoteControlAction {
   MeasureInterval = 'interval',
   LedOff = 'led-off',
 }
-export interface RemoteControl {
+
+export interface RemoteControl extends MongodbDocument {
+  _id: ObjectId
   when: Date
   action: RemoteControlAction
   payload?: string | null
 }
 
-export type NewScheduledAction = RemoteControl
-export interface ScheduledAction extends NewScheduledAction {
-  _id: ObjectId
-}
+export type ScheduledAction = RemoteControl
+
+export type New<T> = Omit<T, '_id'>

@@ -1,11 +1,11 @@
 import {Sort} from 'mongodb'
 import {exec} from '../db'
-import {RemoteControl} from '../models'
+import {New, RemoteControl} from '../models'
 import {Service} from './base'
 
 export class RemoteControlService extends Service<null, null> {
-  public async insertOne(doc: RemoteControl): Promise<void> {
-    await exec<RemoteControl>('remote-control', async (collection) => {
+  public async insertOne(doc: New<RemoteControl>): Promise<void> {
+    await exec<New<RemoteControl>>('remote-control', async (collection) => {
       await collection.insertOne(doc)
     })
   }
