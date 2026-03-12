@@ -52,6 +52,7 @@ jobs:
           echo 'DEVICE_CONNECTION_INTERVAL=${{ vars.DEVICE_CONNECTION_INTERVAL }}' >> .env
           echo 'HOME_LEVELS_AMOUNT="${{ vars.HOME_LEVELS_AMOUNT }}"' >> .env
           echo 'HOME_LOGS_AMOUNT="${{ vars.HOME_LOGS_AMOUNT }}"' >> .env
+          echo 'HOME_LOGS_MARK_AS_PAST="${{ vars.HOME_LOGS_MARK_AS_PAST }}"' >> .env
           cat .env
       - name: Deploy
         run: npm run deploy

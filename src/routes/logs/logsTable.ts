@@ -14,11 +14,14 @@ const LOG_SOURCE_TO_ELEMENT = {
   [Source.Web]: '<span title="Web">☁️</span>',
 }
 
-export function toViewModel(levels: Log[]): LogViewModel[] {
+export function toViewModel(levels: Log[], {markAsPast}: {markAsPast: number | false}): LogViewModel[] {
+  const nowMs = new Date().getTime()
+  const markAsPastMs = markAsPast ? markAsPast * 60 * 60 * 1000 : 0
   return levels.reduce((acc, x) => {
+    const isPast = markAsPast ? nowMs - x.when.getTime() > markAsPastMs : false
     acc.push({
       raw: x,
-      className: x.severity,
+      className: [x.severity, ...(isPast ? ['past'] : [])].join(' '),
       message: x.message.replaceAll('\n', '<br>'),
       severity: x.severity,
       source: LOG_SOURCE_TO_ELEMENT[x.source] || '',

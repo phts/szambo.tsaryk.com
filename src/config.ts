@@ -47,6 +47,7 @@ export interface Config {
   home: {
     levelsAmount: number
     logsAmount: number
+    logsMarkAsPast: number
   }
   version: string
 }
@@ -81,6 +82,7 @@ export function getConfig(): Config {
     DEVICE_CONNECTION_INTERVAL,
     HOME_LEVELS_AMOUNT,
     HOME_LOGS_AMOUNT,
+    HOME_LOGS_MARK_AS_PAST,
   } = process.env
   if (!DB_URI) {
     throw new Error('DB_URI env variable is missing')
@@ -198,6 +200,7 @@ export function getConfig(): Config {
     home: {
       levelsAmount: parseInt(String(HOME_LEVELS_AMOUNT)) || 31,
       logsAmount: parseInt(String(HOME_LOGS_AMOUNT)) || 20,
+      logsMarkAsPast: parseInt(String(HOME_LOGS_MARK_AS_PAST)) || 48,
     },
     version: APP_VERSION || 'unknown',
   }

@@ -53,7 +53,8 @@ export const getRoot: Route =
         limit: config.home.logsAmount,
         sort: {when: -1},
         filter: {severity: {$ne: Severity.Debug}},
-      })
+      }),
+      {markAsPast: config.home.logsMarkAsPast}
     )
     page.levels.forEach((v) => {
       page.chart.data.unshift({

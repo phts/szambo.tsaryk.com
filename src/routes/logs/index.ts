@@ -10,7 +10,8 @@ export const getLogs: Route =
       await services.logs.toArray({
         limit: 1000,
         sort: {when: -1},
-      })
+      }),
+      {markAsPast: false}
     )
     res.send(logsPage({logs}))
   }
