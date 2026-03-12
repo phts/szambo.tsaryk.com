@@ -1,5 +1,6 @@
 import {Route} from '..'
-import {toViewModel} from '../levels/levelsTable'
+import {toViewModel as toLevelViewModel} from '../levels/levelsTable'
+import {toViewModel as toLogViewModel} from '../logs/logsTable'
 import {Severity} from '../../models'
 import {login} from './login'
 import {home, Data} from './home'
@@ -36,7 +37,7 @@ export const getRoot: Route =
       res.sendStatus(400)
       return
     }
-    page.levels = toViewModel(
+    page.levels = toLevelViewModel(
       await services.levels.toThrottledArray({
         freq,
         limit: config.home.levelsAmount,
@@ -47,11 +48,13 @@ export const getRoot: Route =
         warningLevel: config.levels.warningAt,
       }
     )
-    page.logs = await services.logs.toArray({
-      limit: config.home.logsAmount,
-      sort: {when: -1},
-      filter: {severity: {$ne: Severity.Debug}},
-    })
+    page.logs = toLogViewModel(
+      await services.logs.toArray({
+        limit: config.home.logsAmount,
+        sort: {when: -1},
+        filter: {severity: {$ne: Severity.Debug}},
+      })
+    )
     page.levels.forEach((v) => {
       page.chart.data.unshift({
         x: v.raw.when.toISOString(),

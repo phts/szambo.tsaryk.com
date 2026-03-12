@@ -1,13 +1,12 @@
 import * as path from 'path'
 import {readFileSync} from 'fs'
-import {Log} from '../../models'
-import {getLogsTableHtml} from '../logs/logsPage'
 import {levelsTable, LevelViewModel} from '../levels/levelsTable'
 import {Health} from '../../services'
+import {logsTable, LogViewModel} from '../logs/logsTable'
 
 export interface Data {
   levels: LevelViewModel[]
-  logs: Log[]
+  logs: LogViewModel[]
   chart: {
     data: Array<{x: string; y: number; label_m3: string; errorRate: string}>
   }
@@ -68,7 +67,7 @@ export function home({
     warningHighErrorRate,
     warningHighRange,
   })
-  const logsHtml = getLogsTableHtml({logs})
+  const logsHtml = logsTable({logs})
 
   return tmpl
     .replace('{{adminPanel}}', adminPanelHtml)
