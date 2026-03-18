@@ -66,7 +66,7 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
         withFailures = true
         this.dependencies.deviceHealth.registerFailure()
         this.dependencies.logs.insertOneFromWeb({
-          message: `Sensor high values range: ${range}`,
+          message: `Sensor high values range: ${range.toFixed(2)}`,
           severity: Severity.Error,
         })
       }
