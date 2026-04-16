@@ -8,31 +8,31 @@
     <title>szambo.tsaryk.com</title>
   </head>
   <body class="home">
-    {{adminPanel}}
+    __CONFIG__.adminPanel
     <hr />
     <h3>
       Levels
       <span class="freq"
-        >[<a href="{{freq1Href}}"><sup>1</sup>&frasl;<sub>1</sub></a
-        >]&nbsp;[<a href="{{freq2Href}}"><sup>2</sup>&frasl;<sub>1</sub></a
-        >]&nbsp;[<a href="{{freq3Href}}"><sup>3</sup>&frasl;<sub>1</sub></a
-        >]&nbsp;[<a href="{{freq4Href}}"><sup>4</sup>&frasl;<sub>1</sub></a
+        >[<a href="__CONFIG__.freq1Href"><sup>1</sup>&frasl;<sub>1</sub></a
+        >]&nbsp;[<a href="__CONFIG__.freq2Href"><sup>2</sup>&frasl;<sub>1</sub></a
+        >]&nbsp;[<a href="__CONFIG__.freq3Href"><sup>3</sup>&frasl;<sub>1</sub></a
+        >]&nbsp;[<a href="__CONFIG__.freq4Href"><sup>4</sup>&frasl;<sub>1</sub></a
         >]</span
       >
     </h3>
     <div class="chart-wrapper">
       <canvas id="chart"></canvas>
     </div>
-    {{levels}}
+    __CONFIG__.levels
     <h3>Logs</h3>
-    {{logs}}
+    __CONFIG__.logs
     <hr />
     <footer>
-      <a href="{{levelsHref}}">Levels</a>
+      <a href="__CONFIG__.levelsHref">Levels</a>
       &nbsp;|&nbsp;
-      <a href="{{logsHref}}">Logs</a>
+      <a href="__CONFIG__.logsHref">Logs</a>
       &nbsp;|&nbsp;
-      <span style="{{adminModeLinkStyle}}"><a href="/">Admin mode</a>&nbsp;|&nbsp;</span>
+      <span style="__CONFIG__.adminModeLinkStyle"><a href="/">Admin mode</a>&nbsp;|&nbsp;</span>
       <a href="/version">Version</a>
       &nbsp;|&nbsp;
       <a href="https://github.com/phts/szambo.tsaryk.com" target="_blank">© Phil Tsaryk, 2026</a>
@@ -69,7 +69,7 @@
         data: {
           datasets: [
             {
-              data: '{{chartData}}',
+              data: __CONFIG__.chartData,
               borderWidth: 1,
             },
           ],
