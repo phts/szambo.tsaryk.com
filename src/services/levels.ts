@@ -27,7 +27,7 @@ export class LevelsService extends Service<Dependencies, Config['levels']> {
       await collection.insertOne({...doc, when, hidden: false})
     })
 
-    if (doc.value >= this.config.warningAt && previousLevel.value < this.config.warningAt) {
+    if (Math.round(doc.value) >= this.config.warningAt && Math.round(previousLevel.value) < this.config.warningAt) {
       this.dependencies.emails.sendLevelNotification(doc.value)
     }
 
