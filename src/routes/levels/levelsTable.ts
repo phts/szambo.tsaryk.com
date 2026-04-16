@@ -57,16 +57,17 @@ export function toViewModel(
       nextEntry.delta = delta.toFixed(2)
     }
 
+    const value = Math.round(x.value)
     acc.push({
       raw: {
         ...x,
-        value: Math.round(x.value),
+        value,
         m3,
         delta: 0,
         range,
       },
       when: x.when.toLocaleString('ru'),
-      warning: x.value >= warningLevel,
+      warning: value >= warningLevel,
       m3: m3.toFixed(2),
       delta: '',
       errorRate: typeof x.errorRate === 'number' ? x.errorRate.toString() : '',
