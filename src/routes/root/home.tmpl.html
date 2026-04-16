@@ -78,7 +78,7 @@
           animation: false,
           elements: {
             bar: {
-              backgroundColor: (ctx) => (ctx.parsed.y >= 83 ? '#f60' : dark ? '#c8c6c3' : '#000'),
+              backgroundColor: (ctx) => (ctx.parsed.y >= __CONFIG__.warningLevel ? '#f60' : dark ? '#c8c6c3' : '#000'),
             },
           },
           scales: {

@@ -31,6 +31,7 @@ export const getRoot: Route =
       warningHighRange: config.levels.warningHighRange,
       adminModeLinkStyle: isAdmin ? 'display:none' : '',
       deviceHealth: services.deviceHealth.getHealth(),
+      warningLevel: config.levels.warningAt,
     }
     const freq = parseInt(req.query.freq as string) || 1
     if (freq < 0 || freq > 4) {
