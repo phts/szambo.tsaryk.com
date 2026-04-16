@@ -25,6 +25,7 @@ export interface Data {
   adminModeLinkStyle: string
   deviceHealth: Health
   warningLevel: number
+  removalDay: number
 }
 
 const tmpl = readFileSync(path.resolve(__dirname, 'home.tmpl.html')).toString()
@@ -48,6 +49,7 @@ export function home({
   adminModeLinkStyle,
   deviceHealth,
   warningLevel,
+  removalDay,
 }: Data) {
   const healthHtml =
     deviceHealth === Health.OK
@@ -84,4 +86,5 @@ export function home({
     .replace('__CONFIG__.freq4Href', freq4Href)
     .replace('__CONFIG__.adminModeLinkStyle', adminModeLinkStyle)
     .replace('__CONFIG__.warningLevel', String(warningLevel))
+    .replace('__CONFIG__.removalDay', String(removalDay))
 }

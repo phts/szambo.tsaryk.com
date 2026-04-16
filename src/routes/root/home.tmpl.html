@@ -101,7 +101,16 @@
                 },
               },
               grid: {
-                display: false,
+                color: (ctx) => {
+                  if (!ctx.tick?.label) {
+                    return null
+                  }
+                  const [d, m] = ctx.tick.label.split('.')
+                  const date = new Date()
+                  date.setDate(d)
+                  date.setMonth(m - 1)
+                  return date.getDay() === __CONFIG__.removalDay ? (dark ? '#333' : '#aaa') : null
+                },
               },
             },
             y: {

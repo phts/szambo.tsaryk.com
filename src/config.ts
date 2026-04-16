@@ -33,6 +33,7 @@ export interface Config {
     warningHighDiffPerHour: number
     warningHighErrorRate: number
     warningHighRange: number
+    removalDay: number
   }
   deviceHealth: {
     minSequentialFailures: number
@@ -78,6 +79,7 @@ export function getConfig(): Config {
     LEVELS_WARNING_HIGH_ERROR_RATE,
     LEVELS_WARNING_HIGH_RANGE,
     LEVELS_TRIM_SAMPLES,
+    LEVELS_REMOVAL_DAY,
     DEVICE_HEALTH_MIN_SEQUENTIAL_FAILURES,
     DEVICE_CONNECTION_INTERVAL,
     HOME_LEVELS_AMOUNT,
@@ -186,6 +188,7 @@ export function getConfig(): Config {
       warningHighDiffPerHour: parseInt(LEVELS_WARNING_HIGH_DIFF_PER_HOUR),
       warningHighErrorRate: parseInt(LEVELS_WARNING_HIGH_ERROR_RATE),
       warningHighRange: parseInt(LEVELS_WARNING_HIGH_RANGE),
+      removalDay: parseInt(String(LEVELS_REMOVAL_DAY)) || 4,
     },
     deviceHealth: {
       minSequentialFailures: parseInt(String(DEVICE_HEALTH_MIN_SEQUENTIAL_FAILURES)) || 3,

@@ -32,6 +32,7 @@ export const getRoot: Route =
       adminModeLinkStyle: isAdmin ? 'display:none' : '',
       deviceHealth: services.deviceHealth.getHealth(),
       warningLevel: config.levels.warningAt,
+      removalDay: config.levels.removalDay,
     }
     const freq = parseInt(req.query.freq as string) || 1
     if (freq < 0 || freq > 4) {
