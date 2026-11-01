@@ -107,8 +107,10 @@
                   }
                   const [d, m] = ctx.tick.label.split('.')
                   const date = new Date()
-                  date.setDate(d)
+                  date.setHours(12)
+                  date.setDate(1)
                   date.setMonth(m - 1)
+                  date.setDate(d)
                   return date.getDay() === __CONFIG__.removalDay ? (dark ? '#333' : '#aaa') : null
                 },
               },
