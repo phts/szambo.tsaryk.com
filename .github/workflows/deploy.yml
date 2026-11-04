@@ -43,12 +43,13 @@ jobs:
           echo 'EMAILS_UNSTABLE_RESOLVED_SUBJECT="${{ vars.EMAILS_UNSTABLE_RESOLVED_SUBJECT }}"' >> .env
           echo 'EMAILS_UNSTABLE_RESOLVED_TEXT="${{ vars.EMAILS_UNSTABLE_RESOLVED_TEXT }}"' >> .env
           echo 'LEVELS_CAPACITY=${{ vars.LEVELS_CAPACITY }}' >> .env
+          echo 'LEVELS_MAX_AMOUNT=${{ vars.LEVELS_MAX_AMOUNT }}' >> .env
+          echo 'LEVELS_REMOVAL_DAY=${{ vars.LEVELS_REMOVAL_DAY }}' >> .env
           echo 'LEVELS_TRIM_SAMPLES=${{ vars.LEVELS_TRIM_SAMPLES }}' >> .env
           echo 'LEVELS_WARNING_AT=${{ vars.LEVELS_WARNING_AT }}' >> .env
           echo 'LEVELS_WARNING_HIGH_DIFF_PER_HOUR=${{ vars.LEVELS_WARNING_HIGH_DIFF_PER_HOUR }}' >> .env
           echo 'LEVELS_WARNING_HIGH_ERROR_RATE=${{ vars.LEVELS_WARNING_HIGH_ERROR_RATE }}' >> .env
           echo 'LEVELS_WARNING_HIGH_RANGE=${{ vars.LEVELS_WARNING_HIGH_RANGE }}' >> .env
-          echo 'LEVELS_REMOVAL_DAY=${{ vars.LEVELS_REMOVAL_DAY }}' >> .env
           echo 'DEVICE_HEALTH_MIN_SEQUENTIAL_FAILURES=${{ vars.DEVICE_HEALTH_MIN_SEQUENTIAL_FAILURES }}' >> .env
           echo 'DEVICE_CONNECTION_INTERVAL=${{ vars.DEVICE_CONNECTION_INTERVAL }}' >> .env
           echo 'HOME_LEVELS_AMOUNT="${{ vars.HOME_LEVELS_AMOUNT }}"' >> .env

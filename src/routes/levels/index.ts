@@ -53,7 +53,7 @@ export const getLevels: Route =
   ({services, config}) =>
   async (req, res) => {
     const levels = await services.levels.toArray({
-      limit: 1000,
+      limit: config.levels.maxAmount,
       sort: {when: -1},
     })
     res.send(

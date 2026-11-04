@@ -28,12 +28,13 @@ export interface Config {
   }
   levels: {
     capacity: number
+    maxAmount: number
+    removalDay: number
     trimSamples: number
     warningAt: number
     warningHighDiffPerHour: number
     warningHighErrorRate: number
     warningHighRange: number
-    removalDay: number
   }
   deviceHealth: {
     minSequentialFailures: number
@@ -74,12 +75,13 @@ export function getConfig(): Config {
     EMAILS_UNSTABLE_RESOLVED_SUBJECT,
     EMAILS_UNSTABLE_RESOLVED_TEXT,
     LEVELS_CAPACITY,
+    LEVELS_MAX_AMOUNT,
+    LEVELS_REMOVAL_DAY,
+    LEVELS_TRIM_SAMPLES,
     LEVELS_WARNING_AT,
     LEVELS_WARNING_HIGH_DIFF_PER_HOUR,
     LEVELS_WARNING_HIGH_ERROR_RATE,
     LEVELS_WARNING_HIGH_RANGE,
-    LEVELS_TRIM_SAMPLES,
-    LEVELS_REMOVAL_DAY,
     DEVICE_HEALTH_MIN_SEQUENTIAL_FAILURES,
     DEVICE_CONNECTION_INTERVAL,
     HOME_LEVELS_AMOUNT,
@@ -183,12 +185,13 @@ export function getConfig(): Config {
     },
     levels: {
       capacity: parseFloat(LEVELS_CAPACITY),
+      maxAmount: parseInt(String(LEVELS_MAX_AMOUNT)) || 1000,
+      removalDay: parseInt(String(LEVELS_REMOVAL_DAY)) || 4,
       trimSamples: parseInt(LEVELS_TRIM_SAMPLES),
       warningAt: parseInt(LEVELS_WARNING_AT),
       warningHighDiffPerHour: parseInt(LEVELS_WARNING_HIGH_DIFF_PER_HOUR),
       warningHighErrorRate: parseInt(LEVELS_WARNING_HIGH_ERROR_RATE),
       warningHighRange: parseInt(LEVELS_WARNING_HIGH_RANGE),
-      removalDay: parseInt(String(LEVELS_REMOVAL_DAY)) || 4,
     },
     deviceHealth: {
       minSequentialFailures: parseInt(String(DEVICE_HEALTH_MIN_SEQUENTIAL_FAILURES)) || 3,
